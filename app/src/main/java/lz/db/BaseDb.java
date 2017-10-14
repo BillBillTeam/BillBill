@@ -30,6 +30,7 @@ public class BaseDb extends SQLiteOpenHelper {
      */
     public BaseDb(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        darkRen = "Deep Dark";
     }
 
 
