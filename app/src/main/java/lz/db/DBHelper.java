@@ -124,6 +124,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     *  清空Bill表中的所有数据
+     */
+    public void clearTabBill(){
+        getWritableDatabase().delete(TAB_BILL_NAME,null,null);
+    }
+
+
 
     public double getTotalBills(){
         double totalAmount;
