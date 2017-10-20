@@ -53,4 +53,34 @@ public class IDBill extends Bill {
                 "ID=" + ID + " " +super.toString()+
                 '}';
     }
+
+    @Override
+    public void setYear(int year) {
+        super.setYear(year);
+    }
+
+    @Override
+    public void setMonth(int month) {
+        super.setMonth(month);
+    }
+
+    @Override
+    public void setDay(int day) {
+        super.setDay(day);
+    }
+
+    @Override
+    public void setType(String type) {
+        super.setType(type);
+    }
+
+    @Override
+    public void setAmount(double amount) {
+        super.setAmount(amount);
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        super.setRemark(remark);
+    }
 }

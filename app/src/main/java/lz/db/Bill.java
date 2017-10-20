@@ -58,4 +58,28 @@ public class Bill {
                 ", remark='" + remark + '\'' +
                 '}';
     }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
