@@ -4,29 +4,30 @@ package fivene.billbill;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import android.support.v7.app.ActionBarActivity;
+
+import android.renderscript.Sampler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
-import bhj.PopWindow;
+import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
+import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
+import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
+
+import bhj.TimePopWindow;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +48,41 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImageView;
 
     private Button mButton_pop_time;
+
+    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
+        @Override
+        public void onCancelled() {
+           // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+                                            int hourOfDay, int minute,
+                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+                                            String recurrenceRule) {
+            SelectedDate mSelectedDate;
+            mSelectedDate = selectedDate;
+            System.out.print(selectedDate.toString());
+//            mHour = hourOfDay;
+//            mMinute = minute;
+//            mRecurrenceOption = recurrenceOption != null ?
+//                    recurrenceOption.name() : "n/a";
+//            mRecurrenceRule = recurrenceRule != null ?
+//                    recurrenceRule : "n/a";
+//
+//            updateInfoView();
+//
+//            svMainContainer.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    svMainContainer.scrollTo(svMainContainer.getScrollX(),
+//                            cbAllowDateRangeSelection.getBottom());
+//                }
+//            });
+        }
+    };
+
+
 
     //tag
     @Override
@@ -281,23 +317,39 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    /**
+     * 弹出 日历底部弹窗
+     * @param view
+     */
     public void showTimePopFormBottom(View view) {
 
-        View.OnClickListener onClickListener=new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        };
-        PopWindow takePhotoPopWin = new PopWindow(this, onClickListener);
+        Pair<Boolean, SublimeOptions> optionsPair = getOptions();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
+        TimePopWindow PopWin = new TimePopWindow(this, bundle);
+        PopWin.setCallback(mFragmentCallback);
+        // Options
+
+
+//        if (!optionsPair.first) { // If options are not valid
+//            Toast.makeText(Sampler.this, "No pickers activated",
+//                    Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+
+
+
 //        设置Popupwindow显示位置（从底部弹出）
-        takePhotoPopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+        PopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         //当弹出Popupwindow时，背景变半透明
         params.alpha=0.7f;
         getWindow().setAttributes(params);
         //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
-        takePhotoPopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        PopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -308,4 +360,35 @@ public class MainActivity extends AppCompatActivity {
 
 //        takePhotoPopWin.lis
     }
+
+    /**
+     * 设置日历的显示参数
+     * @return
+     */
+    Pair<Boolean, SublimeOptions> getOptions() {
+        SublimeOptions options = new SublimeOptions();
+        int displayOptions = 0;
+        displayOptions |= SublimeOptions.ACTIVATE_DATE_PICKER;
+        options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
+        options.setDisplayOptions(displayOptions);
+        // Enable/disable the date range selection feature
+        options.setCanPickDateRange(false);
+
+        // Example for setting date range:
+        // Note that you can pass a date range as the initial date params
+        // even if you have date-range selection disabled. In this case,
+        // the user WILL be able to change date-range using the header
+        // TextViews, but not using long-press.
+
+        /*Calendar startCal = Calendar.getInstance();
+        startCal.set(2016, 2, 4);
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(2016, 2, 17);
+
+        options.setDateParams(startCal, endCal);*/
+
+        // If 'displayOptions' is zero, the chosen options are not valid
+        return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
+    }
+
 }
