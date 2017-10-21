@@ -112,6 +112,17 @@ public class DBHelperTest {
         assertEquals(r,1);
     }
 
+    @Test
+    public void getTotalBills() throws Exception{
+        ArrayList<IDBill> list = helper.selectAllBill();
+
+        double amount = 0;
+        for(IDBill bill:list){
+            amount += bill.getAmount();
+        }
+
+        assertEquals(amount,helper.getTotalBills(),0.001);
+    }
 
     private static String randomString(int length){
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";

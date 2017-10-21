@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     * 数据库辅助类构造函数，此对象用于辅助对账单信息的数据库管理
+     * 数据库辅助类构造函数，此对象用于辅助数据库管理
      * @param context 需要访问数据库的上下文
      */
     public DBHelper(Context context){
@@ -86,36 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return getWritableDatabase().delete(TAB_CUSTOM_TYPE_NAME,where,null);
     }
 
-    public ArrayList<String> selectAllCustomType(){
-        ArrayList<String> list = new ArrayList<>();
-        Cursor cursor = getReadableDatabase().query(TAB_CUSTOM_TYPE_NAME,null,null,null,null,null,null);
-        while (cursor.moveToNext()){
-            String type = cursor.getString(cursor.getColumnIndex(fd_TYPE));
 
-            list.add(type);
-        }
-        cursor.close();
-        return list;
-    }
-
-    public ArrayList<IDBill> selectAllBill(){
-        ArrayList<IDBill> list = new ArrayList<>();
-        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,null,null,null,null,null);
-        while (cursor.moveToNext()){
-            int ID        = cursor.getInt(cursor.getColumnIndex(fd_ID));
-            int year      = cursor.getInt(cursor.getColumnIndex(fd_YEAR));
-            int month     = cursor.getInt(cursor.getColumnIndex(fd_MONTH));
-            int day       = cursor.getInt(cursor.getColumnIndex(fd_DAY));
-            String type   = cursor.getString(cursor.getColumnIndex(fd_TYPE));
-            double amount = cursor.getDouble(cursor.getColumnIndex(fd_AMOUNT));
-            String remark = cursor.getString(cursor.getColumnIndex(fd_REMARK));
-
-            IDBill bill = new IDBill(year,month,day,type,amount,remark,ID);
-            list.add(bill);
-        }
-        cursor.close();
-        return list;
-    }
 
     /**
      * 将一条账单记录插入数据库中
@@ -150,6 +121,44 @@ public class DBHelper extends SQLiteOpenHelper {
         return getWritableDatabase().delete(TAB_BILL_NAME,where,null);
     }
 
+    /**
+     * 获得所有的用户自定义类型
+     * @return 包含所有用户自定义类型的数组
+     */
+    public ArrayList<String> selectAllCustomType(){
+        ArrayList<String> list = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().query(TAB_CUSTOM_TYPE_NAME,null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            String type = cursor.getString(cursor.getColumnIndex(fd_TYPE));
+
+            list.add(type);
+        }
+        cursor.close();
+        return list;
+    }
+
+    /**
+     * 获得用户的所有账单记录
+     * @return 包含所有账单记录的数组
+     */
+    public ArrayList<IDBill> selectAllBill(){
+        ArrayList<IDBill> list = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            int ID        = cursor.getInt(cursor.getColumnIndex(fd_ID));
+            int year      = cursor.getInt(cursor.getColumnIndex(fd_YEAR));
+            int month     = cursor.getInt(cursor.getColumnIndex(fd_MONTH));
+            int day       = cursor.getInt(cursor.getColumnIndex(fd_DAY));
+            String type   = cursor.getString(cursor.getColumnIndex(fd_TYPE));
+            double amount = cursor.getDouble(cursor.getColumnIndex(fd_AMOUNT));
+            String remark = cursor.getString(cursor.getColumnIndex(fd_REMARK));
+
+            IDBill bill = new IDBill(year,month,day,type,amount,remark,ID);
+            list.add(bill);
+        }
+        cursor.close();
+        return list;
+    }
 
     /**
      *  清空Bill表中的所有数据
@@ -159,10 +168,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
+    /**
+     * 获得账单总数量
+     * @return 账单总金额
+     */
     public double getTotalBills(){
         double totalAmount;
-        String SQL = String.format("SELECT COUNT(%s) FROM %s", fd_AMOUNT,TAB_BILL_NAME);
+        String SQL = String.format("SELECT SUM(%s) FROM %s", fd_AMOUNT,TAB_BILL_NAME);
         Cursor cursor = getReadableDatabase().rawQuery(SQL,null);
         cursor.moveToNext();
         totalAmount = cursor.getDouble(0);
