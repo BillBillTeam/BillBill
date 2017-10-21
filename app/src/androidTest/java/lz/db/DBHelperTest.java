@@ -1,10 +1,8 @@
 package lz.db;
 
 import android.content.Context;
-import android.os.IBinder;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,8 +12,8 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by LiZeC on 2017/10/20.
@@ -25,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class DBHelperTest {
     private static Random rand;
     private static DBHelper helper;
+
 
     // 数据库中插入的数据会一直保留
     @BeforeClass
@@ -56,17 +55,15 @@ public class DBHelperTest {
     public void insertCustomType() throws Exception {
         final int n = 3;
 
+        ArrayList<CustomType> list = new ArrayList<>();
         for(int i=0;i<n;i++){
-            String type = randomString(10);
-
-            //任意插入一条数据，应该成功插入
-            long r = helper.insertCustomType(type);
-            assertNotEquals(-1,r);
-
-            //重复插入同一数据，应该插入失败
-            r = helper.insertCustomType(type);
-            assertEquals(-1,r);
+            CustomType ct = new CustomType(randomString(10),rand.nextInt());
+            list.add(ct);
         }
+
+        //任意插入一组数据
+        helper.insertCustomType(list);
+
 
     }
 
@@ -122,6 +119,26 @@ public class DBHelperTest {
         }
 
         assertEquals(amount,helper.getTotalBills(),0.001);
+    }
+
+
+    @Test
+    public void selectBillByTime() throws Exception {
+        helper.clearTabBill();
+        final int n = 5;
+        ArrayList<Bill> blist = new ArrayList<>(n);
+        for(int i=1;i<=n;i++){
+            Bill bill = new Bill(2017,10,i,randomString(4),rand.nextDouble(),randomString(10));
+            blist.add(bill);
+            helper.insertBill(bill);
+        }
+
+        ArrayList<IDBill> bills = helper.selectBillByTime(2017,10,1,2017,10,n);
+
+        for(int i=0;i<n;i++){
+            assertEquals(blist.get(i).getAmount(),bills.get(i).getAmount(),0.0001);
+        }
+
     }
 
     private static String randomString(int length){
