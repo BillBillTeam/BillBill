@@ -33,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String fd_ID     = "ID";
 
 
+
     /**
      * 数据库辅助类构造函数，此对象用于辅助对账单信息的数据库管理
      * @param context 需要访问数据库的上下文
@@ -59,6 +60,9 @@ public class DBHelper extends SQLiteOpenHelper {
                         "%s TEXT);",
                 TAB_BILL_NAME, fd_ID, fd_YEAR, fd_MONTH, fd_DAY,fd_TYPE, fd_AMOUNT,fd_REMARK);
         db.execSQL(BillSQL);
+
+        String TypeSQL = String.format("CREATE TABLE %s (%s TEXT PRIMARY KEY);",TAB_CUSTOM_TYPE_NAME,fd_TYPE);
+        db.execSQL(TypeSQL);
     }
 
     /**
@@ -67,8 +71,31 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return 非负整数表示插入成功，-1表示插入失败
      */
     public long insertCustomType(String type){
-        //TODO: 插入自定义类型数据
-        return 0;
+        ContentValues cv = new ContentValues();
+        cv.put(fd_TYPE,type);
+        return getWritableDatabase().insert(TAB_CUSTOM_TYPE_NAME,null,cv);
+    }
+
+    /**
+     * 删除一个用户自定义类型
+     * @param type 待删除的自定义类型
+     * @return 删除成功返回受影响的行数(应该为1),否则返回0
+     */
+    public long deleteCustomType(String type){
+        String where = String.format("%s='%s'",fd_TYPE,type);
+        return getWritableDatabase().delete(TAB_CUSTOM_TYPE_NAME,where,null);
+    }
+
+    public ArrayList<String> selectAllCustomType(){
+        ArrayList<String> list = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().query(TAB_CUSTOM_TYPE_NAME,null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            String type = cursor.getString(cursor.getColumnIndex(fd_TYPE));
+
+            list.add(type);
+        }
+        cursor.close();
+        return list;
     }
 
     public ArrayList<IDBill> selectAllBill(){
@@ -165,11 +192,12 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String SQL = "DROP TABLE IF EXISTS ?";
-        String[] bindArgs = {TAB_BILL_NAME};
-        db.execSQL(SQL,bindArgs);
+        String DropBillSQL    = String.format("DROP TABLE IF EXISTS %s",TAB_BILL_NAME);
+        String DropCustomType = String.format("DROP TABLE IF EXISTS %s",TAB_CUSTOM_TYPE_NAME);
+        db.execSQL(DropBillSQL);
+        db.execSQL(DropCustomType);
+        onCreate(db);
         Log.e(TAG,"更新数据库");
-        this.onCreate(db);
     }
 
     private ContentValues bill2Cv(Bill bill){
