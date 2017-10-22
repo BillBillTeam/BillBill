@@ -71,17 +71,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 将一个用户自定义数据类型插入数据库中
-     * @param type 用户自定义的类型的类型名
-     * @return 非负整数表示插入成功，-1表示插入失败
-     */
-//    public long insertCustomType(String type){
-//        ContentValues cv = new ContentValues();
-//        cv.put(fd_TYPE,type);
-//        return getWritableDatabase().insert(TAB_CUSTOM_TYPE_NAME,null,cv);
-//    }
-
-    /**
      * 清空数据库中全部的数据，并将给定的数据插入
      * @param all 包含全部类型的数组
      * @throws SQLException 如果插入过程存在问题,此异常指出错误的类型名
@@ -144,7 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String where = String.format("%s=%s",fd_ID,bill.getID());
         return getWritableDatabase().delete(TAB_BILL_NAME,where,null);
     }
-    
+
     /** 根据指定的时间段，返回该时间段的数据，此时间段包含用于指定边界的两天
      * 此函数不检查给定数据的有效性，如果给定数据不符合逻辑或不符合日期表达习惯，则返回空的ArrayList
      * @param begYear 起始年
@@ -165,8 +154,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 获得所有的用户自定义类型
-     * @return 包含所有用户自定义类型的数组
+     * 获得所有的类型,包括内置类型和用户自定义类型
+     * @return 包含所有用户类型的数组
      */
     public ArrayList<String> selectAllCustomType(){
         ArrayList<String> list = new ArrayList<>();
