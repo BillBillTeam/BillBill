@@ -90,11 +90,11 @@ public class DBHelperTest {
 
     @Test
     public void deleteCustomType() throws Exception{
-        ArrayList<String> list = helper.selectAllCustomType();
+        ArrayList<CustomType> list = helper.selectAllCustomType();
         int de = rand.nextInt(list.size());
-        String type = list.get(de);
+        CustomType ct = list.get(de);
 
-        long r = helper.deleteCustomType(type);
+        long r = helper.deleteCustomType(ct);
         assertEquals(r,1);
     }
 

@@ -91,11 +91,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 删除一个用户自定义类型
-     * @param type 待删除的自定义类型
+     * @param customType 待删除的自定义类型
      * @return 删除成功返回受影响的行数(应该为1),否则返回0
      */
-    public long deleteCustomType(String type){
-        String where = String.format("%s='%s'",fd_TYPE,type);
+    public long deleteCustomType(CustomType customType){
+        String where = String.format("%s='%s'",fd_TYPE,customType.getType());
         return getWritableDatabase().delete(TAB_CUSTOM_TYPE_NAME,where,null);
     }
 
@@ -157,12 +157,14 @@ public class DBHelper extends SQLiteOpenHelper {
      * 获得所有的类型,包括内置类型和用户自定义类型
      * @return 包含所有用户类型的数组
      */
-    public ArrayList<String> selectAllCustomType(){
-        ArrayList<String> list = new ArrayList<>();
+    public ArrayList<CustomType> selectAllCustomType(){
+        ArrayList<CustomType> list = new ArrayList<>();
         Cursor cursor = getReadableDatabase().query(TAB_CUSTOM_TYPE_NAME,null,null,null,null,null,null);
         while (cursor.moveToNext()){
             String type = cursor.getString(cursor.getColumnIndex(fd_TYPE));
-            list.add(type);
+            int index = cursor.getInt(cursor.getColumnIndex(fd_INDEX));
+            CustomType ct = new CustomType(type,index);
+            list.add(ct);
         }
         cursor.close();
         return list;
