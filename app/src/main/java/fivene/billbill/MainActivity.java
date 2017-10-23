@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import android.renderscript.Sampler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.content.Context;
@@ -21,12 +20,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 
+import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isContinue = true;
 
-    private List<View> advPics;
 
     private Context mContext;
 
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void init() {
         mContext = this;
-        advPics = new ArrayList<View>();
+
     }
 
     /**
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         // TODO Auto-generated method stub
         mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
-        mImagePager = (ViewPager) findViewById(R.id.adv_pager);
+        mImagePager = (ViewPager) findViewById(R.id.tag_group_pager);
         mButton_pop_time=(Button) findViewById(R.id.button);
     }
 
@@ -119,31 +117,37 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         mDefaultImage.setVisibility(View.GONE);
         mImagePager.setVisibility(View.VISIBLE);
+//
+//        //修改循环tag
+//        ImageView img1 = new ImageView(mContext);
+//        img1.setBackgroundResource(R.drawable.test);
+//        advPics.add(img1);
+//
+//        ImageView img2 = new ImageView(mContext);
+//        img2.setBackgroundResource(R.drawable.test);
+//        advPics.add(img2);
+//
+//        ImageView img3 = new ImageView(mContext);
+//        img3.setBackgroundResource(R.drawable.test);
+//        advPics.add(img3);
+//
+//        ImageView img4 = new ImageView(mContext);
+//        img4.setBackgroundResource(R.drawable.test);
+//        advPics.add(img4);
 
-        //修改循环tag
-        ImageView img1 = new ImageView(mContext);
-        img1.setBackgroundResource(R.drawable.test);
-        advPics.add(img1);
 
-        ImageView img2 = new ImageView(mContext);
-        img2.setBackgroundResource(R.drawable.test);
-        advPics.add(img2);
-
-        ImageView img3 = new ImageView(mContext);
-        img3.setBackgroundResource(R.drawable.test);
-        advPics.add(img3);
-
-        ImageView img4 = new ImageView(mContext);
-        img4.setBackgroundResource(R.drawable.test);
-        advPics.add(img4);
+        //create TagGroupProvider
+        List <String>testList=new ArrayList<String>();
+        TagGroupProvider provider=new TagGroupProvider(this,testList);
 
         // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
+
         ViewGroup group = (ViewGroup) findViewById(R.id.viewGroup);
-        mImageViews = new ImageView[advPics.size()];
+        mImageViews = new ImageView[provider.getGroupSize()];
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(13, 13);
         layoutParams.setMargins(5, 0, 5, 1);
 
-        for (int i = 0; i < advPics.size(); i++) {
+        for (int i = 0; i < provider.getGroupSize(); i++) {
             mImageView = new ImageView(this);
             mImageView.setLayoutParams(layoutParams);
             mImageViews[i] = mImageView;
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             group.addView(mImageViews[i]);
         }
 
-        mImagePager.setAdapter(new AdvAdapter(advPics));
+        mImagePager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
 
         mButton_pop_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,10 +273,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @Description: 广告栏PaperView 图片适配器
      */
-    private final class AdvAdapter extends PagerAdapter {
+    private final class TagGroupAdapter extends PagerAdapter {
         private List<View> views = null;
 
-        public AdvAdapter(List<View> views) {
+        public TagGroupAdapter(List<View> views) {
             this.views = views;
         }
 
@@ -291,9 +295,13 @@ public class MainActivity extends AppCompatActivity {
             return views.size();
         }
 
+        //TODO: add listener at here
         @Override
         public Object instantiateItem(View arg0, int arg1) {
             ((ViewPager) arg0).addView(views.get(arg1), 0);
+
+
+
             return views.get(arg1);
         }
 
