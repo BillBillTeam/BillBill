@@ -10,6 +10,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import fivene.billbill.R;
+
 /**
  *  Created by LiZeC on 2017/10/19.
  *  数据库帮助类主类，使用此类完成数据库相关的插入，删除，修改等操作
@@ -36,12 +38,15 @@ public class DBHelper extends SQLiteOpenHelper {
     //类型数据库表的列
     private static final String fd_INDEX = "typeIndex";
 
+    private String[] systemTypeNames;
+
     /**
      * 数据库辅助类构造函数，此对象用于辅助数据库管理
      * @param context 需要访问数据库的上下文
      */
     public DBHelper(Context context){
         super(context,DB_NAME,null,DB_VERSION);
+        systemTypeNames = context.getResources().getStringArray(R.array.systemType);
     }
 
     /**
@@ -68,6 +73,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "%s INTEGER);",
                 TAB_CUSTOM_TYPE_NAME,fd_TYPE,fd_INDEX);
         db.execSQL(TypeSQL);
+
+        initSystemType(db);
     }
 
     /**
@@ -76,18 +83,10 @@ public class DBHelper extends SQLiteOpenHelper {
      * @throws SQLException 如果插入过程存在问题,此异常指出错误的类型名
      */
     public void insertCustomType(ArrayList<CustomType> all) throws SQLException{
-        getWritableDatabase().delete(TAB_CUSTOM_TYPE_NAME,null,null);
-        ContentValues cv = new ContentValues(all.size() * 2);
-        long t;
-        for(CustomType ct:all){
-            cv.put(fd_TYPE,ct.getType());
-            cv.put(fd_INDEX,ct.getIndex());
-            t = getWritableDatabase().insert(TAB_CUSTOM_TYPE_NAME,null,cv);
-            if (t == -1){
-                throw new SQLException("插入存在异常，插入的类型是"+cv.getAsString(fd_TYPE));
-            }
-        }
+        insertCustomType(getWritableDatabase(),all);
     }
+
+
 
     /**
      * 删除一个用户自定义类型
@@ -261,5 +260,35 @@ public class DBHelper extends SQLiteOpenHelper {
             list.add(bill);
         }
         return list;
+    }
+
+
+    private void insertCustomType(SQLiteDatabase db,ArrayList<CustomType> all) throws SQLException{
+        db.delete(TAB_CUSTOM_TYPE_NAME,null,null);
+        ContentValues cv = new ContentValues(all.size() * 2);
+        long t;
+        for(CustomType ct:all){
+            cv.put(fd_TYPE,ct.getType());
+            cv.put(fd_INDEX,ct.getIndex());
+            t = db.insert(TAB_CUSTOM_TYPE_NAME,null,cv);
+            if (t == -1){
+                throw new SQLException("插入存在异常，插入的类型是"+cv.getAsString(fd_TYPE));
+            }
+        }
+    }
+
+    /**
+     *  将系统提供的自定义类型插入到数据库中
+     */
+    private void initSystemType(SQLiteDatabase db){
+        int size = systemTypeNames.length;
+
+        ArrayList<CustomType> list = new ArrayList<>(size);
+
+        for(int i=0;i<size;i++){
+            list.add(new CustomType(systemTypeNames[i],i));
+        }
+
+        insertCustomType(db,list);
     }
 }

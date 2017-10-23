@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>吃喝</name> <name>交通</name> <name>娱乐</name> <name>果蔬</name> <name>服饰</name>
-    <name>日用品</name> <name>书籍</name> <name>购物</name> <name>水电</name> <name>数码</name>
-    <name>通讯</name> <name>学习</name> <name>医疗</name> <name>烟酒</name> <name>自定义</name>
-    <name>运动</name> <name>美容</name> <name>维修</name> <name>办公</name> <name>房屋</name>
-</selector>
