@@ -28,7 +28,7 @@ public class ExpenseType {
     public ArrayList<String> getAllExpenseType()
     {
         ArrayList<CustomType> list= dbHelper.selectAllCustomType();
-        ArrayList<String> type=new ArrayList<String>();
+        ArrayList<String> type=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
             type.add(list.get(i).getType());
@@ -46,7 +46,7 @@ public class ExpenseType {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<=list.size();i++)
         {
-            if(list.get(i).getType()==string)
+            if(list.get(i).getType().equals(string))
             {
                 throw new Exception("输入类型已经存在");
             }
