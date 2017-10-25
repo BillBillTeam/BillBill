@@ -28,19 +28,13 @@
                 android:layout_height="150dp"
                 android:baselineAligned="false">
 
-                <ImageView
-                    android:id="@+id/home_default_image"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/test"
-                    android:visibility="gone" />
-
                 <android.support.v4.view.ViewPager
                     android:id="@+id/tag_group_pager"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/test"></android.support.v4.view.ViewPager>
+                   >
+
+                </android.support.v4.view.ViewPager>
 
                 <LinearLayout
                     android:id="@+id/viewGroup"

@@ -18,6 +18,8 @@ import com.appeaser.sublimepickerlibrary.SublimePicker;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.utilities.SUtils;
 
+import static android.view.View.GONE;
+
 /**
  * Created by Admin on 15/02/2016.
  */
@@ -77,6 +79,7 @@ public class ButtonHandler implements View.OnClickListener {
 
         ImageView ivNegativeDP = (ImageView) sublimeMaterialPicker.findViewById(R.id.imageViewNegativeDP);
         ImageView ivNegativeTP = (ImageView) sublimeMaterialPicker.findViewById(R.id.imageViewNegativeTP);
+
 
         try {
             // obtain float value held by android.R.attr.disabledAlpha
@@ -194,6 +197,14 @@ public class ButtonHandler implements View.OnClickListener {
 
         mSwitcherButtonDP.setOnClickListener(this);
         mSwitcherButtonTP.setOnClickListener(this);
+
+        //add by bian
+        //hide the button
+        mPositiveButtonDP.setVisibility(GONE);
+        mNegativeButtonDP.setVisibility(GONE);
+
+
+
     }
 
     /**
@@ -207,8 +218,8 @@ public class ButtonHandler implements View.OnClickListener {
         mCallback = callback;
 
         if (mIsInLandscapeMode) {
-            mSwitcherButtonDP.setVisibility(switcherRequired ? View.VISIBLE : View.GONE);
-            mSwitcherButtonTP.setVisibility(switcherRequired ? View.VISIBLE : View.GONE);
+            mSwitcherButtonDP.setVisibility(switcherRequired ? View.VISIBLE : GONE);
+            mSwitcherButtonTP.setVisibility(switcherRequired ? View.VISIBLE : GONE);
         } else {
             // Let ButtonLayout handle callbacks
             mPortraitButtonHandler.applyOptions(switcherRequired, callback);
@@ -259,6 +270,7 @@ public class ButtonHandler implements View.OnClickListener {
         } else {
             mPortraitButtonHandler.updateValidity(valid);
         }
+
     }
 
     @Override
@@ -271,7 +283,13 @@ public class ButtonHandler implements View.OnClickListener {
             mCallback.onSwitch();
         }
     }
+public void hide(){
+    mNegativeButtonDP.setVisibility(GONE);
+    mPositiveButtonDP.setVisibility(GONE);
 
+
+
+}
     public interface Callback {
         void onOkay();
         void onCancel();

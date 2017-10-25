@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.appeaser.sublimepickerlibrary.R;
+import com.appeaser.sublimepickerlibrary.common.ButtonHandler;
 import com.appeaser.sublimepickerlibrary.common.DateTimePatternHelper;
 import com.appeaser.sublimepickerlibrary.utilities.AccessibilityUtils;
 import com.appeaser.sublimepickerlibrary.utilities.Config;
@@ -99,6 +100,8 @@ public class SublimeDatePicker extends FrameLayout {
     private String mSelectYear;
 
     private SublimeDatePicker.OnDateChangedListener mDateChangedListener;
+
+    private SublimeDatePicker.OnCloseListener mCloseListener;
 
     private int mCurrentView = UNINITIALIZED;
 
@@ -284,6 +287,11 @@ public class SublimeDatePicker extends FrameLayout {
         setCurrentView(VIEW_MONTH_DAY);
     }
 
+
+    public void setCloseCallback(SublimeDatePicker.OnCloseListener callback){
+        this.mCloseListener=callback;
+
+    }
     /**
      * Listener called when the user selects a day in the day picker view.
      */
@@ -324,6 +332,10 @@ public class SublimeDatePicker extends FrameLayout {
             }
 
             onDateChanged(true, false, goToPosition);
+
+            //close datePicker
+            //TODO: it close too quick
+            mCloseListener.onclose();
         }
 
         @Override
@@ -553,6 +565,7 @@ public class SublimeDatePicker extends FrameLayout {
     // callbackToClient is useless for now & gives us an unnecessary round-trip
     // by calling init(...)
     private void onDateChanged(boolean fromUser, boolean callbackToClient, boolean goToPosition) {
+
         final int year = mCurrentDate.getStartDate().get(Calendar.YEAR);
 
         if (callbackToClient && mDateChangedListener != null) {
@@ -571,7 +584,12 @@ public class SublimeDatePicker extends FrameLayout {
 
         if (fromUser) {
             SUtils.vibrateForDatePicker(SublimeDatePicker.this);
+            //tag1  i can close it at here
+            //but it close too quick to wait ui change
+
         }
+
+
     }
 
     private void updateHeaderViews() {
@@ -979,5 +997,11 @@ public class SublimeDatePicker extends FrameLayout {
          * @param selectedDate The date that was set.
          */
         void onDateChanged(SublimeDatePicker view, SelectedDate selectedDate);
+
+
+    }
+    public interface OnCloseListener{
+
+        void onclose();
     }
 }

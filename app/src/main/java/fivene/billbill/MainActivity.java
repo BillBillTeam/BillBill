@@ -11,6 +11,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -30,7 +31,7 @@ import bhj.TimePopWindow;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView mDefaultImage = null;
+   // private ImageView mDefaultImage = null;
 
     private ViewPager mImagePager = null;
 
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isContinue = true;
 
-
+    private  int globalHeight;
+    private  int globalWidth;
     private Context mContext;
 
     private ImageView mImageView;
@@ -87,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        globalWidth = dm.widthPixels;
+        globalHeight = dm.heightPixels;
         init();
         initView();
         initViewPager();
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initView() {
         // TODO Auto-generated method stub
-        mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
+       // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
         mImagePager = (ViewPager) findViewById(R.id.tag_group_pager);
         mButton_pop_time=(Button) findViewById(R.id.button);
     }
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initViewPager() {
         // TODO Auto-generated method stub
-        mDefaultImage.setVisibility(View.GONE);
+      //  mDefaultImage.setVisibility(View.GONE);
         mImagePager.setVisibility(View.VISIBLE);
 //
 //        //修改循环tag
@@ -153,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
             mImageViews[i] = mImageView;
             if (i == 0) {
                 // 默认选中第一张图片
-                mImageViews[i].setBackgroundResource(R.drawable.test);
+                mImageViews[i].setBackgroundResource(R.drawable.circle_3);
             }
             else {
-                mImageViews[i].setBackgroundResource(R.drawable.test);
+                mImageViews[i].setBackgroundResource(R.drawable.circle_1);
             }
             group.addView(mImageViews[i]);
         }
@@ -167,6 +172,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showTimePopFormBottom(view);
+            }
+        });
+        mImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                for(int i=0;i<mImageViews.length;i++){
+                    if (i == position) {
+                        // 默认选中第一张图片
+                        mImageViews[i].setBackgroundResource(R.drawable.circle_3);
+                    }
+                    else {
+                        mImageViews[i].setBackgroundResource(R.drawable.circle_1);
+                    }
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -338,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
         TimePopWindow PopWin = new TimePopWindow(this, bundle);
         PopWin.setCallback(mFragmentCallback);
+        PopWin.setHeight((int) (globalHeight/2*1.20));
         // Options
 
 

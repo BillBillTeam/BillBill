@@ -70,7 +70,6 @@ class DayPickerView extends ViewGroup {
     public DayPickerView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.spDayPickerStyle);
     }
-
     public DayPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(SUtils.createThemeWrapper(context, R.attr.sublimePickerStyle,
                 R.style.SublimePickerStyleLight, defStyleAttr,

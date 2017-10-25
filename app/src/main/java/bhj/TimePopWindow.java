@@ -3,6 +3,7 @@ package bhj;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -158,7 +159,7 @@ public class TimePopWindow extends PopupWindow {
             this.setBackgroundDrawable(dw);
 
             // 设置弹出窗体显示时的动画，从底部向上弹出
-            this.setAnimationStyle(R.style.pop_window_anim);
+            //this.setAnimationStyle(R.style.pop_window_anim);
 
     }
 
@@ -187,6 +188,7 @@ public class TimePopWindow extends PopupWindow {
         }
 
         mSublimePicker.initializePicker(options, mListener);
+
         return mSublimePicker;
     }
 

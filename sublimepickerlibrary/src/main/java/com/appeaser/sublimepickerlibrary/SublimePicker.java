@@ -61,7 +61,9 @@ import java.util.TimeZone;
  */
 public class SublimePicker extends FrameLayout
         implements SublimeDatePicker.OnDateChangedListener,
+        SublimeDatePicker.OnCloseListener,
         SublimeDatePicker.DatePickerValidationCallback,
+
         SublimeTimePicker.TimePickerValidationCallback {
     private static final String TAG = SublimePicker.class.getSimpleName();
 
@@ -121,6 +123,7 @@ public class SublimePicker extends FrameLayout
             if (mDatePickerEnabled || mTimePickerEnabled) {
                 updateCurrentPicker();
                 updateDisplay();
+
             } else { /* No other picker is activated. Dismiss. */
                 mButtonLayoutCallback.onOkay();
             }
@@ -131,6 +134,7 @@ public class SublimePicker extends FrameLayout
     private final ButtonHandler.Callback mButtonLayoutCallback = new ButtonHandler.Callback() {
         @Override
         public void onOkay() {
+
             SelectedDate selectedDate = null;
 
             if (mDatePickerEnabled) {
@@ -167,6 +171,7 @@ public class SublimePicker extends FrameLayout
 
         @Override
         public void onCancel() {
+
             mListener.onCancelled();
         }
 
@@ -223,12 +228,14 @@ public class SublimePicker extends FrameLayout
 
         llMainContentHolder = (LinearLayout) findViewById(R.id.llMainContentHolder);
         mButtonLayout = new ButtonHandler(this);
+
         initializeRecurrencePickerSwitch();
 
         mDatePicker = (SublimeDatePicker) findViewById(R.id.datePicker);
         mTimePicker = (SublimeTimePicker) findViewById(R.id.timePicker);
         mSublimeRecurrencePicker = (SublimeRecurrencePicker)
                 findViewById(R.id.repeat_option_picker);
+        mDatePicker.setCloseCallback(this);
     }
 
     public void initializePicker(SublimeOptions options, SublimeListenerAdapter listener) {
@@ -344,6 +351,8 @@ public class SublimePicker extends FrameLayout
 
             mSublimeRecurrencePicker.setVisibility(View.VISIBLE);
         }
+
+
     }
 
     private String formatDateRange(SelectedDate selectedDate) {
@@ -419,6 +428,7 @@ public class SublimePicker extends FrameLayout
             public void onClick(View v) {
                 mCurrentPicker = SublimeOptions.Picker.REPEAT_OPTION_PICKER;
                 updateDisplay();
+
             }
         });
 
@@ -454,6 +464,11 @@ public class SublimePicker extends FrameLayout
     protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
         super.dispatchRestoreInstanceState(container);
         updateDisplay();
+    }
+
+    @Override
+    public void onclose() {
+        mButtonLayoutCallback.onOkay();
     }
 
     /**
@@ -596,6 +611,7 @@ public class SublimePicker extends FrameLayout
         } else {
             mButtonLayout.applyOptions(false /* hide switch button */,
                     mButtonLayoutCallback);
+
         }
 
         if (!mDatePickerEnabled && !mTimePickerEnabled) {
@@ -627,6 +643,7 @@ public class SublimePicker extends FrameLayout
 
     private void reassessValidity() {
         mButtonLayout.updateValidity(mDatePickerValid && mTimePickerValid);
+
     }
 
     @Override
@@ -636,13 +653,22 @@ public class SublimePicker extends FrameLayout
                 //selectedDate.getStartDate().get(Calendar.MONTH),
                 //selectedDate.getStartDate().get(Calendar.DAY_OF_MONTH),
                 //mOptions.canPickDateRange(), this);
+
+
+        //i can't understand
+        //it seems never call
         mDatePicker.init(selectedDate, mOptions.canPickDateRange(), this);
+
+
+
     }
 
     @Override
     public void onDatePickerValidationChanged(boolean valid) {
         mDatePickerValid = valid;
         reassessValidity();
+
+
     }
 
     @Override
