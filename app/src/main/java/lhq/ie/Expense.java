@@ -9,6 +9,7 @@ import lz.db.DBHelper;
 import lz.db.IDBill;
 
 /**
+ * 管理用户消费记录的类
  * Created by lihuiqingdediannao on 2017/10/21.
  */
 

@@ -2,6 +2,7 @@ package lhq.ie;
 
 import android.content.Context;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import lz.db.CustomType;
@@ -22,16 +23,66 @@ public class ExpenseType {
     }
 
     /**
-     * 获得所有消费类型，以动态数组形式输出
-     * @return 包含所有消费类型的动态数组
+     * 获得所有显示的消费类型，以动态数组形式按位置顺序输出
+     * @return 包含所有显示的消费类型的动态数组
      */
-    public ArrayList<String> getAllExpenseType()
+    public ArrayList<String> getAllShowExpenseType()
     {
+        int showNumber=0;
+        int Index=0;
+        ArrayList<CustomType> list= dbHelper.selectAllCustomType();
+        ArrayList<String> type=new ArrayList<>();
+
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()>=0)
+            {
+                showNumber++;
+            }
+        }
+        for(int i=0;i<showNumber;i++)
+        {
+            for(int j=0;j<list.size();j++)
+            {
+                if(list.get(i).getIndex()==Index)
+                {
+                    type.add(list.get(i).getType());
+                    Index++;
+                }
+            }
+
+        }
+        return type;
+    }
+
+    /**
+     * 获得所有隐藏的消费类型，以动态数组的形式按位置顺序输出
+     * @return 包含所有隐藏的消费类型的动态数组
+     */
+    public ArrayList<String> getAllHideExpenseType()
+    {
+        int hideNumber=0;
+        int Index=-1;
         ArrayList<CustomType> list= dbHelper.selectAllCustomType();
         ArrayList<String> type=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
-            type.add(list.get(i).getType());
+            if(list.get(i).getIndex()<0)
+            {
+                hideNumber++;
+            }
+        }
+        for(int i=0;i<hideNumber;i++)
+        {
+            for(int j=0;j<list.size();j++)
+            {
+                if(list.get(i).getIndex()==Index)
+                {
+                    type.add(list.get(i).getType());
+                    Index--;
+                }
+            }
+
         }
         return type;
     }
@@ -44,19 +95,146 @@ public class ExpenseType {
     public void InsertType (String string)throws Exception
     {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
-        for(int i=0;i<=list.size();i++)
+        for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getType().equals(string))
             {
                 throw new Exception("输入类型已经存在");
             }
         }
-        CustomType expensetype=new CustomType(string,list.size()+1);
+        CustomType expensetype=new CustomType(string,list.size());
         list.add(expensetype);
         dbHelper.insertCustomType(list);
     }
 
+    /**
+     * 删除用户指定的显示区的消费类型
+     * @param Index 用户指定的显示区的消费类型的位置
+     */
+    public void deleteShowType(int Index)
+    {
+        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index)
+            {
+                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                dbHelper.deleteCustomType(customType);
+            }
+        }
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()>Index)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()-1);
+            }
+        }
+    }
 
+    /**
+     * 删除用户指定的隐藏区的消费类型
+     * @param Index 用户指定的隐藏区的消费类型的位置
+     */
+    public void deleteHideType(int Index)
+    {
+        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index)
+            {
+                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                dbHelper.deleteCustomType(customType);
+            }
+        }
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()<Index)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()+1);
+            }
+        }
+    }
+    /**
+     * 交换两个消费类型的位置
+     * @param Index1 第一个消费类型的位置
+     * @param Index2 第二个消费类型的位置
+     * @return 将交换后的所有消费类型以动态数组的形式输出
+     */
+    public ArrayList<String> exchange(int Index1,int Index2)
+    {
+        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        CustomType customType=new CustomType(list.get(Index1).getType(),list.get(Index1).getIndex());
+        list.get(Index1).setType(list.get(Index2).getType());
+        list.get(Index1).setIndex(list.get(Index2).getIndex());
+        list.get(Index2).setType(customType.getType());
+        list.get(Index2).setIndex(customType.getIndex());
 
+        ArrayList<String> type=new ArrayList<>();
+        for(int i=0;i<list.size();i++)
+        {
+            type.add(list.get(i).getType());
+        }
+        return type;
+    }
+
+    /**
+     * 将用户指定的显示区的消费类型移入隐藏区
+     * @param Index 用户指定的消费类型的位置
+     */
+    public void showToHide(int Index)
+    {
+        int minIndex=Index;
+        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()<=Index)
+            {
+                minIndex=list.get(i).getIndex();
+            }
+            if(list.get(i).getIndex()>Index)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()-1);
+            }
+        }
+
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index)
+            {
+                list.get(i).setIndex(minIndex-1);
+            }
+        }
+
+    }
+
+    /**
+     * 将用户指定的隐藏区的消费类型加入显示区
+     * @param Index 用户指定的消费类型的位置
+     */
+    public void hideToShow(int Index)
+    {
+        int maxIndex=Index;
+        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()>=Index)
+            {
+                maxIndex=list.get(i).getIndex();
+            }
+            if(list.get(i).getIndex()<Index)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()+1);
+            }
+        }
+
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index)
+            {
+                list.get(i).setIndex(maxIndex+1);
+            }
+        }
+
+    }
 
 }
