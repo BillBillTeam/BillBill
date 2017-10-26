@@ -96,11 +96,15 @@
 
                 <Button
                     android:id="@+id/Button2"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
+                    android:layout_width="101dp"
+                    android:layout_height="36dp"
                     android:background="@drawable/test" />
             </LinearLayout>
+
+            <include
+                layout="@layout/number_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
 
         </LinearLayout>
     </ScrollView>
