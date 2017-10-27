@@ -2,9 +2,10 @@ package lhq.ie;
 
 import android.content.Context;
 
-import java.lang.reflect.Array;
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import fivene.billbill.R;
 import lz.db.CustomType;
 import lz.db.DBHelper;
 
@@ -14,12 +15,13 @@ import lz.db.DBHelper;
  */
 
 public class ExpenseType {
-    DBHelper dbHelper;
-
+    private DBHelper dbHelper;
+    private String[] systemTypeNames;
 
     public ExpenseType(Context context)
     {
         this.dbHelper=new DBHelper(context);
+        systemTypeNames = context.getResources().getStringArray(R.array.systemType);
     }
 
     /**
@@ -107,11 +109,13 @@ public class ExpenseType {
         dbHelper.insertCustomType(list);
     }
 
+
     /**
-     * 删除用户指定的显示区的消费类型
-     * @param Index 用户指定的显示区的消费类型的位置
+     * 删除用户指定的用户自定义的显示区的消费类型
+     * @param Index 用户指定的消费类型的位置
+     * @return false表示用户删除类型为系统类型，删除失败；true表示删除成功
      */
-    public void deleteShowType(int Index)
+    public boolean deleteShowType(int Index)
     {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
@@ -119,6 +123,13 @@ public class ExpenseType {
             if(list.get(i).getIndex()==Index)
             {
                 CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                for(int j=0;j<systemTypeNames.length;j++)
+                {
+                    if(systemTypeNames[j].equals(list.get(i).getType()))
+                    {
+                        return false;
+                    }
+                }
                 dbHelper.deleteCustomType(customType);
             }
         }
@@ -129,13 +140,15 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()-1);
             }
         }
+        return true;
     }
 
     /**
-     * 删除用户指定的隐藏区的消费类型
-     * @param Index 用户指定的隐藏区的消费类型的位置
+     * 删除用户指定的用户自定义的隐藏区的消费类型
+     * @param Index 用户指定的消费类型的位置
+     * @return false表示用户删除类型为系统类型，删除失败；true表示删除成功
      */
-    public void deleteHideType(int Index)
+    public boolean deleteHideType(int Index)
     {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
@@ -143,6 +156,13 @@ public class ExpenseType {
             if(list.get(i).getIndex()==Index)
             {
                 CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                for(int j=0;j<systemTypeNames.length;j++)
+                {
+                    if(systemTypeNames[j].equals(list.get(i).getType()))
+                    {
+                        return false;
+                    }
+                }
                 dbHelper.deleteCustomType(customType);
             }
         }
@@ -153,6 +173,7 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()+1);
             }
         }
+        return true;
     }
     /**
      * 交换两个消费类型的位置
@@ -187,7 +208,7 @@ public class ExpenseType {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()<=Index)
+            if(list.get(i).getIndex()<=minIndex)
             {
                 minIndex=list.get(i).getIndex();
             }
@@ -217,7 +238,7 @@ public class ExpenseType {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()>=Index)
+            if(list.get(i).getIndex()>=maxIndex)
             {
                 maxIndex=list.get(i).getIndex();
             }
