@@ -9,16 +9,17 @@
     tools:context="fivene.billbill.MainActivity">
 
     <ScrollView
+        android:id="@+id/mainScrollView"
         android:layout_width="368dp"
-
         android:layout_height="495dp"
+        android:scrollbars="none"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
@@ -31,8 +32,7 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/tag_group_pager"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                   >
+                    android:layout_height="wrap_content">
 
                 </android.support.v4.view.ViewPager>
 
@@ -100,6 +100,10 @@
                     android:layout_height="36dp"
                     android:background="@drawable/test" />
             </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
 
             <include
                 layout="@layout/number_keyboard"

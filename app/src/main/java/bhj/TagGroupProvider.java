@@ -23,13 +23,14 @@ public class TagGroupProvider {
    // private List<String> TagNameList;
     private final int COLUMNCOUNT=5;
     private final int ROWCOUNT=2;
-
+    private int width;
     /**
      * 创建标签组
      * @param context 上下文
      * @param tagList 标签数据
      */
-   public TagGroupProvider(Context context, List<String> tagList){
+   public TagGroupProvider(Context context, List<String> tagList,int width){
+       this.width=width;
         //init
         tagList.add("出行");
         tagList.add("餐饮");
@@ -55,6 +56,7 @@ public class TagGroupProvider {
                 View tagWithName = inflater.inflate(R.layout.tag_with_name, null);
                 LinearLayout layout1 = (LinearLayout) tagWithName.getRootView();
                 //add tagWith name Image and name
+                layout1.setMinimumWidth(width/COLUMNCOUNT);
                 ImageView img=(ImageView) layout1.getChildAt(0);
                 final TextView text=(TextView)layout1.getChildAt(1);
                 text.setText("hhhhhh");

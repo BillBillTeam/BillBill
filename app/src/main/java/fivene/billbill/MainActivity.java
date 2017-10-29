@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.content.Context;
@@ -14,13 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
@@ -33,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
    // private ImageView mDefaultImage = null;
 
-    private ViewPager mImagePager = null;
+    private ViewPager mTagGroupPager = null;
 
     private ImageView[] mImageViews = null;
 
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImageView;
 
     private Button mButton_pop_time;
+    private ScrollView mScrollView;
+    private View currentSelectedTag;
 
     TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
         @Override
@@ -89,12 +96,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         DisplayMetrics dm = getResources().getDisplayMetrics();
         globalWidth = dm.widthPixels;
         globalHeight = dm.heightPixels;
         init();
         initView();
         initViewPager();
+        initev();
     }
 
     /**
@@ -104,6 +113,36 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
 
     }
+    private void initev(){
+
+        //auto move on the two page
+        mScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                           switch (motionEvent.getAction()){
+                                case MotionEvent.ACTION_UP:
+                                    System.out.print("up");
+                                    System.out.print(mScrollView.getScrollY());
+                                    if(mScrollView.getScrollY()>globalHeight/4){
+
+                                        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                    }
+                                    else{
+                                        mScrollView.fullScroll(ScrollView.FOCUS_UP);
+
+                                    }
+                                        break;
+                               }
+                return false;
+            }
+
+        });
+//
+//        mScrollView.fullScroll(ScrollView.FOCUS_UP);
+//        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+    }
+
 
     /**
      * 初始化控件
@@ -111,8 +150,9 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         // TODO Auto-generated method stub
        // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
-        mImagePager = (ViewPager) findViewById(R.id.tag_group_pager);
+        mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
         mButton_pop_time=(Button) findViewById(R.id.button);
+        mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
     }
 
     /**
@@ -121,29 +161,12 @@ public class MainActivity extends AppCompatActivity {
     private void initViewPager() {
         // TODO Auto-generated method stub
       //  mDefaultImage.setVisibility(View.GONE);
-        mImagePager.setVisibility(View.VISIBLE);
-//
-//        //修改循环tag
-//        ImageView img1 = new ImageView(mContext);
-//        img1.setBackgroundResource(R.drawable.test);
-//        advPics.add(img1);
-//
-//        ImageView img2 = new ImageView(mContext);
-//        img2.setBackgroundResource(R.drawable.test);
-//        advPics.add(img2);
-//
-//        ImageView img3 = new ImageView(mContext);
-//        img3.setBackgroundResource(R.drawable.test);
-//        advPics.add(img3);
-//
-//        ImageView img4 = new ImageView(mContext);
-//        img4.setBackgroundResource(R.drawable.test);
-//        advPics.add(img4);
+        mTagGroupPager.setVisibility(View.VISIBLE);
 
 
         //create TagGroupProvider
         List <String>testList=new ArrayList<String>();
-        TagGroupProvider provider=new TagGroupProvider(this,testList);
+        final TagGroupProvider provider=new TagGroupProvider(this,testList,globalWidth);
 
         // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
 
@@ -165,8 +188,11 @@ public class MainActivity extends AppCompatActivity {
             }
             group.addView(mImageViews[i]);
         }
+        // add listener for tags
+        GridLayout layout =(GridLayout)provider.getTagGroup().get(0);
+        addListenerToGridLayout(layout);
 
-        mImagePager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
+        mTagGroupPager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
 
         mButton_pop_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 showTimePopFormBottom(view);
             }
         });
-        mImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mTagGroupPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -196,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
+                GridLayout layout =(GridLayout)provider.getTagGroup().get(position);
+                addListenerToGridLayout(layout);
+
             }
 
             @Override
@@ -204,112 +233,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        mImagePager.setOnPageChangeListener(new GuidePageChangeListener());
-//        // 按下时不继续定时滑动,弹起时继续定时滑动
-//        mImagePager.setOnTouchListener(new View.OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                    case MotionEvent.ACTION_MOVE:
-//                        isContinue = false;
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        isContinue = true;
-//                        break;
-//                    default:
-//                        isContinue = true;
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
-        // 定时滑动线程
-//        new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                while (true) {
-//                    if (isContinue) {
-//                        viewHandler.sendEmptyMessage(what.get());
-//                        whatOption();
-//                    }
-//                }
-//            }
-//
-//        }).start();
+
     }
 
-//    /**
-//     * 操作圆点轮换变背景
-//     */
-//    private void whatOption() {
-//        what.incrementAndGet();
-//        if (what.get() > mImageViews.length - 1) {
-//            what.getAndAdd(-mImageViews.length);
-//        }
-//        try {
-//            if (what.get() == 1) {
-//                Thread.sleep(3000);
-//            }
-//            else {
-//                Thread.sleep(2000);
-//            }
-//        }
-//        catch (InterruptedException e) {
-//        }
-//    }
-//
-//    /**
-//     * 处理定时切换广告栏图片的句柄
-//     */
-//    @SuppressLint("HandlerLeak")
-//    private final Handler viewHandler = new Handler() {
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            mImagePager.setCurrentItem(msg.what);
-//            super.handleMessage(msg);
-//        }
-//    };
-//
-//    /** 指引页面改监听器 */
-//    private final class GuidePageChangeListener implements OnPageChangeListener {
-//
-//        @Override
-//        public void onPageScrollStateChanged(int arg0) {
-//
-//        }
-//
-//        @Override
-//        public void onPageScrolled(int arg0, float arg1, int arg2) {
-//
-//        }
-//
-//
-//
-//
-//        //tag
-//        @Override
-//        public void onPageSelected(int arg0) {
-//            arg0 = arg0 % advPics.size();
-//            for (int i = 0; i < mImageViews.length; i++) {
-//                mImageViews[arg0].setBackgroundResource(R.drawable.test);
-//                if (arg0 != i) {
-//                    mImageViews[i].setBackgroundResource(R.drawable.test);
-//                }
-//            }
-//            what.set(arg0);
-//        }
-//    }
 
-    /**
-     * @Description: 广告栏PaperView 图片适配器
-     */
+
+
     private final class TagGroupAdapter extends PagerAdapter {
         private List<View> views = null;
-
         public TagGroupAdapter(List<View> views) {
             this.views = views;
         }
@@ -331,12 +262,10 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: add listener at here
         @Override
-        public Object instantiateItem(View arg0, int arg1) {
-            ((ViewPager) arg0).addView(views.get(arg1), 0);
+        public Object instantiateItem(ViewGroup container, int position) {
+            container.addView(views.get(position), 0);
 
-
-
-            return views.get(arg1);
+            return views.get(position);
         }
 
         @Override
@@ -432,6 +361,39 @@ public class MainActivity extends AppCompatActivity {
 
         // If 'displayOptions' is zero, the chosen options are not valid
         return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
+    }
+    private void addListenerToGridLayout(final GridLayout layout){
+        for(int i=0;i<layout.getChildCount();i++){
+            layout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(currentSelectedTag!=view){
+                        LinearLayout layout1=(LinearLayout)view;
+                        if(currentSelectedTag!=null){
+                            //remove selected change
+                            LinearLayout layout2 =(LinearLayout) currentSelectedTag;
+                            Drawable drawable=getResources().getDrawable(R.drawable.none_drawable);
+                            layout2.setBackground(drawable);
+
+
+                        }
+                        currentSelectedTag=view;
+                        //add selected change
+                        Drawable drawable=getResources().getDrawable(R.drawable.selected_tag_background);
+                        layout1.setBackground(drawable);
+
+                        TextView textView=(TextView) layout1.getChildAt(1);
+                        System.out.print(textView.getText());
+
+
+
+                    }
+
+                }
+            });
+        }
+
     }
 
 }
