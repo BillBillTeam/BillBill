@@ -35,7 +35,9 @@ public class NewRecord  {
         this.remark = remark;
         mId =UUID.randomUUID();
         String s = UUID.randomUUID().toString();
-        IDBill mIDBill =new IDBill(year,month,date,type,amount,remark,mId);
+        //delete it because it can't be make //from bianhongjia
+
+        //IDBill mIDBill =new IDBill(year,month,date,type,amount,remark,mId);
     }
     public Calendar getNow() {
         return now;
