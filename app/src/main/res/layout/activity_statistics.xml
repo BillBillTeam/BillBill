@@ -7,6 +7,7 @@
     tools:context="fivene.billbill.StatisticsActivity">
 
     <TabHost
+        android:id="@+id/tabhost"
         android:layout_width="368dp"
         android:layout_height="495dp"
         tools:layout_editor_absoluteX="8dp"
@@ -33,6 +34,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/tab1_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+                    </ScrollView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -41,6 +52,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/tab2_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+                    </ScrollView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -49,6 +70,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/tab3_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+                    </ScrollView>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
