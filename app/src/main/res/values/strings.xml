@@ -1,9 +1,29 @@
 <resources>
     <string name="app_name">BillBill</string>
     <string-array name="systemType">
-        <item>吃喝</item> <item>交通</item> <item>娱乐</item> <item>果蔬</item> <item>服饰</item>
-        <item>日用品</item> <item>书籍</item> <item>购物</item> <item>水电</item> <item>数码</item>
-        <item>通讯</item> <item>学习</item> <item>医疗</item> <item>烟酒</item> <item>自定义</item>
-        <item>运动</item> <item>美容</item> <item>维修</item> <item>办公</item> <item>房屋</item>
+        <item>吃喝</item>
+        <item>交通</item>
+        <item>娱乐</item>
+        <item>果蔬</item>
+        <item>服饰</item>
+        <item>日用品</item>
+        <item>书籍</item>
+        <item>购物</item>
+        <item>水电</item>
+        <item>数码</item>
+        <item>通讯</item>
+        <item>学习</item>
+        <item>医疗</item>
+        <item>烟酒</item>
+        <item>自定义</item>
+        <item>运动</item>
+        <item>美容</item>
+        <item>维修</item>
+        <item>办公</item>
+        <item>房屋</item>
     </string-array>
+    <string name="title_activity_bottom_activity">bottom_activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
