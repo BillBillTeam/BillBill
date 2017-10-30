@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private  int globalHeight;
     private  int globalWidth;
     private Context mContext;
-
+    private Button mButton_ok;
     private ImageView mImageView;
 
     private Button mButton_pop_time;
@@ -141,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
 //
 //        mScrollView.fullScroll(ScrollView.FOCUS_UP);
 //        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        mButton_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //just for test
+                Intent intent = new Intent(MainActivity.this,StatisticsActivity.class);
+                MainActivity.this.startActivity(intent);
+
+            }
+        });
+
     }
 
 
@@ -153,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
         mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
         mButton_pop_time=(Button) findViewById(R.id.button);
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
+        mButton_ok=(Button)findViewById(R.id.btn_ok);
+
     }
 
     /**

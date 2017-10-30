@@ -17,6 +17,7 @@
             </intent-filter>
             android:theme="@android:style/Theme.NoTitleBar"
         </activity>
+        <activity android:name=".StatisticsActivity"></activity>
     </application>
 
 </manifest>
