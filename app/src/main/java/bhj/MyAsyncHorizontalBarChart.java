@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -36,24 +39,66 @@ import java.util.List;
  * 横向的柱状图
  */
 
-public class MyHorizontalBarChart implements  OnChartValueSelectedListener {
-    protected HorizontalBarChart mChart;
+public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener {
+    private HorizontalBarChart mChart;
 //    protected Typeface mTfRegular;
-    protected Typeface mTfLight;
-    private Context context;
-    public void MyHorizontalBarChart (Context context) {
-        this.context=context;
-//
-//        mTfRegular = Typeface.createFromAsset(context.getAssets(), "OpenSans-Regular.ttf");
-        mTfLight = Typeface.createFromAsset(context.getAssets(), "OpenSans-Light.ttf");
-//
-//        tvX = (TextView) findViewById(R.id.tvXMax);
-//        tvY = (TextView) findViewById(R.id.tvYMax);
-//
-//        mSeekBarX = (SeekBar) findViewById(R.id.seekBar1);
-//        mSeekBarY = (SeekBar) findViewById(R.id.seekBar2);
+   //protected Typeface mTfLight;
+    private ProgressBar progressBar;
+    private LinearLayout layout;
+    //add barchart values at here
+    //and init values at setValues()
+    //and set it on createBarChart()
 
-        mChart = new HorizontalBarChart(context);
+
+
+
+    public MyAsyncHorizontalBarChart(Context context,ProgressBar progressBar,LinearLayout linearLayout){
+        this.progressBar=progressBar;
+        this.layout=linearLayout;
+        this.mChart=new HorizontalBarChart(context);
+    }
+    public void setValues(){
+
+    }
+
+    public void run(){
+        myAsyncTask.Callback callback=new myAsyncTask.Callback() {
+
+            @Override
+            public void CallbackOnPerExecute() {
+
+
+            }
+
+            @Override
+            public void CallbackDoInBackground() {
+
+                //colored line chart
+                //horizontal bar chart
+               createBarChart();
+
+
+            }
+
+            @Override
+            public void CallbackOnPostExecute() {
+                mChart.animateY(2500);
+                progressBar.setVisibility(View.GONE);
+                layout.addView(mChart);
+            }
+        };
+
+
+        myAsyncTask task=new myAsyncTask();
+        task.setCallback(callback);
+        task.execute();
+    }
+
+
+
+ private void createBarChart() {
+
+
         mChart.setOnChartValueSelectedListener(this);
         // mChart.setHighlightEnabled(false);
 
@@ -78,20 +123,20 @@ public class MyHorizontalBarChart implements  OnChartValueSelectedListener {
 
         XAxis xl = mChart.getXAxis();
         xl.setPosition(XAxisPosition.BOTTOM);
-        xl.setTypeface(mTfLight);
+       // xl.setTypeface(mTfLight);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
 
         YAxis yl = mChart.getAxisLeft();
-        yl.setTypeface(mTfLight);
+     //   yl.setTypeface(mTfLight);
         yl.setDrawAxisLine(true);
         yl.setDrawGridLines(true);
         yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 //        yl.setInverted(true);
 
         YAxis yr = mChart.getAxisRight();
-        yr.setTypeface(mTfLight);
+    //    yr.setTypeface(mTfLight);
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
@@ -104,7 +149,7 @@ public class MyHorizontalBarChart implements  OnChartValueSelectedListener {
 
         setData(12, 50);
         mChart.setFitBars(true);
-        mChart.animateY(2500);
+
 
 
         Legend l = mChart.getLegend();
@@ -150,7 +195,7 @@ public class MyHorizontalBarChart implements  OnChartValueSelectedListener {
 
             BarData data = new BarData(dataSets);
             data.setValueTextSize(10f);
-            data.setValueTypeface(mTfLight);
+            //data.setValueTypeface(mTfLight);
             data.setBarWidth(barWidth);
             mChart.setData(data);
         }
