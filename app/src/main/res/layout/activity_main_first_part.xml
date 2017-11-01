@@ -7,25 +7,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="384dp"
+        android:layout_height="349dp"
         android:orientation="vertical">
 
         <include
             layout="@layout/bill_column"
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <include
-            layout="@layout/bill_item"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="20dp" />
 
         <include
             layout="@layout/bill_item"
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="60dp" />
+
+        <include
+            layout="@layout/bill_item"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
 
         <Button
             android:id="@+id/button_jump"

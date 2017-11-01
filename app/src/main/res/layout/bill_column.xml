@@ -1,43 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/bill_column_layout"
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorButtonNormal"
-        android:orientation="horizontal"
-        android:weightSum="1">
+    //高度20dp，三个TextView比例：1:4:1
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="xx月xx日"
+        android:textAlignment="center" />
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="57dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="xx月xx日"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:text="  周x" />
 
-        <EditText
-            android:id="@+id/editText7"
-            android:layout_width="178dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="周x"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="支出：xx "
+        android:textAlignment="viewStart" />
 
-        <EditText
-            android:id="@+id/editText8"
-            android:layout_width="67dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="支出：xx"
-            android:textAlignment="center"
-            android:textSize="10sp" />
-
-    </LinearLayout>
 </LinearLayout>
