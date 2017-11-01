@@ -1,10 +1,15 @@
 package fivene.billbill;
 
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
@@ -15,6 +20,7 @@ import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.Menu;
@@ -38,6 +44,7 @@ import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicke
 
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
+import lz.db.Bill;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,50 +57,20 @@ public class MainActivity extends AppCompatActivity {
     private AtomicInteger what = new AtomicInteger(0);
 
     private boolean isContinue = true;
+    private Calendar mSelectedDate;
 
     private  int globalHeight;
     private  int globalWidth;
     private Context mContext;
     private Button mButton_ok;
+    private Button mTimeButton;
+
+    private Button mButton2;
     private ImageView mImageView;
     private Toolbar mToolbar;
 
-    private Button mButton_pop_time;
     private ScrollView mScrollView;
     private View currentSelectedTag;
-
-    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
-        @Override
-        public void onCancelled() {
-           // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
-                                            int hourOfDay, int minute,
-                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
-                                            String recurrenceRule) {
-            SelectedDate mSelectedDate;
-            mSelectedDate = selectedDate;
-            System.out.print(selectedDate.toString());
-//            mHour = hourOfDay;
-//            mMinute = minute;
-//            mRecurrenceOption = recurrenceOption != null ?
-//                    recurrenceOption.name() : "n/a";
-//            mRecurrenceRule = recurrenceRule != null ?
-//                    recurrenceRule : "n/a";
-//
-//            updateInfoView();
-//
-//            svMainContainer.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    svMainContainer.scrollTo(svMainContainer.getScrollX(),
-//                            cbAllowDateRangeSelection.getBottom());
-//                }
-//            });
-        }
-    };
 
 
 
@@ -141,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void init() {
         mContext = this;
+        mSelectedDate=Calendar.getInstance();
+        mSelectedDate.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
 
     }
     private void initev(){
@@ -180,6 +159,29 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO:实现数据插入到数据库并且显示一个对话框
+                //
+//                mSelectedDate.get
+//                Bill bill=new Bill()
+                new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
+                        .setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？")//设置显示的内容
+                        .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
+                                // TODO Auto-generated method stub
+                            }
+                        }).setNegativeButton("返回账单",new DialogInterface.OnClickListener() {//添加返回按钮
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//响应事件
+                        // TODO Auto-generated method stub
+                    }
+
+                }).show();//在按键响应事件中显示此对话框
+            }
+        });
 
     }
 
@@ -191,9 +193,11 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
        // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
         mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
-        mButton_pop_time=(Button) findViewById(R.id.button);
+
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
         mButton_ok=(Button)findViewById(R.id.btn_ok);
+        mTimeButton=(Button)findViewById(R.id.time_button);
+        mButton2=(Button)findViewById(R.id.Button2);
 
 
     }
@@ -237,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTagGroupPager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
 
-        mButton_pop_time.setOnClickListener(new View.OnClickListener() {
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTimePopFormBottom(view);
@@ -405,6 +409,11 @@ public class MainActivity extends AppCompatActivity {
         // If 'displayOptions' is zero, the chosen options are not valid
         return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
     }
+
+    /**
+     * 给标签组添加监听事件
+     * @param layout
+     */
     private void addListenerToGridLayout(final GridLayout layout){
         for(int i=0;i<layout.getChildCount();i++){
             layout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
@@ -438,5 +447,47 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
+        @Override
+        public void onCancelled() {
+            // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+                                            int hourOfDay, int minute,
+                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+                                            String recurrenceRule) {
+
+            if(selectedDate.getFirstDate().getTime()!=Calendar.getInstance().getTime()){//no use need to update
+
+                mSelectedDate = selectedDate.getFirstDate();
+                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()));
+
+                Log.i("billbill",selectedDate.toString());
+
+            }
+            else{
+                mTimeButton.setText("今天");
+            }
+//            mHour = hourOfDay;
+//            mMinute = minute;
+//            mRecurrenceOption = recurrenceOption != null ?
+//                    recurrenceOption.name() : "n/a";
+//            mRecurrenceRule = recurrenceRule != null ?
+//                    recurrenceRule : "n/a";
+//
+//            updateInfoView();
+//
+//            svMainContainer.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    svMainContainer.scrollTo(svMainContainer.getScrollX(),
+//                            cbAllowDateRangeSelection.getBottom());
+//                }
+//            });
+        }
+    };
 
 }

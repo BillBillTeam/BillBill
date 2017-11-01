@@ -16,6 +16,8 @@ public class StatisticsActivity extends AppCompatActivity {
     ProgressBar progressBar1;
     ProgressBar progressBar2;
     ProgressBar progressBar3;
+
+    int flags=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
             @Override
             public void CallbackOnPerExecuiite() {
-                progressBar1.setVisibility(View.VISIBLE);
+
+
             }
 
             @Override
@@ -92,6 +95,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 progressBar1.setVisibility(View.GONE);
             }
         };
+
         myAsyncTask task=new myAsyncTask();
         task.setCallback(callback);
         task.execute();
