@@ -3,6 +3,7 @@ package lhq.ie;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import lz.db.Bill;
 import lz.db.DBHelper;
@@ -20,6 +21,20 @@ public class Expense {
     public Expense(Context context)
     {
         this.dbHelper=new DBHelper(context);
+    }
+
+    /**
+     * 初始化一条账单记录
+     * @param now 初始化的时间信息
+     * @param type 消费类型
+     * @param amount 消费金额
+     * @param remark 消费的备注
+     * @return 返回一个初始化完成地账单记录
+     */
+    public Bill initBill(Calendar now, String type,double amount,String remark)
+    {
+        Bill bill=new Bill(now.get(Calendar.YEAR),now.get(Calendar.MONTH)+1,now.get(Calendar.DAY_OF_MONTH),type,amount,remark);
+        return bill;
     }
 
     /**
