@@ -24,6 +24,12 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
+            <include
+                layout="@layout/activity_main_first_part"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private Button mButton_ok;
     private Button mTimeButton;
+    private Button mbt_jump;
 
     private Button mButton2;
     private ImageView mImageView;
@@ -183,6 +184,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mbt_jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
 
 
@@ -198,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         mButton_ok=(Button)findViewById(R.id.btn_ok);
         mTimeButton=(Button)findViewById(R.id.time_button);
         mButton2=(Button)findViewById(R.id.Button2);
+        mbt_jump=(Button)findViewById(R.id.button_jump);
 
 
     }
