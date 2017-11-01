@@ -80,6 +80,9 @@ public class StatisticsActivity extends AppCompatActivity {
 
             @Override
             public void CallbackDoInBackground() {
+
+                //colored line chart
+                //horizontal bar chart
                 for(int i=0;i<100000000;i++)
                     i++;
             }

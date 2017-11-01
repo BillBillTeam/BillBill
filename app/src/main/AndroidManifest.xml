@@ -17,7 +17,11 @@
             </intent-filter>
             android:theme="@android:style/Theme.NoTitleBar"
         </activity>
-        <activity android:name=".StatisticsActivity"></activity>
+        <activity android:name=".StatisticsActivity" />
+        <activity android:name=".BillListActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

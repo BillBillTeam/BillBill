@@ -12,10 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private Button mButton_ok;
     private ImageView mImageView;
+    private Toolbar mToolbar;
 
     private Button mButton_pop_time;
     private ScrollView mScrollView;
@@ -97,7 +102,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(this.getString(R.string.mainTitle));
+        }
         DisplayMetrics dm = getResources().getDisplayMetrics();
         globalWidth = dm.widthPixels;
         globalHeight = dm.heightPixels;
@@ -107,6 +115,27 @@ public class MainActivity extends AppCompatActivity {
         initev();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_setting:
+                Intent intentSetting = new Intent(MainActivity.this,SettingsActivity.class);
+                MainActivity.this.startActivity(intentSetting);
+                return true;
+            case R.id.item_about:
+//                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
+//                MainActivity.this.startActivity(intentSearch);
+                return true;
+            default:
+                return true;
+        }
+    }
     /**
      * 初始化数据
      */
@@ -165,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         mButton_pop_time=(Button) findViewById(R.id.button);
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
         mButton_ok=(Button)findViewById(R.id.btn_ok);
+
 
     }
 
