@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
    // private ImageView mDefaultImage = null;
 
+    private int currentPage=0;
+
     private ViewPager mTagGroupPager = null;
 
     private ImageView[] mImageViews = null;
@@ -132,14 +134,23 @@ public class MainActivity extends AppCompatActivity {
 
                            switch (motionEvent.getAction()){
                                 case MotionEvent.ACTION_UP:
-                                    System.out.print("up");
-                                    System.out.print(mScrollView.getScrollY());
-                                    if(mScrollView.getScrollY()>globalHeight/4){
-
-                                        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                    Log.i("billbill","up"+globalHeight/4);
+                                    Log.i("billbill","up"+mScrollView.getScrollY());
+                                    if(currentPage==0)
+                                    if(mScrollView.getScrollY()>globalHeight/8){
+                                       scrollToDOWN();
                                     }
                                     else{
-                                        mScrollView.fullScroll(ScrollView.FOCUS_UP);
+
+                                       scrollToUP();
+                                    }
+                                    else{
+                                        if(mScrollView.getScrollY()<globalHeight-globalHeight/2.5){
+                                           scrollToUP();
+                                        }
+                                        else{
+                                          scrollToDOWN();
+                                        }
 
                                     }
                                         break;
@@ -499,4 +510,22 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void scrollToUP(){
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+        currentPage=0;
+    }
+    private void scrollToDOWN(){
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+        currentPage=1;
+    }
 }

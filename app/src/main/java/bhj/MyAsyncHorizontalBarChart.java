@@ -84,6 +84,7 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
             public void CallbackOnPostExecute() {
                 mChart.animateY(2500);
                 progressBar.setVisibility(View.GONE);
+                mChart.setMinimumHeight(400);
                 layout.addView(mChart);
             }
         };
