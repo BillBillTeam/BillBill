@@ -40,15 +40,15 @@ public class TimePopWindow extends PopupWindow {
 
     // Date & Time formatter used for formatting
     // text on the switcher button
-    DateFormat mDateFormatter, mTimeFormatter;
+    private DateFormat mDateFormatter, mTimeFormatter;
 
     // Picker
-    SublimePicker mSublimePicker;
+    private SublimePicker mSublimePicker;
 
     // Callback to activity
-    Callback mCallback;
+    private Callback mCallback;
 
-    SublimeListenerAdapter mListener = new SublimeListenerAdapter() {
+    private SublimeListenerAdapter mListener = new SublimeListenerAdapter() {
         @Override
         public void onCancelled() {
             if (mCallback!= null) {

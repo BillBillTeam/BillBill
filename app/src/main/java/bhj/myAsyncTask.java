@@ -7,14 +7,14 @@ import android.os.AsyncTask;
  */
 
 public class myAsyncTask extends AsyncTask {
-    Callback mCallback;
+    private Callback mCallback;
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mCallback.CallbackOnPerExecuiite();
+        mCallback.CallbackOnPerExecute();
     }
     @Override
     protected Object doInBackground(Object[] objects) {
@@ -24,14 +24,14 @@ public class myAsyncTask extends AsyncTask {
     }
     @Override
     protected void onPostExecute(Object o) {
-        mCallback.CallbackonPostExecute();
-        super.onPostExecute(o);
+        mCallback.CallbackOnPostExecute();
+
     }
 
     public interface Callback {
-        void CallbackOnPerExecuiite();
+        void CallbackOnPerExecute();
         void CallbackDoInBackground();
-        void CallbackonPostExecute();
+        void CallbackOnPostExecute();
 
     }
 }
