@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
@@ -29,9 +30,12 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
 
@@ -39,26 +43,26 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by ubuntu on 17-11-1.
- * 横向的柱状图(后台加载)
+ * 折线图（异步）
  */
 
-public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener {
-    private HorizontalBarChart mChart;
-//    protected Typeface mTfRegular;
-   //protected Typeface mTfLight;
+public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
+    private LineChart mChart;
+
     private ProgressBar progressBar;
     private LinearLayout layout;
     //add barchart values at here
     //and init values at setValues()
     //and set it on createBarChart()
+    protected String[] mMonths = new String[] {
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
+    };
 
 
-
-
-    public MyAsyncHorizontalBarChart(Context context,ProgressBar progressBar,LinearLayout linearLayout){
+    public MyAsyncColoredLineChart(Context context,ProgressBar progressBar,LinearLayout linearLayout){
         this.progressBar=progressBar;
         this.layout=linearLayout;
-        this.mChart=new HorizontalBarChart(context);
+        this.mChart=new LineChart(context);
     }
     public void setValues(){
 
@@ -78,14 +82,19 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
                 //colored line chart
                 //horizontal bar chart
-               createBarChart();
+                createLineChart();
 
 
             }
 
             @Override
             public void CallbackOnPostExecute() {
-                mChart.animateY(2500);
+                mChart.animateX(1000);
+                // get the legend (only possible after setting data)
+                Legend l = mChart.getLegend();
+
+                // modify the legend ...
+                l.setForm(Legend.LegendForm.LINE);
                 progressBar.setVisibility(View.GONE);
                 mChart.setMinimumHeight(400);
                 layout.addView(mChart);
@@ -100,15 +109,11 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
 
 
- private void createBarChart() {
+    private void createLineChart() {
 
 
         mChart.setOnChartValueSelectedListener(this);
         // mChart.setHighlightEnabled(false);
-
-        mChart.setDrawBarShadow(false);
-
-        mChart.setDrawValueAboveBar(true);
 
         mChart.getDescription().setEnabled(false);
 
@@ -127,11 +132,11 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
         XAxis xl = mChart.getXAxis();
         xl.setPosition(XAxisPosition.BOTTOM);
-       // xl.setTypeface(mTfLight);
+        // xl.setTypeface(mTfLight);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
-     //set left text value
+        //set left text value
 //    ex:
 //     xAxis.setValueFormatter(new IAxisValueFormatter() {
 //         @Override
@@ -147,7 +152,7 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
         });
 
         YAxis yl = mChart.getAxisLeft();
-     //   yl.setTypeface(mTfLight);
+        //   yl.setTypeface(mTfLight);
         yl.setDrawAxisLine(true);
         yl.setDrawGridLines(true);
         yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
@@ -155,7 +160,7 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
 
         YAxis yr = mChart.getAxisRight();
-    //    yr.setTypeface(mTfLight);
+        //    yr.setTypeface(mTfLight);
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
@@ -167,74 +172,64 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
         mChart.setMaxVisibleValueCount(60);
 
         setData(12, 50);
-        mChart.setFitBars(true);
 
 
 
-        Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setFormSize(8f);
-        l.setXEntrySpace(4f);
     }
-    public HorizontalBarChart getView(){
+    public LineChart getView(){
 
         return mChart;
     }
 
-    private void setData(int count, float range) {
+    private void setData    (int count, float range) {
 
         float barWidth = 9f;
         float spaceForBar = 10f;//
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         //add values at here
-        yVals1.add(new BarEntry( spaceForBar*0,5));
-        yVals1.add(new BarEntry( spaceForBar*1,5));
-        yVals1.add(new BarEntry( spaceForBar*2,5));
-        yVals1.add(new BarEntry( spaceForBar*5,5));
+        yVals1.add(new Entry( spaceForBar*0,5));
+        yVals1.add(new Entry( spaceForBar*1,5));
+        yVals1.add(new Entry( spaceForBar*2,5));
+        yVals1.add(new Entry( spaceForBar*5,5));
 
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
+        ArrayList<Entry> yVals2 = new ArrayList<Entry>();
         //add values at here
-        yVals2.add(new BarEntry( spaceForBar*0,3));
-        yVals2.add(new BarEntry( spaceForBar*1,3));
-        yVals2.add(new BarEntry( spaceForBar*4,3));
-        yVals2.add(new BarEntry( spaceForBar*5,3));
+        yVals2.add(new Entry( spaceForBar*0,3));
+        yVals2.add(new Entry( spaceForBar*1,3));
+        yVals2.add(new Entry( spaceForBar*4,3));
+        yVals2.add(new Entry( spaceForBar*5,3));
 
 
 
 
 
-        BarDataSet set1;
+        LineDataSet set1;
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
             //重新更新表信息
-            set1 = (BarDataSet)mChart.getData().getDataSetByIndex(0);
+            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals1);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         } else {
             //添加表信息
-            set1 = new BarDataSet(yVals1, "DataSet 1");
+            set1 = new LineDataSet(yVals1, "DataSet 1");
             set1.setDrawIcons(false);
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
 
-            BarDataSet set2 = new BarDataSet(yVals2, "DataSet 2");
+            LineDataSet set2 = new LineDataSet(yVals2, "DataSet 2");
             set2.setColor(Color.rgb(140, 234, 0));
 
-            set2.setStackLabels(new String[]{"bian","zz","qq","mm"});
             set2.setDrawIcons(false);
 
 
             dataSets.add(set1);
             dataSets.add(set2);
 
-            BarData data = new BarData(dataSets);
+            LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface(mTfLight);
-            data.setBarWidth(barWidth);
             mChart.setData(data);
         }
     }

@@ -10,6 +10,7 @@ import android.widget.TabHost;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 
+import bhj.MyAsyncColoredLineChart;
 import bhj.MyAsyncHorizontalBarChart;
 import bhj.myAsyncTask;
 public class StatisticsActivity extends AppCompatActivity {
@@ -85,7 +86,7 @@ public class StatisticsActivity extends AppCompatActivity {
         chart.run();
     }
     private void loadTab2(){
-        MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar2,layout2);
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2);
         chart.setValues();
         chart.run();
 
