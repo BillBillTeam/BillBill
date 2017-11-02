@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicke
 
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
+import lhq.ie.Expense;
 import lz.db.Bill;
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton_ok;
     private Button mTimeButton;
     private Button mbt_jump;
+
+    private EditText amount_text;
+    private EditText remark_text;
+
 
     private Button mButton2;
     private ImageView mImageView;
@@ -174,10 +180,16 @@ public class MainActivity extends AppCompatActivity {
         mButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:实现数据插入到数据库并且显示一个对话框
-                //
 
-               //Bill bill=new Bill(mSelectedDate,)
+                //TODO:用户没有输入信息导致的error
+                //获得用户输入的信息
+                double amount=Double.valueOf( amount_text.getText().toString()).doubleValue();
+                String remark=remark_text.getText().toString();
+                String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
+                Bill bill=new Bill(mSelectedDate,type,amount,remark);
+                Log.i("billbill","new bill :"+bill.toString());
+                Expense ex=new Expense(mContext);
+                ex.Insert(bill);
                 new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
                         .setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？")//设置显示的内容
                         .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
@@ -218,6 +230,10 @@ public class MainActivity extends AppCompatActivity {
         mTimeButton=(Button)findViewById(R.id.time_button);
         mButton2=(Button)findViewById(R.id.Button2);
         mbt_jump=(Button)findViewById(R.id.button_jump);
+
+        amount_text=(EditText)findViewById(R.id.editText);
+        remark_text=(EditText)findViewById(R.id.editText2);
+
 
 
     }
