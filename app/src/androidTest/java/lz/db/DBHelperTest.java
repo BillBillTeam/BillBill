@@ -61,10 +61,8 @@ public class DBHelperTest {
             list.add(ct);
         }
 
-        //任意插入一组数据
+        //任意插入一组数据，不抛出异常则表示插入成功
         helper.insertCustomType(list);
-
-
     }
 
     @Test
