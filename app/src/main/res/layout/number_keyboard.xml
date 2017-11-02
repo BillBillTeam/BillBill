@@ -9,100 +9,140 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:clickable="false"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/table_num"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
             android:background="#c8cbcc"
+            android:clickable="false"
             android:orientation="vertical">
-            <LinearLayout style="@style/layout_input_amount_style">
+
+            <LinearLayout style="@style/layout_input_amount_style"
+                tools:clickable="false">
+
                 <Button
                     android:id="@+id/btn_1"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="1" />
+                    android:text="1"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_2"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="2" />
+                    android:text="2"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_3"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="3" />
+                    android:text="3"
+                    android:clickable="true" />
 
                 <Button
-                    android:id="@+id/back"
+                    android:id="@+id/btn_c"
                     style="@style/btn_input_amount_style"
+                    android:clickable="true"
                     android:text="C" />
             </LinearLayout>
-            <LinearLayout style="@style/layout_input_amount_style">
+
+            <LinearLayout style="@style/layout_input_amount_style"
+                tools:clickable="false">
+
                 <Button
                     android:id="@+id/btn_4"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="4" />
+                    android:text="4"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_5"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="5" />
+                    android:text="5"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_6"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="6" />
+                    android:text="6"
+                    android:clickable="true" />
 
                 <Button
                     android:id="@+id/btn_add"
                     style="@style/btn_input_amount_style"
-                    android:text="+" />
+                    android:text="+"
+                    android:clickable="true" />
             </LinearLayout>
-            <LinearLayout style="@style/layout_input_amount_style">
+
+            <LinearLayout style="@style/layout_input_amount_style"
+                tools:clickable="false">
+
                 <Button
                     android:id="@+id/btn_7"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="7" />
+                    android:text="7"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_8"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="8" />
+                    android:text="8"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_9"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="9" />
+                    android:text="9"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_sub"
                     style="@style/btn_input_amount_style"
-                    android:text="-" />
+                    android:text="-"
+                    android:clickable="true" />
             </LinearLayout>
-            <LinearLayout style="@style/layout_input_amount_style">
+
+            <LinearLayout style="@style/layout_input_amount_style"
+                android:clickable="false">
+
                 <Button
                     android:id="@+id/btn_t"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="." />
+                    android:text="."
+                    android:clickable="true"/>
+
                 <Button
                     android:id="@+id/btn_0"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="0" />
+                    android:text="0"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_tab"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="tab" />
+                    android:text="tab"
+                    android:clickable="true" />
+
                 <Button
                     android:id="@+id/btn_ok"
                     style="@style/btn_input_amount_style"
-                    android:text="ok" />
+                    android:text="ok"
+                    android:clickable="true" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

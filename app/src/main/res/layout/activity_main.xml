@@ -69,13 +69,15 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="number" />
+                <TextView
+                    android:id="@+id/text_Amount"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp" />
+
+
 
             </LinearLayout>
 
@@ -103,8 +105,7 @@
                 <Button
                     android:id="@+id/Button2"
                     android:layout_width="101dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/test" />
+                    android:layout_height="36dp"/>
             </LinearLayout>
 
             <android.support.v4.widget.Space

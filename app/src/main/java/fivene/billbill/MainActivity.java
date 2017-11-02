@@ -70,9 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mTimeButton;
     private Button mbt_jump;
 
-    private EditText amount_text;
     private EditText remark_text;
-
+    private TextView amount_text;
 
     private Button mButton2;
     private ImageView mImageView;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ScrollView mScrollView;
     private View currentSelectedTag;
-
+    private LinearLayout mNumberKeyboard;
 
 
     //tag
@@ -121,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return true;
         }
+
     }
     /**
      * 初始化数据
@@ -131,6 +131,30 @@ public class MainActivity extends AppCompatActivity {
         mSelectedDate.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
 
     }
+
+
+    /**
+     * 初始化控件
+     */
+    private void initView() {
+        // TODO Auto-generated method stub
+        // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
+        mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
+
+        mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
+        mButton_ok=(Button)findViewById(R.id.btn_ok);
+        mTimeButton=(Button)findViewById(R.id.time_button);
+        mButton2=(Button)findViewById(R.id.Button2);
+        mbt_jump=(Button)findViewById(R.id.button_jump);
+        mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
+        amount_text=(TextView)findViewById(R.id.text_Amount) ;
+        remark_text=(EditText)findViewById(R.id.editText2);
+
+
+
+    }
+
+
     private void initev(){
 
         //auto move on the two page
@@ -214,29 +238,9 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
+       addListenerToNumberKeyboard();
     }
 
-
-    /**
-     * 初始化控件
-     */
-    private void initView() {
-        // TODO Auto-generated method stub
-       // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
-        mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
-
-        mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
-        mButton_ok=(Button)findViewById(R.id.btn_ok);
-        mTimeButton=(Button)findViewById(R.id.time_button);
-        mButton2=(Button)findViewById(R.id.Button2);
-        mbt_jump=(Button)findViewById(R.id.button_jump);
-
-        amount_text=(EditText)findViewById(R.id.editText);
-        remark_text=(EditText)findViewById(R.id.editText2);
-
-
-
-    }
 
     /**
      * void
@@ -528,6 +532,38 @@ public class MainActivity extends AppCompatActivity {
 //            });
         }
     };
+
+    private void addListenerToNumberKeyboard(){
+        int[] keys={R.id.btn_0,R.id.btn_1,R.id.btn_2,
+                R.id.btn_3,R.id.btn_4,R.id.btn_5,
+                R.id.btn_6,R.id.btn_7,R.id.btn_8,
+                R.id.btn_9,};
+        for(int i=0;i<keys.length;i++) {
+            final int k=i;
+            mNumberKeyboard.findViewById(keys[i]).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(amount_text.getText().length()<20)
+                        amount_text.setText(amount_text.getText().toString()+k);
+                }
+            });
+        }
+        mNumberKeyboard.findViewById(R.id.btn_t).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(amount_text.getText().length()<20)
+                    amount_text.setText(amount_text.getText().toString()+".");
+            }
+        });
+        mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(amount_text.getText().length()>0)
+                amount_text.setText(amount_text.getText().toString().subSequence(0,amount_text.getText().toString().length()-1));
+            }
+        });
+
+    }
 
     private void scrollToUP(){
         mScrollView.post(new Runnable() {

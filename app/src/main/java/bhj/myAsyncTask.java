@@ -19,7 +19,6 @@ public class myAsyncTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         mCallback.CallbackDoInBackground();
-
         return null;
     }
     @Override
