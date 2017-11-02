@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO:实现数据插入到数据库并且显示一个对话框
                 //
-//                mSelectedDate.get
-//                Bill bill=new Bill()
+
+               //Bill bill=new Bill(mSelectedDate,)
                 new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
                         .setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？")//设置显示的内容
                         .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
@@ -455,6 +455,9 @@ public class MainActivity extends AppCompatActivity {
                         Drawable drawable=getResources().getDrawable(R.drawable.selected_tag_background);
                         layout1.setBackground(drawable);
 
+                        if(currentPage==0){
+                            scrollToDOWN();
+                        }
                         TextView textView=(TextView) layout1.getChildAt(1);
                         System.out.print(textView.getText());
 

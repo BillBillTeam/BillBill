@@ -2,6 +2,7 @@ package bhj;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -169,30 +170,49 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
     private void setData(int count, float range) {
 
         float barWidth = 9f;
-        float spaceForBar = 10f;
+        float spaceForBar = 10f;//
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        //add values at here
+        yVals1.add(new BarEntry( spaceForBar*0,5));
+        yVals1.add(new BarEntry( spaceForBar*1,5));
+        yVals1.add(new BarEntry( spaceForBar*2,5));
+        yVals1.add(new BarEntry( spaceForBar*5,5));
 
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            yVals1.add(new BarEntry(i * spaceForBar, val));
-        }
+        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
+        //add values at here
+        yVals2.add(new BarEntry( spaceForBar*0,3));
+        yVals2.add(new BarEntry( spaceForBar*1,3));
+        yVals2.add(new BarEntry( spaceForBar*4,3));
+        yVals2.add(new BarEntry( spaceForBar*5,3));
+
+
+
+
 
         BarDataSet set1;
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
+            //重新更新表信息
             set1 = (BarDataSet)mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals1);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         } else {
+            //添加表信息
             set1 = new BarDataSet(yVals1, "DataSet 1");
-
             set1.setDrawIcons(false);
-
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
 
+            BarDataSet set2 = new BarDataSet(yVals2, "DataSet 2");
+            set2.setColor(Color.rgb(140, 234, 0));
+
+            set2.setStackLabels(new String[]{"bian","zz","qq","mm"});
+            set2.setDrawIcons(false);
+
+
             dataSets.add(set1);
+            dataSets.add(set2);
 
             BarData data = new BarData(dataSets);
             data.setValueTextSize(10f);

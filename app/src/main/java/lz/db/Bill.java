@@ -1,5 +1,7 @@
 package lz.db;
 
+import java.util.Calendar;
+
 /**
  * Created by LiZec on 2017/10/19.
  *
@@ -21,6 +23,16 @@ public class Bill {
         this.type = type;
         this.amount = amount;
         this.remark = remark;
+    }
+    public Bill (Calendar now, String type, double amount, String remark)
+    {
+        this.year=now.get(Calendar.YEAR);
+        this.month=now.get(Calendar.MONTH)+1;
+        this.day=now.get(Calendar.DAY_OF_MONTH);
+        this.type = type;
+        this.amount = amount;
+        this.remark = remark;
+
     }
 
     public int getYear() {
