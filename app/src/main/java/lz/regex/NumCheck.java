@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 
 public class NumCheck {
-    private static Pattern patternDouble = Pattern.compile("^[1-9][0-9]*([.][0-9]*)?$");
+    private static Pattern patternDouble = Pattern.compile("^[0-9]*([.][0-9]*)?$");
     
     public static boolean matchDouble(String numStr){
         Matcher matcher = patternDouble.matcher(numStr);
