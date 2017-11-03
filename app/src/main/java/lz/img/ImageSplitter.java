@@ -25,8 +25,8 @@ public class ImageSplitter {
         List<ImagePiece> pieces = new ArrayList<>(xPiece * yPiece);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int pieceWidth = width / 3;
-        int pieceHeight = height / 3;
+        int pieceWidth = width / xPiece;
+        int pieceHeight = height / yPiece;
         for (int i = 0; i < yPiece; i++) {
             for (int j = 0; j < xPiece; j++) {
                 ImagePiece piece = new ImagePiece();

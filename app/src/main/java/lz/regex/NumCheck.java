@@ -1,7 +1,5 @@
 package lz.regex;
 
-import android.media.MediaCodec;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
