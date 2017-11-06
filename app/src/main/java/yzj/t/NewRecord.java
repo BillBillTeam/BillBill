@@ -6,6 +6,7 @@ import lz.db.Bill;
 import lz.db.DBHelper;
 import lz.db.IDBill;
 /**
+ * 用来返回当前时间的各种细节
  * Created by ~ on 2017/10/27.
  */
 
@@ -17,7 +18,6 @@ public class NewRecord  {
     private double amount;
     private String remark;
     private UUID mId;
-
 
 
     public NewRecord(String type, double amount, String remark) {
@@ -33,11 +33,7 @@ public class NewRecord  {
         this.type = type;
         this.amount = amount;
         this.remark = remark;
-        mId =UUID.randomUUID();
-        String s = UUID.randomUUID().toString();
-        //delete it because it can't be make //from bianhongjia
-
-        //IDBill mIDBill =new IDBill(year,month,date,type,amount,remark,mId);
+        IDBill mIDBill =new IDBill(year,month,date,type,amount,remark,0);
     }
     public Calendar getNow() {
         return now;
