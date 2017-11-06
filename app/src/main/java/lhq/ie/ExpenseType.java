@@ -28,12 +28,12 @@ public class ExpenseType {
      * 获得所有显示的消费类型，以动态数组形式按位置顺序输出
      * @return 包含所有显示的消费类型的动态数组
      */
-    public ArrayList<String> getAllShowExpenseType()
+    public ArrayList<CustomType> getAllShowExpenseType()
     {
         int showNumber=0;
         int Index=0;
         ArrayList<CustomType> list= dbHelper.selectAllCustomType();
-        ArrayList<String> type=new ArrayList<>();
+        ArrayList<CustomType> type=new ArrayList<>();
 
         for(int i=0;i<list.size();i++)
         {
@@ -48,7 +48,7 @@ public class ExpenseType {
             {
                 if(list.get(i).getIndex()==Index)
                 {
-                    type.add(list.get(i).getType());
+                    type.add(list.get(i));
                     Index++;
                 }
             }
@@ -61,12 +61,12 @@ public class ExpenseType {
      * 获得所有隐藏的消费类型，以动态数组的形式按位置顺序输出
      * @return 包含所有隐藏的消费类型的动态数组
      */
-    public ArrayList<String> getAllHideExpenseType()
+    public ArrayList<CustomType> getAllHideExpenseType()
     {
         int hideNumber=0;
         int Index=-1;
         ArrayList<CustomType> list= dbHelper.selectAllCustomType();
-        ArrayList<String> type=new ArrayList<>();
+        ArrayList<CustomType> type=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()<0)
@@ -80,7 +80,7 @@ public class ExpenseType {
             {
                 if(list.get(i).getIndex()==Index)
                 {
-                    type.add(list.get(i).getType());
+                    type.add(list.get(i));
                     Index--;
                 }
             }
