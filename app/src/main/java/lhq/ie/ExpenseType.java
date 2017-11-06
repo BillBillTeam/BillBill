@@ -179,9 +179,8 @@ public class ExpenseType {
      * 交换两个消费类型的位置
      * @param Index1 第一个消费类型的位置
      * @param Index2 第二个消费类型的位置
-     * @return 将交换后的所有消费类型以动态数组的形式输出
      */
-    public ArrayList<String> exchange(int Index1,int Index2)
+    public void exchange(int Index1,int Index2)
     {
         ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         CustomType customType=new CustomType(list.get(Index1).getType(),list.get(Index1).getIndex());
@@ -189,13 +188,6 @@ public class ExpenseType {
         list.get(Index1).setIndex(list.get(Index2).getIndex());
         list.get(Index2).setType(customType.getType());
         list.get(Index2).setIndex(customType.getIndex());
-
-        ArrayList<String> type=new ArrayList<>();
-        for(int i=0;i<list.size();i++)
-        {
-            type.add(list.get(i).getType());
-        }
-        return type;
     }
 
     /**
