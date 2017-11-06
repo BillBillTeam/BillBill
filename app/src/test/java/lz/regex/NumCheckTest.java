@@ -14,6 +14,7 @@ public class NumCheckTest {
         assertTrue(NumCheck.matchDouble("12.34"));
         assertTrue(NumCheck.matchDouble("3.212"));
         assertTrue(NumCheck.matchDouble("0.23"));
+
         assertFalse(NumCheck.matchDouble("1.2.3"));
     }
 

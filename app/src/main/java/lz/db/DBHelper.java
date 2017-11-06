@@ -37,6 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //类型数据库表的列
     private static final String fd_INDEX = "typeIndex";
+    private static final String fd_RES_ID = "resID";
 
     private String[] systemTypeNames;
 
@@ -69,9 +70,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(BillSQL);
 
         String TypeSQL = String.format("CREATE TABLE %s (" +
-                "%s TEXT PRIMARY KEY," +
+                "%s TEXT PRIMARY KEY, " +
+                "%s INTEGER, " +
                 "%s INTEGER);",
-                TAB_CUSTOM_TYPE_NAME,fd_TYPE,fd_INDEX);
+                TAB_CUSTOM_TYPE_NAME,fd_TYPE,fd_INDEX,fd_RES_ID);
         db.execSQL(TypeSQL);
 
         initSystemType(db);
@@ -161,8 +163,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = getReadableDatabase().query(TAB_CUSTOM_TYPE_NAME,null,null,null,null,null,null);
         while (cursor.moveToNext()){
             String type = cursor.getString(cursor.getColumnIndex(fd_TYPE));
-            int index = cursor.getInt(cursor.getColumnIndex(fd_INDEX));
-            CustomType ct = new CustomType(type,index);
+            int index   = cursor.getInt(cursor.getColumnIndex(fd_INDEX));
+            int res_ID  = cursor.getInt(cursor.getColumnIndex(fd_RES_ID));
+            CustomType ct = new CustomType(type,index,res_ID);
             list.add(ct);
         }
         cursor.close();
@@ -270,10 +273,8 @@ public class DBHelper extends SQLiteOpenHelper {
         for(CustomType ct:all){
             cv.put(fd_TYPE,ct.getType());
             cv.put(fd_INDEX,ct.getIndex());
-            t = db.insert(TAB_CUSTOM_TYPE_NAME,null,cv);
-            if (t == -1){
-                throw new SQLException("插入存在异常，插入的类型是"+cv.getAsString(fd_TYPE));
-            }
+            cv.put(fd_RES_ID,ct.getRes_ID());
+            t = db.insertOrThrow(TAB_CUSTOM_TYPE_NAME,null,cv);
         }
     }
 
@@ -286,7 +287,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<CustomType> list = new ArrayList<>(size);
 
         for(int i=0;i<size;i++){
-            list.add(new CustomType(systemTypeNames[i],i));
+            list.add(new CustomType(systemTypeNames[i],i,i));
         }
 
         insertCustomType(db,list);
