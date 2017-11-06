@@ -57,7 +57,7 @@ public class DBHelperTest {
 
         ArrayList<CustomType> list = new ArrayList<>();
         for(int i=0;i<n;i++){
-            CustomType ct = new CustomType(randomString(10),rand.nextInt());
+            CustomType ct = new CustomType(randomString(10),rand.nextInt(),rand.nextInt(20));
             list.add(ct);
         }
 

@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
  * 将图片切割成指定的样式
  * Created by LiZeC on 2017/11/2.
  */
-public class ImageSplitter {
+class ImageSplitter {
 
     /**
      * 根据指定的参数切割图片
@@ -20,21 +20,21 @@ public class ImageSplitter {
      * @param yPiece y轴需要切割的片数
      * @return 包含 xPiece * yPiece 个子图片的列表
      */
-    public static List<ImagePiece> split(Bitmap bitmap, int xPiece, int yPiece) {
+    static List<Bitmap> split(Bitmap bitmap, int xPiece, int yPiece) {
 
-        List<ImagePiece> pieces = new ArrayList<>(xPiece * yPiece);
+        List<Bitmap> pieces = new ArrayList<>(xPiece * yPiece);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int pieceWidth = width / xPiece;
         int pieceHeight = height / yPiece;
         for (int i = 0; i < yPiece; i++) {
             for (int j = 0; j < xPiece; j++) {
-                ImagePiece piece = new ImagePiece();
-                piece.index = j + i * xPiece;
+
+
                 int xValue = j * pieceWidth;
                 int yValue = i * pieceHeight;
-                piece.bitmap = Bitmap.createBitmap(bitmap, xValue, yValue,
-                        pieceWidth, pieceHeight);
+                Bitmap piece =
+                        Bitmap.createBitmap(bitmap, xValue, yValue, pieceWidth, pieceHeight);
                 pieces.add(piece);
             }
         }

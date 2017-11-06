@@ -8,10 +8,18 @@ package lz.db;
 public class CustomType {
     private String type;
     private int index;
+    private int res_ID;
 
     public CustomType(String type, int index) {
-        this.type = type;
-        this.index = index;
+        setType(type);
+        setIndex(index);
+        setRes_ID(-1);
+    }
+
+    public CustomType(String type,int index,int res_ID){
+        setType(type);
+        setIndex(index);
+        setRes_ID(res_ID);
     }
 
     public String getType() {
@@ -28,5 +36,13 @@ public class CustomType {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public int getRes_ID() {
+        return res_ID;
+    }
+
+    public void setRes_ID(int res_ID) {
+        this.res_ID = res_ID;
     }
 }
