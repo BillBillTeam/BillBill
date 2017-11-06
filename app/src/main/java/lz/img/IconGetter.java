@@ -28,11 +28,10 @@ public class IconGetter {
             synchronized (IconGetter.class){
                 if(imgList == null){
                     initIcons(context);
-                    return imgList.get(res_ID);
                 }
             }
         }
-        return imgList.get(res_ID);
+        return getBitmapByIdx(res_ID);
     }
 
     /**
@@ -46,6 +45,16 @@ public class IconGetter {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
 
         imgList = ImageSplitter.split(bitmap,5,4);
+    }
+
+    private Bitmap getBitmapByIdx(int index){
+        if(index == -1){
+            // -1 表示用户自定义类型的图标
+            throw new ArrayIndexOutOfBoundsException("还没有设定用户自定义类型呢");
+        }
+        else{
+            return imgList.get(index);
+        }
     }
 
 
