@@ -269,12 +269,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private void insertCustomType(SQLiteDatabase db,ArrayList<CustomType> all) throws SQLException{
         db.delete(TAB_CUSTOM_TYPE_NAME,null,null);
         ContentValues cv = new ContentValues(all.size() * 2);
-        long t;
         for(CustomType ct:all){
             cv.put(fd_TYPE,ct.getType());
             cv.put(fd_INDEX,ct.getIndex());
             cv.put(fd_RES_ID,ct.getRes_ID());
-            t = db.insertOrThrow(TAB_CUSTOM_TYPE_NAME,null,cv);
+            db.insertOrThrow(TAB_CUSTOM_TYPE_NAME,null,cv);
         }
     }
 
@@ -286,8 +285,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ArrayList<CustomType> list = new ArrayList<>(size);
 
-        for(int i=0;i<size;i++){
+
+        //可以显示的部分，从0开始排序
+        for(int i=0;i<15;i++){
             list.add(new CustomType(systemTypeNames[i],i,i));
+        }
+
+        //不显示的部分，从-1开始排序
+        int idx = -1;
+        for(int i=15;i<size;i++){
+            list.add(new CustomType(systemTypeNames[i],idx,-1));
+            idx--;
         }
 
         insertCustomType(db,list);
