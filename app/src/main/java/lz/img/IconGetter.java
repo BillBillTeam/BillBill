@@ -22,7 +22,7 @@ public class IconGetter {
      * @param res_ID 图标资源的内置ID
      * @return  图标的Bitmap
      */
-    public Bitmap getIcon(Context context,int res_ID){
+    public static Bitmap getIcon(Context context,int res_ID){
         //使用单例模式确保只加载一次资源
         if(imgList == null){
             synchronized (IconGetter.class){
@@ -37,7 +37,7 @@ public class IconGetter {
     /**
      *  初始化图标
      */
-    private void initIcons(Context context){
+    private static void initIcons(Context context){
         String iconName = "icon";
         ApplicationInfo appInfo = context.getApplicationInfo();
         //得到该图片的id(name 是该图片的名字，"drawable" 是该图片存放的目录，appInfo.packageName是应用程序的包)
@@ -47,7 +47,7 @@ public class IconGetter {
         imgList = ImageSplitter.split(bitmap,5,4);
     }
 
-    private Bitmap getBitmapByIdx(int index){
+    private static Bitmap getBitmapByIdx(int index){
         if(index == -1){
             // -1 表示用户自定义类型的图标
             throw new ArrayIndexOutOfBoundsException("还没有设定用户自定义类型呢");

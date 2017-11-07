@@ -1,6 +1,4 @@
 package fivene.billbill;
-
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,22 +29,22 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
 import lhq.ie.Expense;
+import lhq.ie.ExpenseType;
 import lz.db.Bill;
+import lz.db.CustomType;
+import lz.regex.NumCheck;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initViewPager();
         initev();
+        mButton2.setClickable(false);
     }
 
 
@@ -164,18 +163,17 @@ public class MainActivity extends AppCompatActivity {
 
                            switch (motionEvent.getAction()){
                                 case MotionEvent.ACTION_UP:
-                                    Log.i("billbill","up"+globalHeight/4);
+                                    Log.i("billbill","up"+globalHeight);
                                     Log.i("billbill","up"+mScrollView.getScrollY());
                                     if(currentPage==0)
-                                    if(mScrollView.getScrollY()>globalHeight/8){
-                                       scrollToDOWN();
-                                    }
+                                        if(mScrollView.getScrollY()>globalHeight/8){
+                                                scrollToDOWN();
+                                        }
+                                        else{
+                                            scrollToUP();
+                                        }
                                     else{
-
-                                       scrollToUP();
-                                    }
-                                    else{
-                                        if(mScrollView.getScrollY()<globalHeight-globalHeight/2.5){
+                                        if(mScrollView.getScrollY()<globalHeight/2){
                                            scrollToUP();
                                         }
                                         else{
@@ -231,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         mbt_jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,9 +250,12 @@ public class MainActivity extends AppCompatActivity {
         mTagGroupPager.setVisibility(View.VISIBLE);
 
 
+        ExpenseType types=new ExpenseType(this);
         //create TagGroupProvider
-        List <String>testList=new ArrayList<String>();
-        final TagGroupProvider provider=new TagGroupProvider(this,testList,globalWidth);
+        List <CustomType>list=types.getAllShowExpenseType();
+
+
+        final TagGroupProvider provider=new TagGroupProvider(this,list,globalWidth);
 
         // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
 
@@ -481,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
                         TextView textView=(TextView) layout1.getChildAt(1);
                         System.out.print(textView.getText());
 
-
+                        checkInput();
 
                     }
 
@@ -538,21 +540,28 @@ public class MainActivity extends AppCompatActivity {
                 R.id.btn_3,R.id.btn_4,R.id.btn_5,
                 R.id.btn_6,R.id.btn_7,R.id.btn_8,
                 R.id.btn_9,};
+        final NumCheck check=new NumCheck();
         for(int i=0;i<keys.length;i++) {
             final int k=i;
             mNumberKeyboard.findViewById(keys[i]).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(amount_text.getText().length()<20)
-                        amount_text.setText(amount_text.getText().toString()+k);
+                    String s=amount_text.getText().toString();
+                    if(s.length()<20)
+                        amount_text.setText(s+k);
+                    checkInput();
                 }
             });
         }
         mNumberKeyboard.findViewById(R.id.btn_t).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(amount_text.getText().length()<20)
-                    amount_text.setText(amount_text.getText().toString()+".");
+                String s=amount_text.getText().toString();
+                if(s.length()<20)
+                    if(check.matchDouble(s+"."))
+                        amount_text.setText(s+".");
+                checkInput();
+
             }
         });
         mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
@@ -560,8 +569,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(amount_text.getText().length()>0)
                 amount_text.setText(amount_text.getText().toString().subSequence(0,amount_text.getText().toString().length()-1));
+
             }
         });
+
+    }
+    private void checkInput(){
+        if(currentSelectedTag!=null&&amount_text.getText().toString().length()>0){
+            mButton2.setClickable(true);
+        }
+        else{
+            mButton2.setClickable(false);
+        }
 
     }
 
