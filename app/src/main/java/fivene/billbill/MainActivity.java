@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Space;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView mScrollView;
     private View currentSelectedTag;
     private LinearLayout mNumberKeyboard;
+    private LinearLayout mFirstPart;
+    private FrameLayout mTagGroupContainer;
+    private LinearLayout mAmountLayout;
+    private LinearLayout mMarkLayout;
 
 
     //tag
@@ -96,10 +104,48 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initViewPager();
         initev();
+
         mButton2.setClickable(false);
+//添加空白&&添加主页面的上下滑动&&强制回到上半部分
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                adjustSpaceHeight();
+                makePageScrollable();
+                scrollToUP();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
     }
 
 
+    private void adjustSpaceHeight(){
+        Space s1=(Space) findViewById(R.id.space1);
+        Space s2=(Space) findViewById(R.id.space2);
+
+        int i_s1=mScrollView.getHeight()-mFirstPart.getHeight()-mTagGroupContainer.getHeight();
+        int i_s2=mScrollView.getHeight()-mTagGroupContainer.getHeight()-mAmountLayout.getHeight()-mMarkLayout.getHeight()-mNumberKeyboard.getHeight();
+        Log.i("billbill", "adjustSpaceHeight: "+mScrollView.getHeight());
+        if(i_s1<0){
+            i_s1=0;
+        }
+        if(i_s2<0){
+            i_s2=0;
+        }
+        s1.setMinimumHeight(i_s1);
+        s2.setMinimumHeight(i_s2);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -107,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.item_setting:
                 Intent intentSetting = new Intent(MainActivity.this,SettingsActivity.class);
@@ -128,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mSelectedDate=Calendar.getInstance();
         mSelectedDate.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-
     }
 
 
@@ -148,46 +194,53 @@ public class MainActivity extends AppCompatActivity {
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
         remark_text=(EditText)findViewById(R.id.editText2);
+        mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
 
-
+        mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
+        mAmountLayout=(LinearLayout)findViewById(R.id.amount_layout);
+        mMarkLayout=(LinearLayout)findViewById(R.id.mark_layout);
 
     }
 
 
-    private void initev(){
+    private void makePageScrollable(){
 
         //auto move on the two page
         mScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                           switch (motionEvent.getAction()){
-                                case MotionEvent.ACTION_UP:
-                                    Log.i("billbill","up"+globalHeight);
-                                    Log.i("billbill","up"+mScrollView.getScrollY());
-                                    if(currentPage==0)
-                                        if(mScrollView.getScrollY()>globalHeight/8){
-                                                scrollToDOWN();
-                                        }
-                                        else{
-                                            scrollToUP();
-                                        }
-                                    else{
-                                        if(mScrollView.getScrollY()<globalHeight/2){
-                                           scrollToUP();
-                                        }
-                                        else{
-                                          scrollToDOWN();
-                                        }
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        Log.i("billbill","up"+globalHeight);
+                        Log.i("billbill","up"+mScrollView.getScrollY());
+                        if(currentPage==0)
+                            if(mScrollView.getScrollY()>mScrollView.getHeight()/8){
+                                scrollToDOWN();
+                            }
+                            else{
+                                scrollToUP();
+                            }
+                        else{
+                            if(mScrollView.getScrollY()<mScrollView.getHeight()/8*7-mTagGroupContainer.getHeight()){
+                                scrollToUP();
+                            }
+                            else{
+                                scrollToDOWN();
+                            }
 
-                                    }
-                                        break;
-                               }
+                        }
+                        break;
+                }
                 return false;
             }
 
         });
 //
+
+    }
+    private void initev(){
+
 //        mScrollView.fullScroll(ScrollView.FOCUS_UP);
 //        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
         mButton_ok.setOnClickListener(new View.OnClickListener() {

@@ -42,7 +42,7 @@
                             android:id="@+id/tab1_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical" >
+                            android:orientation="vertical">
 
                             <ProgressBar
                                 android:id="@+id/progressBar1"
@@ -67,7 +67,7 @@
                             android:id="@+id/tab2_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical" >
+                            android:orientation="vertical">
 
                             <ProgressBar
                                 android:id="@+id/progressBar2"
@@ -92,7 +92,7 @@
                             android:id="@+id/tab3_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical" >
+                            android:orientation="vertical">
 
                             <ProgressBar
                                 android:id="@+id/progressBar3"
