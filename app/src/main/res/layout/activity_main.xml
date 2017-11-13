@@ -11,7 +11,7 @@
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="368dp"
-        android:layout_height="match_parent"
+        android:layout_height="495dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="8dp"
@@ -36,7 +36,14 @@
             <Space
                 android:id="@+id/space1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
 
             <FrameLayout
                 android:id="@+id/tag_group_container"

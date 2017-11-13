@@ -21,7 +21,11 @@
         <activity android:name=".BillListActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".TagManageActivity"
+            android:label="@string/title_activity_tag_manage"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

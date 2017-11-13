@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton_ok;
     private Button mTimeButton;
     private Button mbt_jump;
+    private Button mbt_jump2;
+
 
     private EditText remark_text;
     private TextView amount_text;
@@ -191,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         mTimeButton=(Button)findViewById(R.id.time_button);
         mButton2=(Button)findViewById(R.id.Button2);
         mbt_jump=(Button)findViewById(R.id.button_jump);
+        mbt_jump2=(Button)findViewById(R.id.button_jump2);
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
         remark_text=(EditText)findViewById(R.id.editText2);
@@ -287,6 +290,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
+
+        mbt_jump2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
                 MainActivity.this.startActivity(intent);
             }
         });
