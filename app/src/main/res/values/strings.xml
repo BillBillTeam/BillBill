@@ -99,6 +99,14 @@
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
+    <string name="author_message">
+        项目经理：刘正\n
+        。。。\n
+        。。。\n
+        。。。\n
+        程序员：边洪佳
+    </string>>
+
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_tag_manage">TagManageActivity</string>

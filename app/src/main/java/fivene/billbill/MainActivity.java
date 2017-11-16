@@ -162,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intentSetting);
                 return true;
             case R.id.item_about:
-//                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
-//                MainActivity.this.startActivity(intentSearch);
+                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
+                MainActivity.this.startActivity(intentSearch);
                 return true;
             default:
                 return true;
