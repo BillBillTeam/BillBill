@@ -26,9 +26,8 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".TagManageActivity"
-            android:label="@string/title_activity_tag_manage"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AboutActivity"></activity>
+            android:label="@string/title_activity_tag_manage" />
+        <activity android:name=".AboutActivity"/>
     </application>
 
 </manifest>

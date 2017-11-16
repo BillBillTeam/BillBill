@@ -109,5 +109,5 @@
 
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_tag_manage">TagManageActivity</string>
+    <string name="title_activity_tag_manage">标签管理</string>
 </resources>
