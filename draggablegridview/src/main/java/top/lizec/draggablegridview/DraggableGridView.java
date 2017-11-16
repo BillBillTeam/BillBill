@@ -81,14 +81,18 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 
 	@Override
 	public void onLayout(boolean changed, int l, int t, int r, int b) {
-		xPadding = ((r - l) - (itemWidth * colCount)) / (colCount + 1);
-		for (int i = 0; i < getChildCount(); i++) {
-			if (i != draggedIndex) {
-				Point xy = getCoorFromIndex(i);
-				getChildAt(i).layout(xy.x, xy.y, xy.x + itemWidth, xy.y + itemHeight);
-			}
-		}
+        myOnLayout(l,r);
 	}
+
+	public void myOnLayout(int l,int r) {
+        xPadding = ((r - l) - (itemWidth * colCount)) / (colCount + 1);
+        for (int i = 0; i < getChildCount(); i++) {
+            if (i != draggedIndex) {
+                Point xy = getCoorFromIndex(i);
+                getChildAt(i).layout(xy.x, xy.y, xy.x + itemWidth, xy.y + itemHeight);
+            }
+        }
+    }
 
 	@Override
 	protected int getChildDrawingOrder(int childCount, int i) {
@@ -107,7 +111,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 	 * get index from coordinate
 	 * @param x x坐标
 	 * @param y y坐标
-	 * @return
+	 * @return index
 	 */
 	private int getIndexFromCoor(int x, int y) {
 		int col = getColFromCoor(x);
@@ -144,9 +148,9 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 
 	/**
 	 * 判断当前移动到的位置 当当前位置在另一个item区域时交换
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x 位置的x坐标
+	 * @param y 位置的y坐标
+	 * @return 对应位置的index
 	 */
 	private int getTargetFromCoor(int x, int y) {
 		if (getRowFromCoor(y) == -1) {
@@ -259,7 +263,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 	/**
 	 * 拖动某个item时其他item的移动动画
 	 * animate the other item when the dragged item moving
-	 * @param targetIndex
+	 * @param targetIndex 目标位置的index
 	 */
 	private void animateGap(int targetIndex) {
 		for (int i = 0; i < getChildCount(); i++) {
@@ -303,7 +307,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 		if (onRearrangeListener != null) {
 			onRearrangeListener.onRearrange(draggedIndex, lastTargetIndex);
 		}
-		ArrayList<View> children = new ArrayList<View>();
+		ArrayList<View> children = new ArrayList<>();
 		for (int i = 0; i < getChildCount(); i++) {
 			getChildAt(i).clearAnimation();
 			children.add(getChildAt(i));
@@ -328,12 +332,12 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 			newPositions.set(i, -1);
 			addView(children.get(i));
 		}
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+        myOnLayout(getLeft(),getRight());
 	}
 
 	/**
 	 * get the index of dragging item
-	 * @return
+	 * @return 获得指定位置的对象的index
 	 */
 	private int getIndex(){
 		return getIndexFromCoor(lastX, lastY);
@@ -349,6 +353,6 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 
 	public interface OnRearrangeListener {
 
-		public abstract void onRearrange(int oldIndex, int newIndex);
+		void onRearrange(int oldIndex, int newIndex);
 	}
 }
