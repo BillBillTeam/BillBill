@@ -19,6 +19,7 @@ import java.util.Collections;
 
 /**
  * Created by andyken on 16/3/22.
+ * 用于实现拖动交换位置的类
  */
 public class DraggableGridView extends ViewGroup implements View.OnTouchListener, View.OnClickListener ,View.OnLongClickListener{
 
@@ -26,7 +27,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 	private int draggedIndex = -1, lastX = -1, lastY = -1, lastTargetIndex = -1;
 	private int xPadding, yPadding;//the x-axis and y-axis padding of the item
 	private int itemWidth, itemHeight, colCount;
-	private ArrayList<Integer> newPositions = new ArrayList<Integer>();
+	private ArrayList<Integer> newPositions = new ArrayList<>();
 	private static int ANIM_DURATION = 150;
 
 	private AdapterView.OnItemClickListener onItemClickListener;
@@ -104,8 +105,8 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 
 	/**
 	 * get index from coordinate
-	 * @param x
-	 * @param y
+	 * @param x x坐标
+	 * @param y y坐标
 	 * @return
 	 */
 	private int getIndexFromCoor(int x, int y) {
@@ -222,10 +223,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 				break;
 		}
 		//如果存在拖动item 则消费掉该事件
-		if (draggedIndex != -1) {
-			return true;
-		}
-		return false;
+		return draggedIndex != -1;
 	}
 
 	/**
