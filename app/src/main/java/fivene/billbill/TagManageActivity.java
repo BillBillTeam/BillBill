@@ -51,6 +51,7 @@ public class TagManageActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_manage);
+        //Toolbar toolbar = (Toolbar)findViewById(R.id.)
 
         dgv = ((DraggableGridView)findViewById(R.id.vgv));
         button1 = ((Button)findViewById(R.id.button1));
