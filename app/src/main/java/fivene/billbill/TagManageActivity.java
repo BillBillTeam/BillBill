@@ -5,11 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -59,20 +56,24 @@ public class TagManageActivity extends AppCompatActivity {
         dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                dgvShow.removeViewAt(position);
-                String name = showTypeNames.remove(position);
-                dgvHide.addView(view);
-                hideTypeNames.add(name);
+                if(hideTypeNames.size() < 15){
+                    dgvShow.removeViewAt(position);
+                    String name = showTypeNames.remove(position);
+                    dgvHide.addView(view);
+                    hideTypeNames.add(name);
+                }
             }
         });
 
         dgvHide.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dgvHide.removeViewAt(position);
-                String name = hideTypeNames.remove(position);
-                dgvShow.addView(view);
-                showTypeNames.add(name);
+                if(showTypeNames.size() < 14){
+                    dgvHide.removeViewAt(position);
+                    String name = hideTypeNames.remove(position);
+                    dgvShow.addView(view);
+                    showTypeNames.add(name);
+                }
             }
         });
 
@@ -84,13 +85,15 @@ public class TagManageActivity extends AppCompatActivity {
         for(CustomType type:show){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
-            showTypeNames.add(name);
+            if(!name.equals("自定义")){
+                showTypeNames.add(name);
 
-            Bitmap bmp = getNamedBitmap(base,name);
-            ImageView imageView = new ImageView(this);
-            imageView.setImageBitmap(bmp);
+                Bitmap bmp = getNamedBitmap(base,name);
+                ImageView imageView = new ImageView(this);
+                imageView.setImageBitmap(bmp);
 
-            dgvShow.addView(imageView);
+                dgvShow.addView(imageView);
+            }
         }
     }
 

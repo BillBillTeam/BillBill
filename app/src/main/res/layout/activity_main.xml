@@ -11,7 +11,7 @@
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_height="match_parent"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="8dp"
@@ -126,8 +126,8 @@
 
                 <Button
                     android:id="@+id/Button2"
-                    android:layout_width="101dp"
-                    android:layout_height="36dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:clickable="false" />
             </LinearLayout>
 
