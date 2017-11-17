@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -81,13 +82,14 @@ public class TagManageActivity extends AppCompatActivity {
     private void setShow(ExpenseType expenseType){
         showTypeNames = new ArrayList<>();
         ArrayList<CustomType> show = expenseType.getAllShowExpenseType();
-        int baseBmpLen = 262;
         int textSize = 60;
         for(CustomType type:show){
-            Bitmap bmp = Bitmap.createBitmap(baseBmpLen,baseBmpLen+textSize, Bitmap.Config.ARGB_8888);
+            Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
+            int baseBmpHeight = base.getHeight();
+            int baseBmpWidth = base.getWidth();
+            Bitmap bmp = Bitmap.createBitmap(baseBmpWidth,baseBmpHeight+textSize+5, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bmp);
 
-            Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
             showTypeNames.add(name);
             canvas.drawBitmap(base,0,0,null);
@@ -97,8 +99,8 @@ public class TagManageActivity extends AppCompatActivity {
             paint.setTextSize(textSize);
             // 起始位置等于图片的中心位置坐标减去文字长度的一半
             // 从而实现文字居中对齐
-            int begin  = (int)(baseBmpLen/2.0 - name.length()/2.0*textSize);
-            canvas.drawText(name,begin, baseBmpLen+textSize-5,paint);
+            int begin  = (int)(baseBmpWidth/2.0 - name.length()/2.0*textSize);
+            canvas.drawText(name,begin, baseBmpHeight+textSize,paint);
 
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bmp);
