@@ -18,7 +18,7 @@ import lz.img.IconGetter;
 import top.lizec.draggablegridview.DraggableGridView;
 
 public class TagManageActivity extends AppCompatActivity {
-    DraggableGridView dgv;
+    DraggableGridView dgvShow;
     Button button1, button2;
     ArrayList<String> showTypeNames;
     ArrayList<String> hideTypeNames;
@@ -31,7 +31,7 @@ public class TagManageActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar)findViewById(R.id.)
         ExpenseType expenseType = new ExpenseType(this);
 
-        dgv = ((DraggableGridView)findViewById(R.id.vgv));
+        dgvShow = ((DraggableGridView)findViewById(R.id.vgv));
         button1 = ((Button)findViewById(R.id.button1));
         button2 = ((Button)findViewById(R.id.button2));
 
@@ -40,7 +40,7 @@ public class TagManageActivity extends AppCompatActivity {
     }
     private void setListeners()
     {
-        dgv.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
+        dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
                 String type = showTypeNames.remove(oldIndex);
                 if (oldIndex < newIndex)
@@ -49,10 +49,10 @@ public class TagManageActivity extends AppCompatActivity {
                     showTypeNames.add(newIndex,type);
             }
         });
-        dgv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                dgv.removeViewAt(arg2);
+                dgvShow.removeViewAt(arg2);
                 showTypeNames.remove(arg2);
             }
         });
@@ -62,7 +62,7 @@ public class TagManageActivity extends AppCompatActivity {
 //                String word = words[random.nextInt(words.length)];
 //                ImageView view = new ImageView(TagManageActivity.this);
 //                view.setImageBitmap(getThumb(word));
-//                dgv.addView(view);
+//                dgvShow.addView(view);
 //                poem.add(word);
             }
         });
@@ -103,7 +103,7 @@ public class TagManageActivity extends AppCompatActivity {
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bmp);
 
-            dgv.addView(imageView);
+            dgvShow.addView(imageView);
         }
     }
 }
