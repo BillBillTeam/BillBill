@@ -126,8 +126,8 @@
 
                 <Button
                     android:id="@+id/Button2"
-                    android:layout_width="101dp"
-                    android:layout_height="36dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:clickable="false" />
             </LinearLayout>
 

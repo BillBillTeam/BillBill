@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
         initViewPager();
         initev();
 
+
+
         mButton2.setClickable(false);
 //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 adjustSpaceHeight();
                 makePageScrollable();
-                scrollToUP();
+
             }
         });
     }
@@ -197,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
         remark_text=(EditText)findViewById(R.id.editText2);
+        //test
         mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
 
         mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
