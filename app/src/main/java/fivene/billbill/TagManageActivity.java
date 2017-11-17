@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import top.lizec.draggablegridview.DraggableGridView;
 
 public class TagManageActivity extends AppCompatActivity {
     DraggableGridView dgvShow;
-    Button button1, button2;
+    DraggableGridView dgvHide;
     ArrayList<String> showTypeNames;
     ArrayList<String> hideTypeNames;
 
@@ -33,11 +34,11 @@ public class TagManageActivity extends AppCompatActivity {
         ExpenseType expenseType = new ExpenseType(this);
 
         dgvShow = ((DraggableGridView)findViewById(R.id.vgvShow));
-        button1 = ((Button)findViewById(R.id.button1));
-        button2 = ((Button)findViewById(R.id.button2));
+        dgvHide = ((DraggableGridView)findViewById(R.id.vgvHide));
 
         setListeners();
         setShow(expenseType);
+        setHide(expenseType);
     }
     private void setListeners()
     {
@@ -52,37 +53,19 @@ public class TagManageActivity extends AppCompatActivity {
         });
         dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                dgvShow.removeViewAt(arg2);
-                showTypeNames.remove(arg2);
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
+                dgvShow.removeViewAt(position);
+                String name = showTypeNames.remove(position);
+                dgvHide.addView(view);
+                hideTypeNames.add(name);
             }
         });
-        button1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-//
-//                String word = words[random.nextInt(words.length)];
-//                ImageView view = new ImageView(TagManageActivity.this);
-//                view.setImageBitmap(getThumb(word));
-//                dgvShow.addView(view);
-//                poem.add(word);
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-//                String finishedPoem = "";
-//                for (String s : poem)
-//                    finishedPoem += s + " ";
-//                new AlertDialog.Builder(TagManageActivity.this)
-//                        .setTitle("Here's your poem!")
-//                        .setMessage(finishedPoem).show();
-            }
-        });
+
     }
 
     private void setShow(ExpenseType expenseType){
         showTypeNames = new ArrayList<>();
         ArrayList<CustomType> show = expenseType.getAllShowExpenseType();
-        int textSize = 60;
         for(CustomType type:show){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
@@ -93,6 +76,22 @@ public class TagManageActivity extends AppCompatActivity {
             imageView.setImageBitmap(bmp);
 
             dgvShow.addView(imageView);
+        }
+    }
+
+    private void setHide(ExpenseType expenseType){
+        hideTypeNames = new ArrayList<>();
+        ArrayList<CustomType> hide = expenseType.getAllHideExpenseType();
+        for(CustomType type:hide){
+            Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
+            String name = type.getType();
+            hideTypeNames.add(name);
+
+            Bitmap bmp = getNamedBitmap(base,name);
+            ImageView imageView = new ImageView(this);
+            imageView.setImageBitmap(bmp);
+
+            dgvHide.addView(imageView);
         }
     }
 
