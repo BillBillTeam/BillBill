@@ -9,6 +9,8 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Space;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         mScrollView.post(new Runnable() {
             @Override
             public void run() {
+                remark_text.setFocusable(false);
                 adjustSpaceHeight();
                 makePageScrollable();
 
@@ -302,6 +305,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
                 MainActivity.this.startActivity(intent);
+            }
+        });
+
+        remark_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!remark_text.isFocusable()) {
+                    v.setFocusable(true);
+                    v.setFocusableInTouchMode(true);
+                    v.requestFocus();
+                    InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(v, InputMethod.SHOW_FORCED);
+                }
+
             }
         });
        addListenerToNumberKeyboard();
