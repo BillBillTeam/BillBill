@@ -45,12 +45,17 @@ public class TagManageActivity extends AppCompatActivity {
         dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
                 String type = showTypeNames.remove(oldIndex);
-                if (oldIndex < newIndex)
-                    showTypeNames.add(newIndex,type);
-                else
-                    showTypeNames.add(newIndex,type);
+                showTypeNames.add(newIndex,type);
             }
         });
+        dgvHide.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
+            @Override
+            public void onRearrange(int oldIndex, int newIndex) {
+                String type = hideTypeNames.remove(oldIndex);
+                hideTypeNames.add(newIndex,type);
+            }
+        });
+
         dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
@@ -58,6 +63,16 @@ public class TagManageActivity extends AppCompatActivity {
                 String name = showTypeNames.remove(position);
                 dgvHide.addView(view);
                 hideTypeNames.add(name);
+            }
+        });
+
+        dgvHide.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dgvHide.removeViewAt(position);
+                String name = hideTypeNames.remove(position);
+                dgvShow.addView(view);
+                showTypeNames.add(name);
             }
         });
 
