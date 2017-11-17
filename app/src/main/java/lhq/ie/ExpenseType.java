@@ -46,9 +46,9 @@ public class ExpenseType {
         {
             for(int j=0;j<list.size();j++)
             {
-                if(list.get(i).getIndex()==Index)
+                if(list.get(j).getIndex()==Index)
                 {
-                    type.add(list.get(i));
+                    type.add(list.get(j));
                     Index++;
                 }
             }
@@ -78,9 +78,9 @@ public class ExpenseType {
         {
             for(int j=0;j<list.size();j++)
             {
-                if(list.get(i).getIndex()==Index)
+                if(list.get(j).getIndex()==Index)
                 {
-                    type.add(list.get(i));
+                    type.add(list.get(j));
                     Index--;
                 }
             }
