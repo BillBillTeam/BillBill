@@ -104,14 +104,19 @@ public class ExpenseType {
      */
     public void InsertType (String string)throws Exception
     {
+        int maxIndex=0;
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getType().equals(string))
             {
                 throw new Exception("输入类型已经存在");
             }
+            if(list.get(i).getIndex()>maxIndex)
+            {
+                maxIndex=list.get(i).getIndex();
+            }
         }
-        CustomType expensetype=new CustomType(string,list.size());
+        CustomType expensetype=new CustomType(string,maxIndex+1);
         list.add(expensetype);
     }
 
