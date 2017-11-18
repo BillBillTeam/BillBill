@@ -308,8 +308,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
-                MainActivity.this.startActivity(intent);
-//                refreshTagGroup();
+                MainActivity.this.startActivityForResult(intent,0);
+
+
             }
         });
 
@@ -557,5 +558,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         currentPage=1;
+    }
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data )
+    {
+        switch ( resultCode ) {
+            case RESULT_OK :
+                refreshTagGroup();
+                break;
+            default :
+                break;
+        }
+
     }
 }

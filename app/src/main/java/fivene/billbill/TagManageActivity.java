@@ -1,5 +1,6 @@
 package fivene.billbill;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -94,6 +95,11 @@ public class TagManageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         expenseType.updateDB();
+
+        Intent in = new Intent();
+        in.putExtra( "result", "res" );
+        setResult( RESULT_OK, in );
+
         finish();
         return super.onOptionsItemSelected(item);
     }

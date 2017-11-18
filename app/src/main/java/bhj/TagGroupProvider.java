@@ -40,7 +40,10 @@ public class TagGroupProvider {
         this.TagGroupList = new ArrayList<View>();
 
         this.context=context;
-        initData(context,tagList);
+       if(PicPostion.size()>0){
+           PicPostion.clear();
+       }
+       initData(context,tagList);
 
 
 
@@ -87,11 +90,7 @@ public class TagGroupProvider {
     }
 
 
-    public void  updataGroupList(List <CustomType> tagList){
-        TagGroupList.clear();
-        initData(context,tagList);
 
-    }
     public List<View> getTagGroup(){
         return this.TagGroupList;
 

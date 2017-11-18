@@ -166,17 +166,79 @@ public class ViewPagerManagement {
         public void startUpdate(View arg0) {
 
         }
+
     }
 
     public void reloadIt(Context context){
-
+        group.removeAllViews();
 
         ExpenseType types=new ExpenseType(context);
         //create TagGroupProvider
         List<CustomType> list=types.getAllShowExpenseType();
-
-
         provider=new TagGroupProvider(context,list,globalWidth);
+
+        // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
+
+
+        mImageViews = new ImageView[provider.getGroupSize()];
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(13, 13);
+        layoutParams.setMargins(5, 0, 5, 1);
+
+        for (int i = 0; i < provider.getGroupSize(); i++) {
+            mImageView = new ImageView(context);
+            mImageView.setLayoutParams(layoutParams);
+            mImageViews[i] = mImageView;
+            if (i == 0) {
+                // 默认选中第一张图片
+                mImageViews[i].setBackgroundResource(R.drawable.circle_3);
+            }
+            else {
+                mImageViews[i].setBackgroundResource(R.drawable.circle_1);
+            }
+            group.addView(mImageViews[i]);
+        }
+        // add listener for tags
+        GridLayout layout =(GridLayout)provider.getTagGroup().get(0);
+        mCallback.callbackAddListenerToViewPager(layout);
+
+        mTagGroupPager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
+        mTagGroupPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                for(int i=0;i<mImageViews.length;i++){
+                    if (i == position) {
+                        // 默认选中第一张图片
+                        mImageViews[i].setBackgroundResource(R.drawable.circle_3);
+                    }
+                    else {
+                        mImageViews[i].setBackgroundResource(R.drawable.circle_1);
+                    }
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                GridLayout layout =(GridLayout)provider.getTagGroup().get(position);
+                mCallback.callbackAddListenerToViewPager(layout);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        GridLayout layoutd =(GridLayout)provider.getTagGroup().get(0);
+        mCallback.callbackAddListenerToViewPager(layoutd);
+        mTagGroupPager.getAdapter().notifyDataSetChanged();
 
         // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
     }
