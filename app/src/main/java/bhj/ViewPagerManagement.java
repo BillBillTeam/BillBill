@@ -37,7 +37,6 @@ public class ViewPagerManagement {
         this.group=group;
         this.mImageViews=mImageViews;
 
-
     }
     public interface Callback{
         void callbackAddListenerToViewPager(GridLayout layout);
@@ -168,6 +167,7 @@ public class ViewPagerManagement {
 
         }
     }
+
     public void reloadIt(Context context){
 
 

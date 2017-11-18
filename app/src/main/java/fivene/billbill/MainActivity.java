@@ -51,6 +51,7 @@ import lhq.ie.Expense;
 import lhq.ie.ExpenseType;
 import lz.db.Bill;
 import lz.db.CustomType;
+import lz.img.IconGetter;
 import lz.regex.NumCheck;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
    // private ImageView mDefaultImage = null;
 
     private int currentPage=0;
+
+    private int currentSelectedTag_pageN;
 
     private ViewPager mTagGroupPager = null;
 
@@ -422,18 +425,28 @@ public class MainActivity extends AppCompatActivity {
 
                     if(currentSelectedTag!=view){
                         LinearLayout layout1=(LinearLayout)view;
+
                         if(currentSelectedTag!=null){
                             //remove selected change
                             LinearLayout layout2 =(LinearLayout) currentSelectedTag;
-                            Drawable drawable=getResources().getDrawable(R.drawable.none_drawable);
-                            layout2.setBackground(drawable);
+                            int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
+                            int currentPage=currentSelectedTag_pageN;
+                            int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+
+                            int picRecID=TagGroupProvider.getPicRecID(finIndex);
+
+                            ((ImageView)layout2.getChildAt(0)).setImageBitmap(IconGetter.getIcon(MainActivity.this,picRecID));
 
 
                         }
                         currentSelectedTag=view;
                         //add selected change
-                        Drawable drawable=getResources().getDrawable(R.drawable.selected_tag_background);
-                        layout1.setBackground(drawable);
+                        int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
+                        int currentPage=mTagGroupPager.getCurrentItem();
+                        currentSelectedTag_pageN=currentPage;
+                        int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+                        int picRecID=TagGroupProvider.getPicRecID(finIndex);
+                        ((ImageView)layout1.getChildAt(0)).setImageBitmap(IconGetter.getClickedIcon(MainActivity.this,picRecID));
 
                         if(currentPage==0){
                             scrollToDOWN();

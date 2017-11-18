@@ -22,9 +22,12 @@ import lz.img.IconGetter;
 
 public class TagGroupProvider {
     private List<View> TagGroupList;
+
+    private static List<Integer>PicPostion= new ArrayList<Integer>();
    // private List<String> TagNameList;
-    private final int COLUMNCOUNT=5;
-    private final int ROWCOUNT=2;
+    public final static int COLUMNCOUNT=5;
+    public final static int ROWCOUNT=2;
+
     private int width;
     private Context context;
     /**
@@ -35,11 +38,15 @@ public class TagGroupProvider {
    public TagGroupProvider(Context context, List <CustomType> tagList, int width){
         this.width=width;
         this.TagGroupList = new ArrayList<View>();
+
         this.context=context;
         initData(context,tagList);
 
 
 
+    }
+    public  static int getPicRecID(int i){
+        return PicPostion.get(i);
     }
 
     private void initData(Context context,List <CustomType> tagList){
@@ -70,7 +77,7 @@ public class TagGroupProvider {
                 //set values
                 text.setText(tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getType());
                 img.setImageBitmap(IconGetter.getIcon(context,tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getRes_ID()));
-
+                PicPostion.add( tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getRes_ID());
                 //insert tagWithName to gridlayout
                 layout.addView(tagWithName);
             }
