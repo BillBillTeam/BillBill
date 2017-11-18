@@ -47,7 +47,7 @@ public class IconGetter {
         if(clickedImgList == null){
             synchronized (IconGetter.class){
                 if(clickedImgList == null){
-                    initClickedIcnos(context);
+                    initClickedIcons(context);
                 }
             }
         }
@@ -70,7 +70,7 @@ public class IconGetter {
         customIcon = BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
-    private static void initClickedIcnos(Context context){
+    private static void initClickedIcons(Context context){
         String clickedIconName = "clicked_icon";
         ApplicationInfo appInfo = context.getApplicationInfo();
         //得到该图片的id(name 是该图片的名字，"drawable" 是该图片存放的目录，appInfo.packageName是应用程序的包)

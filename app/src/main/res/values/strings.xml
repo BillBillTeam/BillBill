@@ -110,4 +110,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_tag_manage">标签管理</string>
+    <string name="tag_manager_finish">完成</string>
 </resources>
