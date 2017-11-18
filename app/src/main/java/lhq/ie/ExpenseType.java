@@ -140,6 +140,7 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()-1);
             }
         }
+        dbHelper.insertCustomType(list);
         return true;
     }
 
@@ -173,6 +174,7 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()+1);
             }
         }
+        dbHelper.insertCustomType(list);
         return true;
     }
     /**
@@ -188,6 +190,7 @@ public class ExpenseType {
         list.get(Index1).setIndex(list.get(Index2).getIndex());
         list.get(Index2).setType(customType.getType());
         list.get(Index2).setIndex(customType.getIndex());
+        dbHelper.insertCustomType(list);
     }
 
     /**
@@ -217,6 +220,7 @@ public class ExpenseType {
                 list.get(i).setIndex(minIndex-1);
             }
         }
+        dbHelper.insertCustomType(list);
 
     }
 
@@ -247,6 +251,7 @@ public class ExpenseType {
                 list.get(i).setIndex(maxIndex+1);
             }
         }
+        dbHelper.insertCustomType(list);
 
     }
 
