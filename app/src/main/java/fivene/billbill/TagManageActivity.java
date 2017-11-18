@@ -102,7 +102,8 @@ public class TagManageActivity extends AppCompatActivity {
     {
         dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
-                expenseType.exchange(oldIndex,newIndex);
+                expenseType.moveShowType(oldIndex,newIndex);
+
                 //String type = showTypeNames.remove(oldIndex);
                 //showTypeNames.add(newIndex,type);
             }
@@ -110,7 +111,7 @@ public class TagManageActivity extends AppCompatActivity {
         dgvHide.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             @Override
             public void onRearrange(int oldIndex, int newIndex) {
-                expenseType.exchange(-oldIndex-1,-newIndex-1);
+                expenseType.moveHideType(-oldIndex-1,-newIndex-1);
                 //String type = hideTypeNames.remove(oldIndex);
                 //hideTypeNames.add(newIndex,type);
             }
