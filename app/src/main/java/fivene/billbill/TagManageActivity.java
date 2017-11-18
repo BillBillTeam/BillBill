@@ -21,8 +21,11 @@ import top.lizec.draggablegridview.DraggableGridView;
 public class TagManageActivity extends AppCompatActivity {
     DraggableGridView dgvShow;
     DraggableGridView dgvHide;
-    ArrayList<String> showTypeNames;
-    ArrayList<String> hideTypeNames;
+    //ArrayList<String> showTypeNames;
+    //ArrayList<String> hideTypeNames;
+    ExpenseType expenseType;
+    int showCount;
+    int hideCount;
 
     /** Called when the activity is first created. */
     @Override
@@ -30,8 +33,8 @@ public class TagManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_manage);
         //Toolbar toolbar = (Toolbar)findViewById(R.id.)
-        ExpenseType expenseType = new ExpenseType(this);
 
+        expenseType = new ExpenseType(this);
         dgvShow = ((DraggableGridView)findViewById(R.id.vgvShow));
         dgvHide = ((DraggableGridView)findViewById(R.id.vgvHide));
 
@@ -90,7 +93,7 @@ public class TagManageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        expenseType.updateDB();
         finish();
         return super.onOptionsItemSelected(item);
     }
@@ -99,26 +102,29 @@ public class TagManageActivity extends AppCompatActivity {
     {
         dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
-                String type = showTypeNames.remove(oldIndex);
-                showTypeNames.add(newIndex,type);
+                expenseType.exchange(oldIndex,newIndex);
+                //String type = showTypeNames.remove(oldIndex);
+                //showTypeNames.add(newIndex,type);
             }
         });
         dgvHide.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             @Override
             public void onRearrange(int oldIndex, int newIndex) {
-                String type = hideTypeNames.remove(oldIndex);
-                hideTypeNames.add(newIndex,type);
+                expenseType.exchange(-oldIndex-1,-newIndex-1);
+                //String type = hideTypeNames.remove(oldIndex);
+                //hideTypeNames.add(newIndex,type);
             }
         });
 
         dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                if(hideTypeNames.size() < 15){
+                if(hideCount < 15){
                     dgvShow.removeViewAt(position);
-                    String name = showTypeNames.remove(position);
+                    expenseType.showToHide(position);
+                    //String name = showTypeNames.remove(position);
                     dgvHide.addView(view);
-                    hideTypeNames.add(name);
+                    //hideTypeNames.add(name);
                 }
             }
         });
@@ -126,11 +132,12 @@ public class TagManageActivity extends AppCompatActivity {
         dgvHide.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(showTypeNames.size() < 14){
+                if(showCount < 14){
                     dgvHide.removeViewAt(position);
-                    String name = hideTypeNames.remove(position);
+                    expenseType.hideToShow(-position-1);
+                    //String name = hideTypeNames.remove(position);
                     dgvShow.addView(view);
-                    showTypeNames.add(name);
+                    //showTypeNames.add(name);
                 }
             }
         });
@@ -138,13 +145,14 @@ public class TagManageActivity extends AppCompatActivity {
     }
 
     private void setShow(ExpenseType expenseType){
-        showTypeNames = new ArrayList<>();
+        //showTypeNames = new ArrayList<>();
         ArrayList<CustomType> show = expenseType.getAllShowExpenseType();
+        showCount = show.size();
         for(CustomType type:show){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
             if(!name.equals("自定义")){
-                showTypeNames.add(name);
+                //showTypeNames.add(name);
 
                 Bitmap bmp = getNamedBitmap(base,name);
                 ImageView imageView = new ImageView(this);
@@ -156,12 +164,13 @@ public class TagManageActivity extends AppCompatActivity {
     }
 
     private void setHide(ExpenseType expenseType){
-        hideTypeNames = new ArrayList<>();
+        //hideTypeNames = new ArrayList<>();
         ArrayList<CustomType> hide = expenseType.getAllHideExpenseType();
+        hideCount = hide.size();
         for(CustomType type:hide){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
-            hideTypeNames.add(name);
+            //hideTypeNames.add(name);
 
             Bitmap bmp = getNamedBitmap(base,name);
             ImageView imageView = new ImageView(this);
