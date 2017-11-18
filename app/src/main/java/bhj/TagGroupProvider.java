@@ -26,6 +26,7 @@ public class TagGroupProvider {
     private final int COLUMNCOUNT=5;
     private final int ROWCOUNT=2;
     private int width;
+    private Context context;
     /**
      * 创建标签组
      * @param context 上下文
@@ -34,7 +35,14 @@ public class TagGroupProvider {
    public TagGroupProvider(Context context, List <CustomType> tagList, int width){
         this.width=width;
         this.TagGroupList = new ArrayList<View>();
+        this.context=context;
+        initData(context,tagList);
 
+
+
+    }
+
+    private void initData(Context context,List <CustomType> tagList){
 
         LayoutInflater inflater = LayoutInflater.from(context);
         int n=tagList.size()/(COLUMNCOUNT*ROWCOUNT);
@@ -69,11 +77,12 @@ public class TagGroupProvider {
 
             TagGroupList.add(layout);
         }
-
-
     }
-    public void  updataGroupList(List<String> tagNameList){
 
+
+    public void  updataGroupList(List <CustomType> tagList){
+        TagGroupList.clear();
+        initData(context,tagList);
 
     }
     public List<View> getTagGroup(){

@@ -46,6 +46,7 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
+import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
 import lhq.ie.ExpenseType;
 import lz.db.Bill;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mAmountLayout;
     private LinearLayout mMarkLayout;
 
-
+    private TagGroupProvider provider;
     //tag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,6 +322,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePopFormBottom(view);
+            }
+        });
        addListenerToNumberKeyboard();
     }
 
@@ -329,138 +336,32 @@ public class MainActivity extends AppCompatActivity {
      * void
      */
     private void initViewPager() {
-        // TODO Auto-generated method stub
-      //  mDefaultImage.setVisibility(View.GONE);
-        mTagGroupPager.setVisibility(View.VISIBLE);
+        ViewGroup group = (ViewGroup) findViewById(R.id.viewGroup);
+        ViewPagerManagement.Callback callback=new ViewPagerManagement.Callback() {
+            @Override
+            public void callbackAddListenerToViewPager(GridLayout layout) {
+                addListenerToGridLayout(layout);
+            }
+        };
 
+        ViewPagerManagement viewPagerManagement=new ViewPagerManagement(mTagGroupPager,globalWidth,callback,group,mImageView,mImageViews);
+        viewPagerManagement.createViewPager(this);
+
+    }
+
+
+    private void refreshTagGroup(){
 
         ExpenseType types=new ExpenseType(this);
-        //create TagGroupProvider
         List <CustomType>list=types.getAllShowExpenseType();
 
 
-        final TagGroupProvider provider=new TagGroupProvider(this,list,globalWidth);
-
-        // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
-
-        ViewGroup group = (ViewGroup) findViewById(R.id.viewGroup);
-        mImageViews = new ImageView[provider.getGroupSize()];
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(13, 13);
-        layoutParams.setMargins(5, 0, 5, 1);
-
-        for (int i = 0; i < provider.getGroupSize(); i++) {
-            mImageView = new ImageView(this);
-            mImageView.setLayoutParams(layoutParams);
-            mImageViews[i] = mImageView;
-            if (i == 0) {
-                // 默认选中第一张图片
-                mImageViews[i].setBackgroundResource(R.drawable.circle_3);
-            }
-            else {
-                mImageViews[i].setBackgroundResource(R.drawable.circle_1);
-            }
-            group.addView(mImageViews[i]);
-        }
-        // add listener for tags
-        GridLayout layout =(GridLayout)provider.getTagGroup().get(0);
-        addListenerToGridLayout(layout);
-
-        mTagGroupPager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
-
-        mTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePopFormBottom(view);
-            }
-        });
-        mTagGroupPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                for(int i=0;i<mImageViews.length;i++){
-                    if (i == position) {
-                        // 默认选中第一张图片
-                        mImageViews[i].setBackgroundResource(R.drawable.circle_3);
-                    }
-                    else {
-                        mImageViews[i].setBackgroundResource(R.drawable.circle_1);
-                    }
-
-
-                }
-
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                GridLayout layout =(GridLayout)provider.getTagGroup().get(position);
-                addListenerToGridLayout(layout);
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        provider=new TagGroupProvider(this,list,globalWidth);
+        provider.updataGroupList(list);
 
 
     }
 
-
-
-
-    private final class TagGroupAdapter extends PagerAdapter {
-        private List<View> views = null;
-        public TagGroupAdapter(List<View> views) {
-            this.views = views;
-        }
-
-        @Override
-        public void destroyItem(View arg0, int arg1, Object arg2) {
-            ((ViewPager) arg0).removeView(views.get(arg1));
-        }
-
-        @Override
-        public void finishUpdate(View arg0) {
-
-        }
-
-        @Override
-        public int getCount() {
-            return views.size();
-        }
-
-        //TODO: add listener at here
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(views.get(position), 0);
-
-            return views.get(position);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1) {
-
-        }
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View arg0) {
-
-        }
-    }
 
     /**
      * 弹出 日历底部弹窗
@@ -476,15 +377,6 @@ public class MainActivity extends AppCompatActivity {
         PopWin.setCallback(mFragmentCallback);
         PopWin.setHeight((int) (globalHeight/2*1.20));
         // Options
-
-
-//        if (!optionsPair.first) { // If options are not valid
-//            Toast.makeText(Sampler.this, "No pickers activated",
-//                    Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-
 
 
 //        设置Popupwindow显示位置（从底部弹出）
@@ -518,19 +410,6 @@ public class MainActivity extends AppCompatActivity {
         options.setDisplayOptions(displayOptions);
         // Enable/disable the date range selection feature
         options.setCanPickDateRange(false);
-
-        // Example for setting date range:
-        // Note that you can pass a date range as the initial date params
-        // even if you have date-range selection disabled. In this case,
-        // the user WILL be able to change date-range using the header
-        // TextViews, but not using long-press.
-
-        /*Calendar startCal = Calendar.getInstance();
-        startCal.set(2016, 2, 4);
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2016, 2, 17);
-
-        options.setDateParams(startCal, endCal);*/
 
         // If 'displayOptions' is zero, the chosen options are not valid
         return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
@@ -600,22 +479,7 @@ public class MainActivity extends AppCompatActivity {
             else{
                 mTimeButton.setText("今天");
             }
-//            mHour = hourOfDay;
-//            mMinute = minute;
-//            mRecurrenceOption = recurrenceOption != null ?
-//                    recurrenceOption.name() : "n/a";
-//            mRecurrenceRule = recurrenceRule != null ?
-//                    recurrenceRule : "n/a";
-//
-//            updateInfoView();
-//
-//            svMainContainer.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    svMainContainer.scrollTo(svMainContainer.getScrollX(),
-//                            cbAllowDateRangeSelection.getBottom());
-//                }
-//            });
+
         }
     };
 
