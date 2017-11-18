@@ -15,6 +15,7 @@ import java.util.List;
 
 public class IconGetter {
     private static List<Bitmap> imgList;
+    private static List<Bitmap> clickedImgList;
     private static Bitmap customIcon;
 
 
@@ -37,6 +38,23 @@ public class IconGetter {
     }
 
     /**
+     * 获得系统内置的图标(选中状态)
+     * @param context 当前进程上下文
+     * @param res_ID 图标资源的内置ID
+     * @return 图标的Bitmap
+     */
+    public static Bitmap getClickedIcon(Context context,int res_ID) {
+        if(clickedImgList == null){
+            synchronized (IconGetter.class){
+                if(clickedImgList == null){
+                    initClickedIcnos(context);
+                }
+            }
+        }
+        return getClickedBitmapByIdx(res_ID);
+    }
+
+    /**
      *  初始化图标
      */
     private static void initIcons(Context context){
@@ -52,8 +70,16 @@ public class IconGetter {
         customIcon = BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
+    private static void initClickedIcnos(Context context){
+        String clickedIconName = "clicked_icon";
+        ApplicationInfo appInfo = context.getApplicationInfo();
+        //得到该图片的id(name 是该图片的名字，"drawable" 是该图片存放的目录，appInfo.packageName是应用程序的包)
+        int resID = context.getResources().getIdentifier(clickedIconName, "drawable", appInfo.packageName);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
+        clickedImgList = ImageSplitter.split(bitmap,5,4);
+    }
+
     private static Bitmap getBitmapByIdx(int index){
-        Log.i("查询资源编号",Integer.toString(index));
         if(index == -1){
             return customIcon;
         }
@@ -62,6 +88,15 @@ public class IconGetter {
         }
     }
 
+    private static Bitmap getClickedBitmapByIdx(int index){
+        if(index == -1){
+            Log.w("获得选中图标","没有设置默认选中样式");
+            return customIcon;
+        }
+        else{
+            return clickedImgList.get(index);
+        }
+    }
 
     private IconGetter(){ }
 }
