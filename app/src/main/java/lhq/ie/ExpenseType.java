@@ -17,7 +17,7 @@ import lz.db.DBHelper;
 public class ExpenseType {
     private DBHelper dbHelper;
     private String[] systemTypeNames;
-    public ArrayList<CustomType> list;
+    private ArrayList<CustomType> list;
 
     public ExpenseType(Context context)
     {
@@ -60,6 +60,7 @@ public class ExpenseType {
                 {
                     type.add(list.get(j));
                     Index++;
+                    break;
                 }
             }
         }
@@ -90,6 +91,7 @@ public class ExpenseType {
                 {
                     type.add(list.get(j));
                     Index--;
+                    break;
                 }
             }
 
@@ -264,5 +266,4 @@ public class ExpenseType {
             }
         }
     }
-
 }
