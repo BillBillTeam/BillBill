@@ -220,8 +220,13 @@ public class ExpenseType {
     public void showToHide(int Index)
     {
         int minIndex=Index;
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()<=minIndex)
             {
                 minIndex=list.get(i).getIndex();
@@ -232,13 +237,7 @@ public class ExpenseType {
             }
         }
 
-        for(int i=0;i<list.size();i++)
-        {
-            if(list.get(i).getIndex()==Index)
-            {
-                list.get(i).setIndex(minIndex-1);
-            }
-        }
+        list.get(tempIndex).setIndex(minIndex-1);
     }
 
     /**
@@ -248,8 +247,13 @@ public class ExpenseType {
     public void hideToShow(int Index)
     {
         int maxIndex=Index;
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()>=maxIndex)
             {
                 maxIndex=list.get(i).getIndex();
@@ -260,12 +264,6 @@ public class ExpenseType {
             }
         }
 
-        for(int i=0;i<list.size();i++)
-        {
-            if(list.get(i).getIndex()==Index)
-            {
-                list.get(i).setIndex(maxIndex+1);
-            }
-        }
+       list.get(tempIndex).setIndex(maxIndex+1);
     }
 }
