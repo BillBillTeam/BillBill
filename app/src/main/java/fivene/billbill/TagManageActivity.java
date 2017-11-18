@@ -155,15 +155,12 @@ public class TagManageActivity extends AppCompatActivity {
         for(CustomType type:show){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
-            if(!name.equals("自定义")){
-                //showTypeNames.add(name);
 
-                Bitmap bmp = getNamedBitmap(base,name);
-                ImageView imageView = new ImageView(this);
-                imageView.setImageBitmap(bmp);
+            Bitmap bmp = getNamedBitmap(base,name);
+            ImageView imageView = new ImageView(this);
+            imageView.setImageBitmap(bmp);
 
-                dgvShow.addView(imageView);
-            }
+            dgvShow.addView(imageView);
         }
     }
 

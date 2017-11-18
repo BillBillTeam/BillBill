@@ -281,7 +281,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *  将系统提供的自定义类型插入到数据库中
      *
      *  对于默认类型，资源ID按照递增顺序，从0开始，提供20种资源图片
-     *  其中默认显示前15个图片，后五个默认隐藏
+     *  其中默认显示前14个图片，后5个默认隐藏
      */
     private void initSystemType(SQLiteDatabase db){
         int size = systemTypeNames.length;
@@ -290,11 +290,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         //可以显示的部分，从0开始排序，资源ID依次递增
-        for(int i=0;i<15;i++){
+        for(int i=0;i<14;i++){
             list.add(new CustomType(systemTypeNames[i],i,i));
         }
 
         //不显示的部分，从-1开始排序，资源ID依次递增
+        //其中14对应的是自定义的图标，跳过此图标
         int idx = -1;
         for(int i=15;i<size;i++){
             list.add(new CustomType(systemTypeNames[i],idx,i));
