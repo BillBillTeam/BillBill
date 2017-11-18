@@ -565,6 +565,7 @@ public class MainActivity extends AppCompatActivity {
         switch ( resultCode ) {
             case RESULT_OK :
                 refreshTagGroup();
+                currentSelectedTag=null;
                 break;
             default :
                 break;
