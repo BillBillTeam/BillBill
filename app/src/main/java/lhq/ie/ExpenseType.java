@@ -196,23 +196,37 @@ public class ExpenseType {
     public void moveShowType(int oldIndex,int newIndex)
     {
         int tempIndex=oldIndex;
-        for(int i=0;i<list.size();i++)
+        //从后往前移动
+        if(oldIndex>=newIndex)
         {
-            if(list.get(i).getIndex()==oldIndex)
+            for(int i=0;i<list.size();i++)
             {
-                tempIndex=i;
-            }
-            if(list.get(i).getIndex()>oldIndex)
-            {
-                list.get(i).setIndex(list.get(i).getIndex()-1);
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+                if(list.get(i).getIndex()>=newIndex&&list.get(i).getIndex()<oldIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()+1);
+                }
             }
         }
-        list.get(tempIndex).setIndex(newIndex);
-        for(int i=0;i<list.size();i++)
+        //从前往后移动
+        if(oldIndex<newIndex)
         {
-            if(list.get(i).getIndex()>newIndex)
+            for(int i=0;i<list.size();i++)
             {
-                list.get(i).setIndex(list.get(i).getIndex()+1);
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+                if(list.get(i).getIndex()>oldIndex&&list.get(i).getIndex()<=newIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()-1);
+                }
+
             }
         }
     }
@@ -220,23 +234,37 @@ public class ExpenseType {
     public void moveHideType(int oldIndex,int newIndex)
     {
         int tempIndex=oldIndex;
-        for(int i=0;i<list.size();i++)
+        //从后往前移动
+        if(oldIndex<newIndex)
         {
-            if(list.get(i).getIndex()==oldIndex)
+            for(int i=0;i<list.size();i++)
             {
-                tempIndex=i;
-            }
-            if(list.get(i).getIndex()<oldIndex)
-            {
-                list.get(i).setIndex(list.get(i).getIndex()+1);
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+                if(list.get(i).getIndex()<=newIndex&&list.get(i).getIndex()>oldIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()-1);
+                }
             }
         }
-        list.get(tempIndex).setIndex(newIndex);
-        for(int i=0;i<list.size();i++)
+        //从前往后移动
+        if(oldIndex>=newIndex)
         {
-            if(list.get(i).getIndex()<newIndex)
+            for(int i=0;i<list.size();i++)
             {
-                list.get(i).setIndex(list.get(i).getIndex()-1);
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+                if(list.get(i).getIndex()<oldIndex&&list.get(i).getIndex()>=newIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()+1);
+                }
+
             }
         }
     }
