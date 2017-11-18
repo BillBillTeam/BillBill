@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/BillBill.iml" filepath="$PROJECT_DIR$/BillBill.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/draggablegridview/draggablegridview.iml" filepath="$PROJECT_DIR$/draggablegridview/draggablegridview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/draggablegridview/draggablegridview.iml" filepath="$PROJECT_DIR$/draggablegridview/draggablegridview.iml" />
       <module fileurl="file://$PROJECT_DIR$/sublimepickerlibrary/sublimepickerlibrary.iml" filepath="$PROJECT_DIR$/sublimepickerlibrary/sublimepickerlibrary.iml" />
     </modules>
   </component>
