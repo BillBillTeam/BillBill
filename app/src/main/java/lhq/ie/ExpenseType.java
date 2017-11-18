@@ -189,26 +189,54 @@ public class ExpenseType {
         return true;
     }
     /**
-     * 交换两个消费类型的位置
-     * @param Index1 第一个消费类型的位置
-     * @param Index2 第二个消费类型的位置
+     * 将用户指定的消费类型移至指定位置
+     * @param oldIndex 初始消费类型位置
+     * @param newIndex 欲移动到的位置
      */
-    public void exchange(int Index1,int Index2)
+    public void moveShowType(int oldIndex,int newIndex)
     {
-        int temIndex=0;
+        int tempIndex=oldIndex;
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()==Index1)
+            if(list.get(i).getIndex()==oldIndex)
             {
-                temIndex=i;
-                list.get(i).setIndex(Index2);
+                tempIndex=i;
+            }
+            if(list.get(i).getIndex()>oldIndex)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()-1);
             }
         }
+        list.get(tempIndex).setIndex(newIndex);
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()==Index2 && i!=temIndex)
+            if(list.get(i).getIndex()>newIndex)
             {
-                list.get(i).setIndex(Index1);
+                list.get(i).setIndex(list.get(i).getIndex()+1);
+            }
+        }
+    }
+
+    public void moveHideType(int oldIndex,int newIndex)
+    {
+        int tempIndex=oldIndex;
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()==oldIndex)
+            {
+                tempIndex=i;
+            }
+            if(list.get(i).getIndex()<oldIndex)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()+1);
+            }
+        }
+        list.get(tempIndex).setIndex(newIndex);
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getIndex()<newIndex)
+            {
+                list.get(i).setIndex(list.get(i).getIndex()-1);
             }
         }
     }
@@ -220,8 +248,13 @@ public class ExpenseType {
     public void showToHide(int Index)
     {
         int minIndex=Index;
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()<=minIndex)
             {
                 minIndex=list.get(i).getIndex();
@@ -232,13 +265,7 @@ public class ExpenseType {
             }
         }
 
-        for(int i=0;i<list.size();i++)
-        {
-            if(list.get(i).getIndex()==Index)
-            {
-                list.get(i).setIndex(minIndex-1);
-            }
-        }
+        list.get(tempIndex).setIndex(minIndex-1);
     }
 
     /**
@@ -248,8 +275,13 @@ public class ExpenseType {
     public void hideToShow(int Index)
     {
         int maxIndex=Index;
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()>=maxIndex)
             {
                 maxIndex=list.get(i).getIndex();
@@ -260,12 +292,6 @@ public class ExpenseType {
             }
         }
 
-        for(int i=0;i<list.size();i++)
-        {
-            if(list.get(i).getIndex()==Index)
-            {
-                list.get(i).setIndex(maxIndex+1);
-            }
-        }
+       list.get(tempIndex).setIndex(maxIndex+1);
     }
 }
