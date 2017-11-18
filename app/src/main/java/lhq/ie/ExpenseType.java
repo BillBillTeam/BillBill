@@ -206,6 +206,9 @@ public class ExpenseType {
                     list.get(i).setIndex(newIndex);
                     tempIndex=i;
                 }
+            }
+            for(int i=0;i<list.size();i++)
+            {
                 if(list.get(i).getIndex()>=newIndex&&list.get(i).getIndex()<oldIndex&&i!=tempIndex)
                 {
                     list.get(i).setIndex(list.get(i).getIndex()+1);
@@ -222,11 +225,13 @@ public class ExpenseType {
                     list.get(i).setIndex(newIndex);
                     tempIndex=i;
                 }
+            }
+            for(int i=0;i<list.size();i++)
+            {
                 if(list.get(i).getIndex()>oldIndex&&list.get(i).getIndex()<=newIndex&&i!=tempIndex)
                 {
                     list.get(i).setIndex(list.get(i).getIndex()-1);
                 }
-
             }
         }
     }
@@ -244,6 +249,9 @@ public class ExpenseType {
                     list.get(i).setIndex(newIndex);
                     tempIndex=i;
                 }
+            }
+            for(int i=0;i<list.size();i++)
+            {
                 if(list.get(i).getIndex()<=newIndex&&list.get(i).getIndex()>oldIndex&&i!=tempIndex)
                 {
                     list.get(i).setIndex(list.get(i).getIndex()-1);
@@ -260,11 +268,13 @@ public class ExpenseType {
                     list.get(i).setIndex(newIndex);
                     tempIndex=i;
                 }
+            }
+            for(int i=0;i<list.size();i++)
+            {
                 if(list.get(i).getIndex()<oldIndex&&list.get(i).getIndex()>=newIndex&&i!=tempIndex)
                 {
                     list.get(i).setIndex(list.get(i).getIndex()+1);
                 }
-
             }
         }
     }
