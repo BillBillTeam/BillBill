@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView amount_text;
 
     private Button mButton2;
-    private ImageView mImageView;
     private Toolbar mToolbar;
 
     private ScrollView mScrollView;
@@ -93,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mMarkLayout;
 
     private TagGroupProvider provider;
+    ViewPagerManagement viewPagerManagement=null;
     //tag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
                 MainActivity.this.startActivity(intent);
+//                refreshTagGroup();
             }
         });
 
@@ -344,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        ViewPagerManagement viewPagerManagement=new ViewPagerManagement(mTagGroupPager,globalWidth,callback,group,mImageView,mImageViews);
+         viewPagerManagement=new ViewPagerManagement(mTagGroupPager,globalWidth,callback,group,mImageViews);
         viewPagerManagement.createViewPager(this);
 
     }
@@ -352,13 +353,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshTagGroup(){
 
-        ExpenseType types=new ExpenseType(this);
-        List <CustomType>list=types.getAllShowExpenseType();
-
-
-        provider=new TagGroupProvider(this,list,globalWidth);
-        provider.updataGroupList(list);
-
+       viewPagerManagement.reloadIt(this);
 
     }
 

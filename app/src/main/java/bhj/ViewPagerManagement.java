@@ -30,12 +30,11 @@ public class ViewPagerManagement {
     private ImageView mImageView;
 
     private ImageView[] mImageViews = null;
-   public ViewPagerManagement(ViewPager mTagGroupPager, int globalWidth,Callback mCallback,ViewGroup group,ImageView mImageView,ImageView[] mImageViews){
+   public ViewPagerManagement(ViewPager mTagGroupPager, int globalWidth,Callback mCallback,ViewGroup group,ImageView[] mImageViews){
         this.mTagGroupPager=mTagGroupPager;
         this.globalWidth=globalWidth;
         this.mCallback=mCallback;
         this.group=group;
-        this.mImageView=mImageView;
         this.mImageViews=mImageViews;
 
 
@@ -168,6 +167,18 @@ public class ViewPagerManagement {
         public void startUpdate(View arg0) {
 
         }
+    }
+    public void reloadIt(Context context){
+
+
+        ExpenseType types=new ExpenseType(context);
+        //create TagGroupProvider
+        List<CustomType> list=types.getAllShowExpenseType();
+
+
+        provider=new TagGroupProvider(context,list,globalWidth);
+
+        // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
     }
 
 }
