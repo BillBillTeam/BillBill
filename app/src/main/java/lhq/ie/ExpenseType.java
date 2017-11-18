@@ -195,16 +195,18 @@ public class ExpenseType {
      */
     public void exchange(int Index1,int Index2)
     {
+        int temIndex=0;
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()==Index1)
             {
+                temIndex=i;
                 list.get(i).setIndex(Index2);
             }
         }
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()==Index2)
+            if(list.get(i).getIndex()==Index2 && i!=temIndex)
             {
                 list.get(i).setIndex(Index1);
             }
