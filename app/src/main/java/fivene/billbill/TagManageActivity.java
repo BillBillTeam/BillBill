@@ -121,9 +121,11 @@ public class TagManageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
                 if(hideCount < 15){
                     dgvShow.removeViewAt(position);
+                    showCount--;
                     expenseType.showToHide(position);
                     //String name = showTypeNames.remove(position);
                     dgvHide.addView(view);
+                    hideCount++;
                     //hideTypeNames.add(name);
                 }
             }
@@ -134,9 +136,11 @@ public class TagManageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(showCount < 14){
                     dgvHide.removeViewAt(position);
+                    hideCount--;
                     expenseType.hideToShow(-position-1);
                     //String name = hideTypeNames.remove(position);
                     dgvShow.addView(view);
+                    showCount++;
                     //showTypeNames.add(name);
                 }
             }
