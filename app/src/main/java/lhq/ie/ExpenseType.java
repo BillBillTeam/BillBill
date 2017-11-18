@@ -17,12 +17,23 @@ import lz.db.DBHelper;
 public class ExpenseType {
     private DBHelper dbHelper;
     private String[] systemTypeNames;
+    public ArrayList<CustomType> list;
 
     public ExpenseType(Context context)
     {
         this.dbHelper=new DBHelper(context);
         systemTypeNames = context.getResources().getStringArray(R.array.systemType);
+        list=dbHelper.selectAllCustomType();
     }
+
+    /**
+     * 更新数据库
+     */
+    public void updateDB()
+    {
+        dbHelper.insertCustomType(list);
+    }
+
 
     /**
      * 获得所有显示的消费类型，以动态数组形式按位置顺序输出
@@ -32,7 +43,6 @@ public class ExpenseType {
     {
         int showNumber=0;
         int Index=0;
-        ArrayList<CustomType> list= dbHelper.selectAllCustomType();
         ArrayList<CustomType> type=new ArrayList<>();
 
         for(int i=0;i<list.size();i++)
@@ -52,7 +62,6 @@ public class ExpenseType {
                     Index++;
                 }
             }
-
         }
         return type;
     }
@@ -65,7 +74,6 @@ public class ExpenseType {
     {
         int hideNumber=0;
         int Index=-1;
-        ArrayList<CustomType> list= dbHelper.selectAllCustomType();
         ArrayList<CustomType> type=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
@@ -96,17 +104,20 @@ public class ExpenseType {
      */
     public void InsertType (String string)throws Exception
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        int maxIndex=0;
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getType().equals(string))
             {
                 throw new Exception("输入类型已经存在");
             }
+            if(list.get(i).getIndex()>maxIndex)
+            {
+                maxIndex=list.get(i).getIndex();
+            }
         }
-        CustomType expensetype=new CustomType(string,list.size());
+        CustomType expensetype=new CustomType(string,maxIndex+1);
         list.add(expensetype);
-        dbHelper.insertCustomType(list);
     }
 
 
@@ -117,7 +128,6 @@ public class ExpenseType {
      */
     public boolean deleteShowType(int Index)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()==Index)
@@ -130,7 +140,8 @@ public class ExpenseType {
                         return false;
                     }
                 }
-                dbHelper.deleteCustomType(customType);
+                list.remove(customType);
+                break;
             }
         }
         for(int i=0;i<list.size();i++)
@@ -140,7 +151,6 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()-1);
             }
         }
-        dbHelper.insertCustomType(list);
         return true;
     }
 
@@ -151,7 +161,6 @@ public class ExpenseType {
      */
     public boolean deleteHideType(int Index)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()==Index)
@@ -164,7 +173,8 @@ public class ExpenseType {
                         return false;
                     }
                 }
-                dbHelper.deleteCustomType(customType);
+                list.remove(customType);
+                break;
             }
         }
         for(int i=0;i<list.size();i++)
@@ -174,7 +184,6 @@ public class ExpenseType {
                 list.get(i).setIndex(list.get(i).getIndex()+1);
             }
         }
-        dbHelper.insertCustomType(list);
         return true;
     }
     /**
@@ -184,13 +193,20 @@ public class ExpenseType {
      */
     public void exchange(int Index1,int Index2)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
-        CustomType customType=new CustomType(list.get(Index1).getType(),list.get(Index1).getIndex());
-        list.get(Index1).setType(list.get(Index2).getType());
-        list.get(Index1).setIndex(list.get(Index2).getIndex());
-        list.get(Index2).setType(customType.getType());
-        list.get(Index2).setIndex(customType.getIndex());
-        dbHelper.insertCustomType(list);
+        for(int i=0;i<=list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index1)
+            {
+                list.get(i).setIndex(Index2);
+            }
+        }
+        for(int i=0;i<=list.size();i++)
+        {
+            if(list.get(i).getIndex()==Index2)
+            {
+                list.get(i).setIndex(Index1);
+            }
+        }
     }
 
     /**
@@ -200,7 +216,6 @@ public class ExpenseType {
     public void showToHide(int Index)
     {
         int minIndex=Index;
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()<=minIndex)
@@ -220,8 +235,6 @@ public class ExpenseType {
                 list.get(i).setIndex(minIndex-1);
             }
         }
-        dbHelper.insertCustomType(list);
-
     }
 
     /**
@@ -231,7 +244,6 @@ public class ExpenseType {
     public void hideToShow(int Index)
     {
         int maxIndex=Index;
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()>=maxIndex)
@@ -251,8 +263,6 @@ public class ExpenseType {
                 list.get(i).setIndex(maxIndex+1);
             }
         }
-        dbHelper.insertCustomType(list);
-
     }
 
 }
