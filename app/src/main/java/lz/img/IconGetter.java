@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class IconGetter {
     private static List<Bitmap> imgList;
     private static List<Bitmap> clickedImgList;
     private static Bitmap customIcon;
-
+    private static Bitmap clickedCustomIcon;
 
     /**
      * 获得系统内置的图标
@@ -77,6 +76,10 @@ public class IconGetter {
         int resID = context.getResources().getIdentifier(clickedIconName, "drawable", appInfo.packageName);
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
         clickedImgList = ImageSplitter.split(bitmap,5,4);
+
+        String clickedCustomIcnoName = "clickd_custom_type";
+        resID = context.getResources().getIdentifier(clickedCustomIcnoName,"drawable",appInfo.packageName);
+        clickedCustomIcon =BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
     private static Bitmap getBitmapByIdx(int index){
@@ -90,8 +93,7 @@ public class IconGetter {
 
     private static Bitmap getClickedBitmapByIdx(int index){
         if(index == -1){
-            Log.w("获得选中图标","没有设置默认选中样式");
-            return customIcon;
+            return clickedCustomIcon;
         }
         else{
             return clickedImgList.get(index);
