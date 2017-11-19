@@ -206,8 +206,12 @@ public class TagManageActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    expenseType.InsertType(edit.getText().toString());
-                    Toast.makeText(TagManageActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    String name = edit.getText().toString();
+                    if(!name.isEmpty()){
+                        expenseType.InsertType(name);
+                        dgvShow.addView(getCustomTypeImageView(name));
+                        Toast.makeText(TagManageActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(TagManageActivity.this,"数据库异常，请稍后再试",Toast.LENGTH_SHORT).show();
                 }
@@ -268,6 +272,16 @@ public class TagManageActivity extends AppCompatActivity {
         canvas.drawText(name,begin, baseBmpHeight+textSize,paint);
 
         return bmp;
+    }
+
+    private ImageView getCustomTypeImageView(String name){
+        Bitmap base = IconGetter.getIcon(this,-1);
+
+        Bitmap bmp = getNamedBitmap(base,name);
+        ImageView imageView = new ImageView(this);
+        imageView.setImageBitmap(bmp);
+
+        return  imageView;
     }
 
     private void checkAndPrint(boolean isSuccess){
