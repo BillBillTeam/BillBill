@@ -332,4 +332,17 @@ public class ExpenseType {
 
        list.get(tempIndex).setIndex(maxIndex+1);
     }
+
+    public int searchRes_ID(String string)
+    {
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getType().equals(string))
+            {
+                return list.get(i).getRes_ID();
+            }
+        }
+        return -1;
+    }
+
 }
