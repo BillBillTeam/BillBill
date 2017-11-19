@@ -134,7 +134,7 @@ public class ExpenseType {
         {
             if(list.get(i).getIndex()==Index)
             {
-                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                CustomType customType=list.get(i);
                 for(int j=0;j<systemTypeNames.length;j++)
                 {
                     if(systemTypeNames[j].equals(list.get(i).getType()))
@@ -167,7 +167,7 @@ public class ExpenseType {
         {
             if(list.get(i).getIndex()==Index)
             {
-                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                CustomType customType=list.get(i);
                 for(int j=0;j<systemTypeNames.length;j++)
                 {
                     if(systemTypeNames[j].equals(list.get(i).getType()))
