@@ -445,7 +445,14 @@ public class MainActivity extends AppCompatActivity {
                         int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
                         int currentPage=mTagGroupPager.getCurrentItem();
                         currentSelectedTag_pageN=currentPage;
+
                         int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+                        if(finIndex>=TagGroupProvider.getPicRecSize()){//自定义标签//jump
+
+                            jumpToTagManageActivity();
+                            return;
+
+                        }
                         int picRecID=TagGroupProvider.getPicRecID(finIndex);
                         ((ImageView)layout1.getChildAt(0)).setImageBitmap(IconGetter.getClickedIcon(MainActivity.this,picRecID));
 
@@ -464,7 +471,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    private void jumpToTagManageActivity(){
+        Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
+        MainActivity.this.startActivityForResult(intent,0);
 
+
+
+    }
     TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
         @Override
         public void onCancelled() {

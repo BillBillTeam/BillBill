@@ -1,6 +1,7 @@
 package bhj;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,9 @@ public class TagGroupProvider {
 
 
     }
+    public static int getPicRecSize(){
+        return PicPostion.size();
+    }
     public  static int getPicRecID(int i){
         return PicPostion.get(i);
     }
@@ -70,26 +74,45 @@ public class TagGroupProvider {
             layout.setRowCount(ROWCOUNT);
             for (int j=0;j<(COLUMNCOUNT*ROWCOUNT)&&(j+i*(COLUMNCOUNT*ROWCOUNT))<tagList.size();j++) {
 
-                View tagWithName = inflater.inflate(R.layout.tag_with_name, null);
-                LinearLayout layout1 = (LinearLayout) tagWithName.getRootView();
-                //add tagWith name Image and name
-                layout1.setMinimumWidth(width/COLUMNCOUNT);
-                ImageView img=(ImageView) layout1.getChildAt(0);
-
-                final TextView text=(TextView)layout1.getChildAt(1);
-                //set values
-                text.setText(tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getType());
-                img.setImageBitmap(IconGetter.getIcon(context,tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getRes_ID()));
                 PicPostion.add( tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getRes_ID());
                 //insert tagWithName to gridlayout
-                layout.addView(tagWithName);
-            }
+                layout.addView(newTagWithName(inflater,tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getType(),IconGetter.getIcon(context,tagList.get(j+i*(COLUMNCOUNT*ROWCOUNT)).getRes_ID())));
 
+            }
+            if(i==n-1&&tagList.size()%(COLUMNCOUNT*ROWCOUNT)!=0){
+                layout.addView(newTagWithName(inflater,"自定义",IconGetter.getIcon(context,14)));
+                TagGroupList.add(layout);
+                break;
+            }
+            else if(i==n-1){
+                View view1 = inflater.inflate(R.layout.tag_group_view, null);
+                GridLayout layout1=(GridLayout)view1.getRootView();
+                layout1.setColumnCount(COLUMNCOUNT);
+                layout1.setRowCount(ROWCOUNT);
+                layout1.addView(newTagWithName(inflater,"自定义",IconGetter.getIcon(context,14)));
+                TagGroupList.add(layout);
+                TagGroupList.add(layout1);
+                break;
+            }
             TagGroupList.add(layout);
         }
+
     }
 
+    private View newTagWithName(LayoutInflater inflater, String text, Bitmap bitmap){
+        View tagWithName = inflater.inflate(R.layout.tag_with_name, null);
+        LinearLayout layout1 = (LinearLayout) tagWithName.getRootView();
+        //add tagWith name Image and name
+        layout1.setMinimumWidth(width/COLUMNCOUNT);
+        ImageView img=(ImageView) layout1.getChildAt(0);
 
+        final TextView textView=(TextView)layout1.getChildAt(1);
+        //set values
+        textView.setText(text);
+        img.setImageBitmap(bitmap);
+        return tagWithName;
+
+    }
 
     public List<View> getTagGroup(){
         return this.TagGroupList;
