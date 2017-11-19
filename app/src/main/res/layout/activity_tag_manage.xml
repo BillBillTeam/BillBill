@@ -79,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_title="删除"
+            fab:fab_icon = "@drawable/delete_icon"
             fab:fab_colorNormal="@color/iconBackground"
             fab:fab_colorPressed="@color/colorPrimary"/>
 
