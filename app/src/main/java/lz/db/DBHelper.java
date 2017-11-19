@@ -177,7 +177,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return 包含所有账单记录的数组
      */
     public ArrayList<IDBill> selectAllBill(){
-        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,null,null,null,null,null);
+        String orderBy = String.format("%s,%s,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
+        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,null,null,null,null,orderBy);
         ArrayList<IDBill> list = billCursor2List(cursor);
         cursor.close();
         return list;
