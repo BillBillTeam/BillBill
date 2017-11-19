@@ -450,6 +450,7 @@ public class MainActivity extends AppCompatActivity {
                         if(finIndex>=TagGroupProvider.getPicRecSize()){//自定义标签//jump
 
                             jumpToTagManageActivity();
+                            currentSelectedTag=null;
                             return;
 
                         }

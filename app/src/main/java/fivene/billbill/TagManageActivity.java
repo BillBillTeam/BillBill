@@ -1,16 +1,23 @@
 package fivene.billbill;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 
@@ -22,11 +29,14 @@ import top.lizec.draggablegridview.DraggableGridView;
 public class TagManageActivity extends AppCompatActivity {
     DraggableGridView dgvShow;
     DraggableGridView dgvHide;
-    //ArrayList<String> showTypeNames;
-    //ArrayList<String> hideTypeNames;
+    FloatingActionsMenu fActionsMenu;
+    FloatingActionButton fActionNew;
+    FloatingActionButton fActionDelete;
+    AlertDialog inputDialog;
     ExpenseType expenseType;
     int showCount;
     int hideCount;
+    boolean isDelete = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -38,8 +48,12 @@ public class TagManageActivity extends AppCompatActivity {
         expenseType = new ExpenseType(this);
         dgvShow = ((DraggableGridView)findViewById(R.id.vgvShow));
         dgvHide = ((DraggableGridView)findViewById(R.id.vgvHide));
-
+        fActionsMenu  = (FloatingActionsMenu) findViewById(R.id.fActionMenu);
+        fActionNew    = (FloatingActionButton) findViewById(R.id.fActionNew);
+        fActionDelete = (FloatingActionButton) findViewById(R.id.fActionDelete);
+        setFAction();
         setListeners();
+        setAlertDialog();
         setShow(expenseType);
         setHide(expenseType);
     }
@@ -104,55 +118,103 @@ public class TagManageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setListeners()
-    {
+    private void setListeners() {
         dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
                 expenseType.moveShowType(oldIndex,newIndex);
-
-                //String type = showTypeNames.remove(oldIndex);
-                //showTypeNames.add(newIndex,type);
             }
         });
         dgvHide.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             @Override
             public void onRearrange(int oldIndex, int newIndex) {
                 expenseType.moveHideType(-oldIndex-1,-newIndex-1);
-                //String type = hideTypeNames.remove(oldIndex);
-                //hideTypeNames.add(newIndex,type);
             }
         });
 
         dgvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                if(hideCount < 15){
-                    dgvShow.removeViewAt(position);
-                    showCount--;
-                    expenseType.showToHide(position);
-                    //String name = showTypeNames.remove(position);
-                    dgvHide.addView(view);
-                    hideCount++;
-                    //hideTypeNames.add(name);
+                if(isDelete){
+                    boolean isSuccess = expenseType.deleteShowType(position);
+                    checkAndDelete(dgvShow,isSuccess,position);
+                    checkAndPrint(isSuccess);
+
+                    isDelete = false;
                 }
+                else{
+                    if(hideCount < 15){
+                        dgvShow.removeViewAt(position);
+                        showCount--;
+                        expenseType.showToHide(position);
+                        dgvHide.addView(view);
+                        hideCount++;
+                    }
+                }
+
             }
         });
 
         dgvHide.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(showCount < 14){
-                    dgvHide.removeViewAt(position);
-                    hideCount--;
-                    expenseType.hideToShow(-position-1);
-                    //String name = hideTypeNames.remove(position);
-                    dgvShow.addView(view);
-                    showCount++;
-                    //showTypeNames.add(name);
+                if(isDelete){
+                    boolean isSuccess = expenseType.deleteHideType(-position-1);
+                    checkAndDelete(dgvHide,isSuccess,position);
+                    checkAndPrint(isSuccess);
+
+                    isDelete = false;
+                }
+                else{
+                    if(showCount < 14){
+                        dgvHide.removeViewAt(position);
+                        hideCount--;
+                        expenseType.hideToShow(-position-1);
+                        dgvShow.addView(view);
+                        showCount++;
+                    }
                 }
             }
         });
 
+    }
+
+    private void setFAction(){
+        fActionNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputDialog.show();
+                fActionsMenu.collapse();
+            }
+        });
+
+        fActionDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(TagManageActivity.this,"现在可以点击删除一个标签",Toast.LENGTH_SHORT).show();
+                isDelete = true;
+                fActionsMenu.collapse();
+            }
+        });
+    }
+
+    private void setAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(TagManageActivity.this);
+        builder.setTitle("请输入自定义类型名");
+        final EditText edit = new EditText(TagManageActivity.this);
+        builder.setView(edit);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    expenseType.InsertType(edit.getText().toString());
+                    Toast.makeText(TagManageActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(TagManageActivity.this,"数据库异常，请稍后再试",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        inputDialog = builder.create();
     }
 
     private void setShow(ExpenseType expenseType){
@@ -206,5 +268,20 @@ public class TagManageActivity extends AppCompatActivity {
         canvas.drawText(name,begin, baseBmpHeight+textSize,paint);
 
         return bmp;
+    }
+
+    private void checkAndPrint(boolean isSuccess){
+        if(isSuccess){
+            Toast.makeText(TagManageActivity.this,"删除成功！",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(TagManageActivity.this,"系统内置类型不能删除！",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkAndDelete(DraggableGridView dgv,boolean isSuccess,int position){
+        if(isSuccess){
+            dgv.removeViewAt(position);
+        }
     }
 }

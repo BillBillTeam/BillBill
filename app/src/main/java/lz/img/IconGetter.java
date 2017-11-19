@@ -77,8 +77,8 @@ public class IconGetter {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
         clickedImgList = ImageSplitter.split(bitmap,5,4);
 
-        String clickedCustomIcnoName = "clickd_custom_type";
-        resID = context.getResources().getIdentifier(clickedCustomIcnoName,"drawable",appInfo.packageName);
+        String clickedCustomIconName = "clicked_custom_type";
+        resID = context.getResources().getIdentifier(clickedCustomIconName,"drawable",appInfo.packageName);
         clickedCustomIcon =BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
