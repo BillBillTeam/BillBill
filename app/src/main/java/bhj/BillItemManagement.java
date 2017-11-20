@@ -1,16 +1,21 @@
 package bhj;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
 import fivene.billbill.R;
+import lhq.ie.Expense;
+import lhq.ie.ExpenseType;
 import lz.db.Bill;
+import lz.db.IDBill;
 import lz.img.IconGetter;
 
 /**
@@ -21,14 +26,16 @@ public class BillItemManagement {
     private Bill bill;
     private Callback callback;
     private SwipeLayout billItem;
-    public BillItemManagement(final Context context, Bill bill,Callback call){
+    public BillItemManagement(final Context context, final IDBill bill, Callback call){
         this.callback=call;
         LayoutInflater inflater = LayoutInflater.from(context);
         billItem = (SwipeLayout) inflater.inflate(R.layout.bill_item_plus, null);
         TextView Type=(TextView) billItem.findViewById(R.id.textView5);
         TextView number=(TextView)billItem.findViewById(R.id.textView7);
         ImageView img=(ImageView)billItem.findViewById(R.id.imageView);
+        ExpenseType expenseType=new ExpenseType(context);
 
+        img.setImageBitmap(IconGetter.getIcon(context,expenseType.searchRes_ID(bill.getType())));
 
         Type.setText(bill.getType());
         number.setText(String.valueOf((float)bill.getAmount()));
@@ -51,7 +58,19 @@ public class BillItemManagement {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Trash Bin", Toast.LENGTH_SHORT).show();
-                callback.onDelete();
+                if(((LinearLayout)(billItem.getParent())).getChildCount()>2)
+                ((LinearLayout)(billItem.getParent())).removeView(billItem);
+                else{
+                    ((LinearLayout)billItem.getParent().getParent()).removeView((View)billItem.getParent());
+                    return;
+                }
+                Expense expense=new Expense(context);
+                expense.Delete(bill);
+
+                //recount amount
+
+
+                callback.onDelete(bill.getAmount());
             }
         });
 
@@ -71,7 +90,7 @@ public class BillItemManagement {
     }
 
     public interface Callback{
-        void onDelete();
+        void onDelete(double amount);
         void onEdit();
 
     }
