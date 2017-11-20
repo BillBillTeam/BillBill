@@ -31,6 +31,7 @@ public class BillItemManagement {
         LayoutInflater inflater = LayoutInflater.from(context);
         billItem = (SwipeLayout) inflater.inflate(R.layout.bill_item_plus, null);
         TextView Type=(TextView) billItem.findViewById(R.id.textView5);
+        TextView mark=(TextView)billItem.findViewById(R.id.textView6);
         TextView number=(TextView)billItem.findViewById(R.id.textView7);
         ImageView img=(ImageView)billItem.findViewById(R.id.imageView);
         ExpenseType expenseType=new ExpenseType(context);
@@ -38,6 +39,7 @@ public class BillItemManagement {
         img.setImageBitmap(IconGetter.getIcon(context,expenseType.searchRes_ID(bill.getType())));
 
         Type.setText(bill.getType());
+        mark.setText(bill.getRemark());
         number.setText(String.valueOf((float)bill.getAmount()));
         //TODO:add img recid
 
@@ -50,22 +52,23 @@ public class BillItemManagement {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Star", Toast.LENGTH_SHORT).show();
-               callback.onEdit();
+               callback.onEdit(bill);
             }
         });
 
         billItem.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Trash Bin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
+                Expense expense=new Expense(context);
+                expense.Delete(bill);
                 if(((LinearLayout)(billItem.getParent())).getChildCount()>2)
                 ((LinearLayout)(billItem.getParent())).removeView(billItem);
                 else{
                     ((LinearLayout)billItem.getParent().getParent()).removeView((View)billItem.getParent());
                     return;
                 }
-                Expense expense=new Expense(context);
-                expense.Delete(bill);
+
 
                 //recount amount
 
@@ -91,7 +94,7 @@ public class BillItemManagement {
 
     public interface Callback{
         void onDelete(double amount);
-        void onEdit();
+        void onEdit(IDBill bill);
 
     }
 
