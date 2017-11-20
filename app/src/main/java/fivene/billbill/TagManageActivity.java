@@ -222,7 +222,6 @@ public class TagManageActivity extends AppCompatActivity {
     }
 
     private void setShow(ExpenseType expenseType){
-        //showTypeNames = new ArrayList<>();
         ArrayList<CustomType> show = expenseType.getAllShowExpenseType();
         showCount = show.size();
         for(CustomType type:show){
@@ -238,13 +237,11 @@ public class TagManageActivity extends AppCompatActivity {
     }
 
     private void setHide(ExpenseType expenseType){
-        //hideTypeNames = new ArrayList<>();
         ArrayList<CustomType> hide = expenseType.getAllHideExpenseType();
         hideCount = hide.size();
         for(CustomType type:hide){
             Bitmap base = IconGetter.getIcon(this,type.getRes_ID());
             String name = type.getType();
-            //hideTypeNames.add(name);
 
             Bitmap bmp = getNamedBitmap(base,name);
             ImageView imageView = new ImageView(this);
