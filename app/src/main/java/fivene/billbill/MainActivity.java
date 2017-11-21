@@ -3,18 +3,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Space;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -34,23 +29,19 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toolbar;
+
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicInteger;
+
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
 import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
-import lhq.ie.ExpenseType;
 import lz.db.Bill;
-import lz.db.CustomType;
 import lz.img.IconGetter;
 import lz.regex.NumCheck;
 
@@ -80,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText remark_text;
     private TextView amount_text;
+    private StringBuilder amountTextStringBuilder = new StringBuilder();
 
     private Button mButton2;
 
@@ -114,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         initev();
         //不可点击记账按钮
         mButton2.setClickable(false);
-//添加空白&&添加主页面的上下滑动&&强制回到上半部分
+        //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
             @Override
             public void run() {
@@ -193,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
      * 初始化控件
      */
     private void initView() {
-        // TODO Auto-generated method stub
         // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
         //标签组
         mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
@@ -241,13 +232,14 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         Log.i("billbill","up"+globalHeight);
                         Log.i("billbill","up"+mScrollView.getScrollY());
-                        if(currentPage==0)
+                        if(currentPage==0){
                             if(mScrollView.getScrollY()>mScrollView.getHeight()/8){
                                 scrollToDOWN();
                             }
                             else{
                                 scrollToUP();
                             }
+                        }
                         else{
                             if(mScrollView.getScrollY()<mScrollView.getHeight()/8*7-mTagGroupContainer.getHeight()){
                                 scrollToUP();
@@ -263,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-//
-
     }
 
     /**
@@ -285,9 +275,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //TODO:用户没有输入信息导致的error
+
                 //获得用户输入的信息
-                double amount=Double.valueOf( amount_text.getText().toString()).doubleValue();
+                double amount= Double.valueOf(amountTextStringBuilder.toString());
                 String remark=remark_text.getText().toString();
                 String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
                 Bill bill=new Bill(mSelectedDate,type,amount,remark);
@@ -299,12 +289,10 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
                             @Override
                             public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
-                                // TODO Auto-generated method stub
                             }
                         }).setNegativeButton("返回账单",new DialogInterface.OnClickListener() {//添加返回按钮
                     @Override
                     public void onClick(DialogInterface dialog, int which) {//响应事件
-                        // TODO Auto-generated method stub
                     }
 
                 }).show();//在按键响应事件中显示此对话框
@@ -382,21 +370,17 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 弹出 日历底部弹窗
-     * @param view
+     * @param view view
      */
     public void showTimePopFormBottom(View view) {
-
-
         Pair<Boolean, SublimeOptions> optionsPair = getOptions();
         Bundle bundle = new Bundle();
         bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
         TimePopWindow PopWin = new TimePopWindow(this, bundle);
         PopWin.setCallback(mFragmentCallback);
         PopWin.setHeight((int) (globalHeight/2*1.20));
-        // Options
 
-
-//        设置Popupwindow显示位置（从底部弹出）
+        //设置Popupwindow显示位置（从底部弹出）
         PopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         //当弹出Popupwindow时，背景变半透明
@@ -411,13 +395,11 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().setAttributes(params);
             }
         });
-
-//        takePhotoPopWin.lis
     }
 
     /**
      * 设置日历的显示参数
-     * @return
+     * @return return
      */
     Pair<Boolean, SublimeOptions> getOptions() {
         SublimeOptions options = new SublimeOptions();
@@ -434,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 给标签组添加监听事件
-     * @param layout
+     * @param layout layout
      */
     private void addListenerToGridLayout(final GridLayout layout){
         for(int i=0;i<layout.getChildCount();i++){
@@ -482,13 +464,10 @@ public class MainActivity extends AppCompatActivity {
                         System.out.print(textView.getText());
 
                         checkInput();
-
                     }
-
                 }
             });
         }
-
     }
 
     /**
@@ -540,40 +519,44 @@ public class MainActivity extends AppCompatActivity {
                 R.id.btn_3,R.id.btn_4,R.id.btn_5,
                 R.id.btn_6,R.id.btn_7,R.id.btn_8,
                 R.id.btn_9,};
-        final NumCheck check=new NumCheck();
         for(int i=0;i<keys.length;i++) {
-            final int k=i;
-            mNumberKeyboard.findViewById(keys[i]).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String s=amount_text.getText().toString();
-                    if(s.length()<20)
-                        amount_text.setText(s+k);
-                    checkInput();
-                }
-            });
+            View view = mNumberKeyboard.findViewById(keys[i]);
+            view.setTag(i);
+            view.setOnClickListener(NumberClickListener);
         }
         mNumberKeyboard.findViewById(R.id.btn_t).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s=amount_text.getText().toString();
-                if(s.length()<20)
-                    if(check.matchDouble(s+"."))
-                        amount_text.setText(s+".");
+                if(amountTextStringBuilder.length()<20){
+                    if(NumCheck.matchDouble(amountTextStringBuilder+".")){
+                        amountTextStringBuilder.append(".");
+                        amount_text.setText(amountTextStringBuilder);
+                    }
+                }
                 checkInput();
-
             }
         });
         mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(amount_text.getText().length()>0)
-                amount_text.setText(amount_text.getText().toString().subSequence(0,amount_text.getText().toString().length()-1));
-
+                if(amountTextStringBuilder.length()>0){
+                    amountTextStringBuilder.deleteCharAt(amountTextStringBuilder.length()-1);
+                    amount_text.setText(amountTextStringBuilder);
+                }
             }
         });
 
     }
+
+    private View.OnClickListener NumberClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(amountTextStringBuilder.length()<20){
+                amountTextStringBuilder.append(v.getTag());
+                amount_text.setText(amountTextStringBuilder);
+            }
+        }
+    };
 
     /**
      * 检查用户输入
@@ -585,7 +568,6 @@ public class MainActivity extends AppCompatActivity {
         else{
             mButton2.setClickable(false);
         }
-
     }
 
     /**
@@ -624,7 +606,6 @@ public class MainActivity extends AppCompatActivity {
             default :
                 break;
         }
-
     }
 
     @Override
