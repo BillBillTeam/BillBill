@@ -170,7 +170,7 @@ public class BillListActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp.setAdapter(adapter);
-        datePicker.init(bill.getYear(), bill.getMonth(), bill.getDay(), new DatePicker.OnDateChangedListener() {
+        datePicker.init(bill.getYear(), bill.getMonth()-1, bill.getDay(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
 
@@ -207,7 +207,7 @@ public class BillListActivity extends AppCompatActivity {
                 String b = mark.getText().toString();
                 String type=sp.getSelectedItem().toString();
                 int year=datePicker.getYear();
-                int month=datePicker.getMonth();
+                int month=datePicker.getMonth()+1;
                 int day=datePicker.getDayOfMonth();
                 Expense expense=new Expense(BillListActivity.this);
                 IDBill newBill=new IDBill(year,month,day,type,a,b,bill.getID());
