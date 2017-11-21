@@ -22,6 +22,7 @@
         <item>办公</item>
         <item>房屋</item>
     </string-array>
+
     <string name="title_activity_bottom_activity">bottom_activity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -98,6 +99,29 @@
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
+    <string name="author_message">
+        人员：\n
+        组长：LiZeC\n
+        产品：lrStyle\n
+        测试：huiqingli\n
+        交互：miseryby\n
+        程序：marykt\n
+    </string>
+
+    <string name="appInfo">
+        感谢以下开源项目：\n
+        1. SublimePicker\n
+        2. FloatingActionButton\n
+        3. DividedDraggableView\n
+        4. PhilJay/MPAndroidChart\n
+        5. daimajia/AndroidSwipeLayout\n
+        6. JohnPersano/SuperToasts
+    </string>
+
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_tag_manage">标签管理</string>
+    <string name="tag_manager_finish">完成</string>
+    <string name="tag_manager_show">显示的标签</string>
+    <string name="tag_manager_hide">不显示的标签</string>
 </resources>

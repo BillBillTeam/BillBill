@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="horizontal">
-//高度60dp，三个layout宽1:4:1
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"

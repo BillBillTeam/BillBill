@@ -14,7 +14,9 @@ import java.util.List;
 
 public class IconGetter {
     private static List<Bitmap> imgList;
-
+    private static List<Bitmap> clickedImgList;
+    private static Bitmap customIcon;
+    private static Bitmap clickedCustomIcon;
 
     /**
      * 获得系统内置的图标
@@ -22,7 +24,7 @@ public class IconGetter {
      * @param res_ID 图标资源的内置ID
      * @return  图标的Bitmap
      */
-    public Bitmap getIcon(Context context,int res_ID){
+    public static Bitmap getIcon(Context context,int res_ID){
         //使用单例模式确保只加载一次资源
         if(imgList == null){
             synchronized (IconGetter.class){
@@ -35,28 +37,68 @@ public class IconGetter {
     }
 
     /**
+     * 获得系统内置的图标(选中状态)
+     * @param context 当前进程上下文
+     * @param res_ID 图标资源的内置ID
+     * @return 图标的Bitmap
+     */
+    public static Bitmap getClickedIcon(Context context,int res_ID) {
+        if(clickedImgList == null){
+            synchronized (IconGetter.class){
+                if(clickedImgList == null){
+                    initClickedIcons(context);
+                }
+            }
+        }
+        return getClickedBitmapByIdx(res_ID);
+    }
+
+    /**
      *  初始化图标
      */
-    private void initIcons(Context context){
+    private static void initIcons(Context context){
         String iconName = "icon";
         ApplicationInfo appInfo = context.getApplicationInfo();
         //得到该图片的id(name 是该图片的名字，"drawable" 是该图片存放的目录，appInfo.packageName是应用程序的包)
         int resID = context.getResources().getIdentifier(iconName, "drawable", appInfo.packageName);
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
-
         imgList = ImageSplitter.split(bitmap,5,4);
+
+        String customIconName = "custom_type";
+        resID = context.getResources().getIdentifier(customIconName,"drawable",appInfo.packageName);
+        customIcon = BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
-    private Bitmap getBitmapByIdx(int index){
+    private static void initClickedIcons(Context context){
+        String clickedIconName = "clicked_icon";
+        ApplicationInfo appInfo = context.getApplicationInfo();
+        //得到该图片的id(name 是该图片的名字，"drawable" 是该图片存放的目录，appInfo.packageName是应用程序的包)
+        int resID = context.getResources().getIdentifier(clickedIconName, "drawable", appInfo.packageName);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
+        clickedImgList = ImageSplitter.split(bitmap,5,4);
+
+        String clickedCustomIconName = "clicked_custom_type";
+        resID = context.getResources().getIdentifier(clickedCustomIconName,"drawable",appInfo.packageName);
+        clickedCustomIcon =BitmapFactory.decodeResource(context.getResources(),resID);
+    }
+
+    private static Bitmap getBitmapByIdx(int index){
         if(index == -1){
-            // -1 表示用户自定义类型的图标
-            throw new ArrayIndexOutOfBoundsException("还没有设定用户自定义类型呢");
+            return customIcon;
         }
         else{
             return imgList.get(index);
         }
     }
 
+    private static Bitmap getClickedBitmapByIdx(int index){
+        if(index == -1){
+            return clickedCustomIcon;
+        }
+        else{
+            return clickedImgList.get(index);
+        }
+    }
 
     private IconGetter(){ }
 }

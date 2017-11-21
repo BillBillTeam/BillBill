@@ -3,6 +3,7 @@ package fivene.billbill;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,10 +25,14 @@ public class StatisticsActivity extends AppCompatActivity {
     ProgressBar progressBar3;
 
     Context mContext;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext=this;
         layout1=(LinearLayout)findViewById(R.id.tab1_content);
         layout2=(LinearLayout)findViewById(R.id.tab2_content);
@@ -79,7 +84,15 @@ public class StatisticsActivity extends AppCompatActivity {
         });
         loadTab1();
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void loadTab1(){
         MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar1,layout1);
         chart.setValues();

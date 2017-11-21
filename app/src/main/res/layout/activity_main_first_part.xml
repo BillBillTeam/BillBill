@@ -6,6 +6,7 @@
 
 
     <LinearLayout
+        android:id="@+id/main_first_part"
         android:layout_width="match_parent"
         android:layout_height="349dp"
         android:orientation="vertical">
@@ -29,6 +30,18 @@
             android:id="@+id/button_jump"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="账单记录" />
+
+        <Button
+            android:id="@+id/button_jump2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="标签管理" />
+
+        <Button
+            android:id="@+id/button_jump3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="数据统计" />
     </LinearLayout>
 </LinearLayout>

@@ -11,10 +11,12 @@
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_height="match_parent"
         android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+
+        >
 
 
         <LinearLayout
@@ -30,7 +32,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Space
+                android:id="@+id/space1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
             <FrameLayout
+                android:id="@+id/tag_group_container"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:baselineAligned="false">
@@ -54,16 +69,17 @@
             </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/amount_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.17"
-                    android:text="RMB ¥"
+                    android:layout_weight="0.85"
+                    android:text="RMB ¥:"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textSize="18sp"
@@ -77,11 +93,16 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp" />
 
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15" />
 
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/mark_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -104,13 +125,15 @@
 
                 <Button
                     android:id="@+id/Button2"
-                    android:layout_width="101dp"
-                    android:layout_height="36dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="false" />
             </LinearLayout>
 
-            <android.support.v4.widget.Space
+            <Space
+                android:id="@+id/space2"
                 android:layout_width="match_parent"
-                android:layout_height="5dp" />
+                android:layout_height="wrap_content" />
 
             <include
                 layout="@layout/number_keyboard"

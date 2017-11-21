@@ -16,6 +16,12 @@ public class CustomType {
         setRes_ID(-1);
     }
 
+    /**
+     *  类型构造函数
+     * @param type 类型名
+     * @param index 索引
+     * @param res_ID 资源ID
+     */
     public CustomType(String type,int index,int res_ID){
         setType(type);
         setIndex(index);

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="Bottom2">
+
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:background="#4cd964"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:src="@drawable/star" />
+
+        <ImageView
+            android:id="@+id/trash"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:background="@drawable/red"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:src="@drawable/trash" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/bill_item"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+    </LinearLayout>
+</com.daimajia.swipe.SwipeLayout>

@@ -1,6 +1,4 @@
 package fivene.billbill;
-
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,10 +6,15 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Space;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -24,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,28 +35,32 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import bhj.TagGroupProvider;
 import bhj.TimePopWindow;
+import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
+import lhq.ie.ExpenseType;
 import lz.db.Bill;
+import lz.db.CustomType;
+import lz.img.IconGetter;
+import lz.regex.NumCheck;
 
 public class MainActivity extends AppCompatActivity {
 
    // private ImageView mDefaultImage = null;
 
     private int currentPage=0;
+
+    private int currentSelectedTag_pageN;
 
     private ViewPager mTagGroupPager = null;
 
@@ -69,19 +77,26 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton_ok;
     private Button mTimeButton;
     private Button mbt_jump;
+    private Button mbt_jump2;
+    private Button mbt_jump3;
+
 
     private EditText remark_text;
     private TextView amount_text;
 
     private Button mButton2;
-    private ImageView mImageView;
     private Toolbar mToolbar;
 
     private ScrollView mScrollView;
     private View currentSelectedTag;
     private LinearLayout mNumberKeyboard;
+    private LinearLayout mFirstPart;
+    private FrameLayout mTagGroupContainer;
+    private LinearLayout mAmountLayout;
+    private LinearLayout mMarkLayout;
 
-
+    private TagGroupProvider provider;
+    ViewPagerManagement viewPagerManagement=null;
     //tag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +113,51 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initViewPager();
         initev();
+
+
+
+        mButton2.setClickable(false);
+//添加空白&&添加主页面的上下滑动&&强制回到上半部分
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                remark_text.setFocusable(false);
+                adjustSpaceHeight();
+                makePageScrollable();
+
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
     }
 
 
+    private void adjustSpaceHeight(){
+        Space s1=(Space) findViewById(R.id.space1);
+        Space s2=(Space) findViewById(R.id.space2);
+
+        int i_s1=mScrollView.getHeight()-mFirstPart.getHeight()-mTagGroupContainer.getHeight();
+        int i_s2=mScrollView.getHeight()-mTagGroupContainer.getHeight()-mAmountLayout.getHeight()-mMarkLayout.getHeight()-mNumberKeyboard.getHeight();
+        Log.i("billbill", "adjustSpaceHeight: "+mScrollView.getHeight());
+        if(i_s1<0){
+            i_s1=0;
+        }
+        if(i_s2<0){
+            i_s2=0;
+        }
+        s1.setMinimumHeight(i_s1);
+        s2.setMinimumHeight(i_s2);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -108,14 +165,15 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.item_setting:
                 Intent intentSetting = new Intent(MainActivity.this,SettingsActivity.class);
                 MainActivity.this.startActivity(intentSetting);
                 return true;
             case R.id.item_about:
-//                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
-//                MainActivity.this.startActivity(intentSearch);
+                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
+                MainActivity.this.startActivity(intentSearch);
                 return true;
             default:
                 return true;
@@ -129,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mSelectedDate=Calendar.getInstance();
         mSelectedDate.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-
     }
 
 
@@ -146,53 +203,71 @@ public class MainActivity extends AppCompatActivity {
         mTimeButton=(Button)findViewById(R.id.time_button);
         mButton2=(Button)findViewById(R.id.Button2);
         mbt_jump=(Button)findViewById(R.id.button_jump);
+        mbt_jump2=(Button)findViewById(R.id.button_jump2);
+        mbt_jump3=(Button)findViewById(R.id.button_jump3);
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
         remark_text=(EditText)findViewById(R.id.editText2);
+        //test
+        mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
 
-
+        mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
+        mAmountLayout=(LinearLayout)findViewById(R.id.amount_layout);
+        mMarkLayout=(LinearLayout)findViewById(R.id.mark_layout);
 
     }
 
 
-    private void initev(){
+    private void makePageScrollable(){
 
         //auto move on the two page
         mScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                           switch (motionEvent.getAction()){
-                                case MotionEvent.ACTION_UP:
-                                    Log.i("billbill","up"+globalHeight/4);
-                                    Log.i("billbill","up"+mScrollView.getScrollY());
-                                    if(currentPage==0)
-                                    if(mScrollView.getScrollY()>globalHeight/8){
-                                       scrollToDOWN();
-                                    }
-                                    else{
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        Log.i("billbill","up"+globalHeight);
+                        Log.i("billbill","up"+mScrollView.getScrollY());
+                        if(currentPage==0)
+                            if(mScrollView.getScrollY()>mScrollView.getHeight()/8){
+                                scrollToDOWN();
+                            }
+                            else{
+                                scrollToUP();
+                            }
+                        else{
+                            if(mScrollView.getScrollY()<mScrollView.getHeight()/8*7-mTagGroupContainer.getHeight()){
+                                scrollToUP();
+                            }
+                            else{
+                                scrollToDOWN();
+                            }
 
-                                       scrollToUP();
-                                    }
-                                    else{
-                                        if(mScrollView.getScrollY()<globalHeight-globalHeight/2.5){
-                                           scrollToUP();
-                                        }
-                                        else{
-                                          scrollToDOWN();
-                                        }
-
-                                    }
-                                        break;
-                               }
+                        }
+                        break;
+                }
                 return false;
             }
 
         });
 //
+
+    }
+    private void initev(){
+
 //        mScrollView.fullScroll(ScrollView.FOCUS_UP);
 //        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        mButton_ok.setOnClickListener(new View.OnClickListener() {
+//        mButton_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //just for test
+//                Intent intent = new Intent(MainActivity.this,StatisticsActivity.class);
+//                MainActivity.this.startActivity(intent);
+//
+//            }
+//        });
+        mbt_jump3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //just for test
@@ -231,11 +306,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         mbt_jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,BillListActivity.class);
                 MainActivity.this.startActivity(intent);
+            }
+        });
+
+        mbt_jump2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
+                MainActivity.this.startActivityForResult(intent,0);
+
+
+            }
+        });
+
+        remark_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!remark_text.isFocusable()) {
+                    v.setFocusable(true);
+                    v.setFocusableInTouchMode(true);
+                    v.requestFocus();
+                    InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(v, InputMethod.SHOW_FORCED);
+                }
+
+            }
+        });
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePopFormBottom(view);
             }
         });
        addListenerToNumberKeyboard();
@@ -246,135 +352,26 @@ public class MainActivity extends AppCompatActivity {
      * void
      */
     private void initViewPager() {
-        // TODO Auto-generated method stub
-      //  mDefaultImage.setVisibility(View.GONE);
-        mTagGroupPager.setVisibility(View.VISIBLE);
-
-
-        //create TagGroupProvider
-        List <String>testList=new ArrayList<String>();
-        final TagGroupProvider provider=new TagGroupProvider(this,testList,globalWidth);
-
-        // group是R.layou.mainview中的负责包裹小圆点的LinearLayout.
-
         ViewGroup group = (ViewGroup) findViewById(R.id.viewGroup);
-        mImageViews = new ImageView[provider.getGroupSize()];
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(13, 13);
-        layoutParams.setMargins(5, 0, 5, 1);
-
-        for (int i = 0; i < provider.getGroupSize(); i++) {
-            mImageView = new ImageView(this);
-            mImageView.setLayoutParams(layoutParams);
-            mImageViews[i] = mImageView;
-            if (i == 0) {
-                // 默认选中第一张图片
-                mImageViews[i].setBackgroundResource(R.drawable.circle_3);
-            }
-            else {
-                mImageViews[i].setBackgroundResource(R.drawable.circle_1);
-            }
-            group.addView(mImageViews[i]);
-        }
-        // add listener for tags
-        GridLayout layout =(GridLayout)provider.getTagGroup().get(0);
-        addListenerToGridLayout(layout);
-
-        mTagGroupPager.setAdapter(new TagGroupAdapter(provider.getTagGroup()));
-
-        mTimeButton.setOnClickListener(new View.OnClickListener() {
+        ViewPagerManagement.Callback callback=new ViewPagerManagement.Callback() {
             @Override
-            public void onClick(View view) {
-                showTimePopFormBottom(view);
-            }
-        });
-        mTagGroupPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                for(int i=0;i<mImageViews.length;i++){
-                    if (i == position) {
-                        // 默认选中第一张图片
-                        mImageViews[i].setBackgroundResource(R.drawable.circle_3);
-                    }
-                    else {
-                        mImageViews[i].setBackgroundResource(R.drawable.circle_1);
-                    }
-
-
-                }
-
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                GridLayout layout =(GridLayout)provider.getTagGroup().get(position);
+            public void callbackAddListenerToViewPager(GridLayout layout) {
                 addListenerToGridLayout(layout);
-
             }
+        };
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+         viewPagerManagement=new ViewPagerManagement(mTagGroupPager,globalWidth,callback,group,mImageViews);
+        viewPagerManagement.createViewPager(this);
 
     }
 
 
+    private void refreshTagGroup(){
 
+       viewPagerManagement.reloadIt(this);
 
-    private final class TagGroupAdapter extends PagerAdapter {
-        private List<View> views = null;
-        public TagGroupAdapter(List<View> views) {
-            this.views = views;
-        }
-
-        @Override
-        public void destroyItem(View arg0, int arg1, Object arg2) {
-            ((ViewPager) arg0).removeView(views.get(arg1));
-        }
-
-        @Override
-        public void finishUpdate(View arg0) {
-
-        }
-
-        @Override
-        public int getCount() {
-            return views.size();
-        }
-
-        //TODO: add listener at here
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(views.get(position), 0);
-
-            return views.get(position);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1) {
-
-        }
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View arg0) {
-
-        }
     }
+
 
     /**
      * 弹出 日历底部弹窗
@@ -390,15 +387,6 @@ public class MainActivity extends AppCompatActivity {
         PopWin.setCallback(mFragmentCallback);
         PopWin.setHeight((int) (globalHeight/2*1.20));
         // Options
-
-
-//        if (!optionsPair.first) { // If options are not valid
-//            Toast.makeText(Sampler.this, "No pickers activated",
-//                    Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-
 
 
 //        设置Popupwindow显示位置（从底部弹出）
@@ -433,19 +421,6 @@ public class MainActivity extends AppCompatActivity {
         // Enable/disable the date range selection feature
         options.setCanPickDateRange(false);
 
-        // Example for setting date range:
-        // Note that you can pass a date range as the initial date params
-        // even if you have date-range selection disabled. In this case,
-        // the user WILL be able to change date-range using the header
-        // TextViews, but not using long-press.
-
-        /*Calendar startCal = Calendar.getInstance();
-        startCal.set(2016, 2, 4);
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2016, 2, 17);
-
-        options.setDateParams(startCal, endCal);*/
-
         // If 'displayOptions' is zero, the chosen options are not valid
         return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
     }
@@ -462,18 +437,36 @@ public class MainActivity extends AppCompatActivity {
 
                     if(currentSelectedTag!=view){
                         LinearLayout layout1=(LinearLayout)view;
+
                         if(currentSelectedTag!=null){
                             //remove selected change
                             LinearLayout layout2 =(LinearLayout) currentSelectedTag;
-                            Drawable drawable=getResources().getDrawable(R.drawable.none_drawable);
-                            layout2.setBackground(drawable);
+                            int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
+                            int currentPage=currentSelectedTag_pageN;
+                            int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+
+                            int picRecID=TagGroupProvider.getPicRecID(finIndex);
+
+                            ((ImageView)layout2.getChildAt(0)).setImageBitmap(IconGetter.getIcon(MainActivity.this,picRecID));
 
 
                         }
                         currentSelectedTag=view;
                         //add selected change
-                        Drawable drawable=getResources().getDrawable(R.drawable.selected_tag_background);
-                        layout1.setBackground(drawable);
+                        int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
+                        int currentPage=mTagGroupPager.getCurrentItem();
+                        currentSelectedTag_pageN=currentPage;
+
+                        int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+                        if(finIndex>=TagGroupProvider.getPicRecSize()){//自定义标签//jump
+
+                            jumpToTagManageActivity();
+                            currentSelectedTag=null;
+                            return;
+
+                        }
+                        int picRecID=TagGroupProvider.getPicRecID(finIndex);
+                        ((ImageView)layout1.getChildAt(0)).setImageBitmap(IconGetter.getClickedIcon(MainActivity.this,picRecID));
 
                         if(currentPage==0){
                             scrollToDOWN();
@@ -481,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
                         TextView textView=(TextView) layout1.getChildAt(1);
                         System.out.print(textView.getText());
 
-
+                        checkInput();
 
                     }
 
@@ -490,7 +483,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    private void jumpToTagManageActivity(){
+        Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
+        MainActivity.this.startActivityForResult(intent,0);
 
+
+
+    }
     TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
         @Override
         public void onCancelled() {
@@ -514,22 +513,7 @@ public class MainActivity extends AppCompatActivity {
             else{
                 mTimeButton.setText("今天");
             }
-//            mHour = hourOfDay;
-//            mMinute = minute;
-//            mRecurrenceOption = recurrenceOption != null ?
-//                    recurrenceOption.name() : "n/a";
-//            mRecurrenceRule = recurrenceRule != null ?
-//                    recurrenceRule : "n/a";
-//
-//            updateInfoView();
-//
-//            svMainContainer.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    svMainContainer.scrollTo(svMainContainer.getScrollX(),
-//                            cbAllowDateRangeSelection.getBottom());
-//                }
-//            });
+
         }
     };
 
@@ -538,21 +522,28 @@ public class MainActivity extends AppCompatActivity {
                 R.id.btn_3,R.id.btn_4,R.id.btn_5,
                 R.id.btn_6,R.id.btn_7,R.id.btn_8,
                 R.id.btn_9,};
+        final NumCheck check=new NumCheck();
         for(int i=0;i<keys.length;i++) {
             final int k=i;
             mNumberKeyboard.findViewById(keys[i]).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(amount_text.getText().length()<20)
-                        amount_text.setText(amount_text.getText().toString()+k);
+                    String s=amount_text.getText().toString();
+                    if(s.length()<20)
+                        amount_text.setText(s+k);
+                    checkInput();
                 }
             });
         }
         mNumberKeyboard.findViewById(R.id.btn_t).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(amount_text.getText().length()<20)
-                    amount_text.setText(amount_text.getText().toString()+".");
+                String s=amount_text.getText().toString();
+                if(s.length()<20)
+                    if(check.matchDouble(s+"."))
+                        amount_text.setText(s+".");
+                checkInput();
+
             }
         });
         mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
@@ -560,8 +551,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(amount_text.getText().length()>0)
                 amount_text.setText(amount_text.getText().toString().subSequence(0,amount_text.getText().toString().length()-1));
+
             }
         });
+
+    }
+    private void checkInput(){
+        if(currentSelectedTag!=null&&amount_text.getText().toString().length()>0){
+            mButton2.setClickable(true);
+        }
+        else{
+            mButton2.setClickable(false);
+        }
 
     }
 
@@ -582,5 +583,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         currentPage=1;
+    }
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data )
+    {
+        switch ( resultCode ) {
+            case RESULT_OK :
+                refreshTagGroup();
+                currentSelectedTag=null;
+                break;
+            default :
+                break;
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(currentPage==1){
+            scrollToUP();
+            return;
+        }
+        super.onBackPressed();
     }
 }

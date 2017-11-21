@@ -17,23 +17,33 @@ import lz.db.DBHelper;
 public class ExpenseType {
     private DBHelper dbHelper;
     private String[] systemTypeNames;
+    private ArrayList<CustomType> list;
 
     public ExpenseType(Context context)
     {
         this.dbHelper=new DBHelper(context);
         systemTypeNames = context.getResources().getStringArray(R.array.systemType);
+        list=dbHelper.selectAllCustomType();
     }
+
+    /**
+     * 更新数据库
+     */
+    public void updateDB()
+    {
+        dbHelper.insertCustomType(list);
+    }
+
 
     /**
      * 获得所有显示的消费类型，以动态数组形式按位置顺序输出
      * @return 包含所有显示的消费类型的动态数组
      */
-    public ArrayList<String> getAllShowExpenseType()
+    public ArrayList<CustomType> getAllShowExpenseType()
     {
         int showNumber=0;
         int Index=0;
-        ArrayList<CustomType> list= dbHelper.selectAllCustomType();
-        ArrayList<String> type=new ArrayList<>();
+        ArrayList<CustomType> type=new ArrayList<>();
 
         for(int i=0;i<list.size();i++)
         {
@@ -46,13 +56,13 @@ public class ExpenseType {
         {
             for(int j=0;j<list.size();j++)
             {
-                if(list.get(i).getIndex()==Index)
+                if(list.get(j).getIndex()==Index)
                 {
-                    type.add(list.get(i).getType());
+                    type.add(list.get(j));
                     Index++;
+                    break;
                 }
             }
-
         }
         return type;
     }
@@ -61,12 +71,11 @@ public class ExpenseType {
      * 获得所有隐藏的消费类型，以动态数组的形式按位置顺序输出
      * @return 包含所有隐藏的消费类型的动态数组
      */
-    public ArrayList<String> getAllHideExpenseType()
+    public ArrayList<CustomType> getAllHideExpenseType()
     {
         int hideNumber=0;
         int Index=-1;
-        ArrayList<CustomType> list= dbHelper.selectAllCustomType();
-        ArrayList<String> type=new ArrayList<>();
+        ArrayList<CustomType> type=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()<0)
@@ -78,10 +87,11 @@ public class ExpenseType {
         {
             for(int j=0;j<list.size();j++)
             {
-                if(list.get(i).getIndex()==Index)
+                if(list.get(j).getIndex()==Index)
                 {
-                    type.add(list.get(i).getType());
+                    type.add(list.get(j));
                     Index--;
+                    break;
                 }
             }
 
@@ -96,17 +106,20 @@ public class ExpenseType {
      */
     public void InsertType (String string)throws Exception
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        int maxIndex=0;
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getType().equals(string))
             {
                 throw new Exception("输入类型已经存在");
             }
+            if(list.get(i).getIndex()>maxIndex)
+            {
+                maxIndex=list.get(i).getIndex();
+            }
         }
-        CustomType expensetype=new CustomType(string,list.size());
+        CustomType expensetype=new CustomType(string,maxIndex+1);
         list.add(expensetype);
-        dbHelper.insertCustomType(list);
     }
 
 
@@ -117,12 +130,11 @@ public class ExpenseType {
      */
     public boolean deleteShowType(int Index)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()==Index)
             {
-                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                CustomType customType=list.get(i);
                 for(int j=0;j<systemTypeNames.length;j++)
                 {
                     if(systemTypeNames[j].equals(list.get(i).getType()))
@@ -130,7 +142,8 @@ public class ExpenseType {
                         return false;
                     }
                 }
-                dbHelper.deleteCustomType(customType);
+                list.remove(customType);
+                break;
             }
         }
         for(int i=0;i<list.size();i++)
@@ -150,12 +163,11 @@ public class ExpenseType {
      */
     public boolean deleteHideType(int Index)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
         for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getIndex()==Index)
             {
-                CustomType customType=new CustomType(list.get(i).getType(),list.get(i).getIndex());
+                CustomType customType=list.get(i);
                 for(int j=0;j<systemTypeNames.length;j++)
                 {
                     if(systemTypeNames[j].equals(list.get(i).getType()))
@@ -163,7 +175,8 @@ public class ExpenseType {
                         return false;
                     }
                 }
-                dbHelper.deleteCustomType(customType);
+                list.remove(customType);
+                break;
             }
         }
         for(int i=0;i<list.size();i++)
@@ -176,26 +189,94 @@ public class ExpenseType {
         return true;
     }
     /**
-     * 交换两个消费类型的位置
-     * @param Index1 第一个消费类型的位置
-     * @param Index2 第二个消费类型的位置
-     * @return 将交换后的所有消费类型以动态数组的形式输出
+     * 将用户指定的消费类型移至指定位置
+     * @param oldIndex 初始消费类型位置
+     * @param newIndex 欲移动到的位置
      */
-    public ArrayList<String> exchange(int Index1,int Index2)
+    public void moveShowType(int oldIndex,int newIndex)
     {
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
-        CustomType customType=new CustomType(list.get(Index1).getType(),list.get(Index1).getIndex());
-        list.get(Index1).setType(list.get(Index2).getType());
-        list.get(Index1).setIndex(list.get(Index2).getIndex());
-        list.get(Index2).setType(customType.getType());
-        list.get(Index2).setIndex(customType.getIndex());
-
-        ArrayList<String> type=new ArrayList<>();
-        for(int i=0;i<list.size();i++)
+        int tempIndex=oldIndex;
+        //从后往前移动
+        if(oldIndex>=newIndex)
         {
-            type.add(list.get(i).getType());
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()>=newIndex&&list.get(i).getIndex()<oldIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()+1);
+                }
+            }
         }
-        return type;
+        //从前往后移动
+        if(oldIndex<newIndex)
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()>oldIndex&&list.get(i).getIndex()<=newIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()-1);
+                }
+            }
+        }
+    }
+
+    public void moveHideType(int oldIndex,int newIndex)
+    {
+        int tempIndex=oldIndex;
+        //从后往前移动
+        if(oldIndex<newIndex)
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()<=newIndex&&list.get(i).getIndex()>oldIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()-1);
+                }
+            }
+        }
+        //从前往后移动
+        if(oldIndex>=newIndex)
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()==oldIndex)
+                {
+                    list.get(i).setIndex(newIndex);
+                    tempIndex=i;
+                }
+            }
+            for(int i=0;i<list.size();i++)
+            {
+                if(list.get(i).getIndex()<oldIndex&&list.get(i).getIndex()>=newIndex&&i!=tempIndex)
+                {
+                    list.get(i).setIndex(list.get(i).getIndex()+1);
+                }
+            }
+        }
     }
 
     /**
@@ -205,9 +286,13 @@ public class ExpenseType {
     public void showToHide(int Index)
     {
         int minIndex=Index;
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()<=minIndex)
             {
                 minIndex=list.get(i).getIndex();
@@ -218,14 +303,7 @@ public class ExpenseType {
             }
         }
 
-        for(int i=0;i<list.size();i++)
-        {
-            if(list.get(i).getIndex()==Index)
-            {
-                list.get(i).setIndex(minIndex-1);
-            }
-        }
-
+        list.get(tempIndex).setIndex(minIndex-1);
     }
 
     /**
@@ -235,9 +313,13 @@ public class ExpenseType {
     public void hideToShow(int Index)
     {
         int maxIndex=Index;
-        ArrayList<CustomType> list = dbHelper.selectAllCustomType();
+        int tempIndex=Index;
         for(int i=0;i<list.size();i++)
         {
+            if(list.get(i).getIndex()==Index)
+            {
+                tempIndex=i;
+            }
             if(list.get(i).getIndex()>=maxIndex)
             {
                 maxIndex=list.get(i).getIndex();
@@ -248,14 +330,19 @@ public class ExpenseType {
             }
         }
 
+       list.get(tempIndex).setIndex(maxIndex+1);
+    }
+
+    public int searchRes_ID(String string)
+    {
         for(int i=0;i<list.size();i++)
         {
-            if(list.get(i).getIndex()==Index)
+            if(list.get(i).getType().equals(string))
             {
-                list.get(i).setIndex(maxIndex+1);
+                return list.get(i).getRes_ID();
             }
         }
-
+        return -1;
     }
 
 }

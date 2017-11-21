@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tag_manager_show" />
+
+        <top.lizec.draggablegridview.DraggableGridView
+            android:id="@+id/vgvShow"
+            android:layout_width="fill_parent"
+            android:layout_height="220dp"
+            app:colCount="5"
+            app:itemHeight="60dp"
+            app:itemWidth="60dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tag_manager_hide" />
+
+        <top.lizec.draggablegridview.DraggableGridView
+            android:id="@+id/vgvHide"
+            android:layout_width="wrap_content"
+            android:layout_height="220dp"
+            app:colCount="5"
+            app:itemHeight="60dp"
+            app:itemWidth="60dp"/>
+
+    </LinearLayout>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/fActionMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        fab:fab_addButtonColorNormal="@color/iconBackground"
+        fab:fab_addButtonColorPressed="@color/colorPrimary"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp">
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/fActionNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/iconBackground"
+            fab:fab_colorPressed="@color/colorPrimary"
+            fab:fab_title="添加"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="31dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="90dp" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fActionDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_title="删除"
+            fab:fab_icon = "@drawable/trash"
+            fab:fab_colorNormal="@color/iconBackground"
+            fab:fab_colorPressed="@color/colorPrimary"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+</android.support.constraint.ConstraintLayout>

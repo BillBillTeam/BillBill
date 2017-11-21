@@ -11,11 +11,12 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
         android:clickable="false"
-        app:srcCompat="@mipmap/ic_launcher_round"
-        android:layout_gravity="center_horizontal"/>
+        android:scaleType="centerInside"
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/tag_name"
