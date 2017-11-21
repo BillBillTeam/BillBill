@@ -66,15 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView[] mImageViews = null;
 
-    private AtomicInteger what = new AtomicInteger(0);
-
-    private boolean isContinue = true;
     private Calendar mSelectedDate;
 
     private  int globalHeight;
     private  int globalWidth;
     private Context mContext;
-    private Button mButton_ok;
+
     private Button mTimeButton;
     private Button mbt_jump;
     private Button mbt_jump2;
@@ -85,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView amount_text;
 
     private Button mButton2;
-    private Toolbar mToolbar;
 
     private ScrollView mScrollView;
     private View currentSelectedTag;
@@ -94,10 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mTagGroupContainer;
     private LinearLayout mAmountLayout;
     private LinearLayout mMarkLayout;
-
-    private TagGroupProvider provider;
     ViewPagerManagement viewPagerManagement=null;
-    //tag
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,16 +100,19 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setTitle(this.getString(R.string.mainTitle));
         }
+        //获取屏幕信息（不可信）
         DisplayMetrics dm = getResources().getDisplayMetrics();
         globalWidth = dm.widthPixels;
         globalHeight = dm.heightPixels;
+        //初始化变量
         init();
+        //绑定xml
         initView();
+        //初始化标签选择部分
         initViewPager();
+        //添加Listener
         initev();
-
-
-
+        //不可点击记账按钮
         mButton2.setClickable(false);
 //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
@@ -141,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
+    /**
+     * 调整空白部分高度适配不同屏幕
+     */
     private void adjustSpaceHeight(){
         Space s1=(Space) findViewById(R.id.space1);
         Space s2=(Space) findViewById(R.id.space2);
@@ -196,28 +195,41 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         // TODO Auto-generated method stub
         // mDefaultImage = (ImageView) findViewById(R.id.home_default_image);
+        //标签组
         mTagGroupPager = (ViewPager) findViewById(R.id.tag_group_pager);
-
+        //滑动条
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
-        mButton_ok=(Button)findViewById(R.id.btn_ok);
+        //弹出时间选择的按钮
         mTimeButton=(Button)findViewById(R.id.time_button);
+        //用户输入完账单的确定按钮
         mButton2=(Button)findViewById(R.id.Button2);
+        //主页面上半部分的三个按钮
         mbt_jump=(Button)findViewById(R.id.button_jump);
         mbt_jump2=(Button)findViewById(R.id.button_jump2);
         mbt_jump3=(Button)findViewById(R.id.button_jump3);
+        //数字键盘
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
+        //显示钱数的
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
+        //显示用户输入的文本的
         remark_text=(EditText)findViewById(R.id.editText2);
-        //test
-        mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
 
-        mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
         mAmountLayout=(LinearLayout)findViewById(R.id.amount_layout);
         mMarkLayout=(LinearLayout)findViewById(R.id.mark_layout);
 
+
+        //主界面上半部分
+        mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
+        //标签组的外面一层
+        mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
+
+
+
     }
 
-
+    /**
+     * 添加主界面的上下滑动响应事件
+     */
     private void makePageScrollable(){
 
         //auto move on the two page
@@ -254,19 +266,12 @@ public class MainActivity extends AppCompatActivity {
 //
 
     }
+
+    /**
+     * 为主界面添加listener
+     */
     private void initev(){
 
-//        mScrollView.fullScroll(ScrollView.FOCUS_UP);
-//        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-//        mButton_ok.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //just for test
-//                Intent intent = new Intent(MainActivity.this,StatisticsActivity.class);
-//                MainActivity.this.startActivity(intent);
-//
-//            }
-//        });
         mbt_jump3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        //控制
         remark_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * void
+     * 初始化标签选择部分
      */
     private void initViewPager() {
         ViewGroup group = (ViewGroup) findViewById(R.id.viewGroup);
@@ -365,7 +370,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * 刷新标签选择部分
+     */
     private void refreshTagGroup(){
 
        viewPagerManagement.reloadIt(this);
@@ -483,6 +490,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    /**
+     * 跳转到TagManageActivity
+     */
     private void jumpToTagManageActivity(){
         Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
         MainActivity.this.startActivityForResult(intent,0);
@@ -490,6 +501,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     *时间选择的回调函数
+     */
     TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
         @Override
         public void onCancelled() {
@@ -517,6 +532,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 小键盘的事件响应
+     */
     private void addListenerToNumberKeyboard(){
         int[] keys={R.id.btn_0,R.id.btn_1,R.id.btn_2,
                 R.id.btn_3,R.id.btn_4,R.id.btn_5,
@@ -556,6 +574,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * 检查用户输入
+     */
     private void checkInput(){
         if(currentSelectedTag!=null&&amount_text.getText().toString().length()>0){
             mButton2.setClickable(true);
@@ -566,6 +588,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 滑动到顶部
+     */
     private void scrollToUP(){
         mScrollView.post(new Runnable() {
             @Override
@@ -575,6 +600,10 @@ public class MainActivity extends AppCompatActivity {
         });
         currentPage=0;
     }
+
+    /**
+     * 滑动到底部
+     */
     private void scrollToDOWN(){
         mScrollView.post(new Runnable() {
             @Override
