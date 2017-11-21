@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<cn.fanrunqi.swipelayoutlibrary.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<bhj.MySwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
@@ -41,4 +41,4 @@
             android:src="@drawable/trash" />
     </LinearLayout>
 
-</cn.fanrunqi.swipelayoutlibrary.SwipeLayout>
+</bhj.MySwipeLayout>

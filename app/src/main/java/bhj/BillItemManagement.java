@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.fanrunqi.swipelayoutlibrary.SwipeLayout;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.SuperToast;
@@ -31,11 +30,29 @@ import lz.img.IconGetter;
 public class BillItemManagement {
     private Bill bill;
     private Callback callback;
-    private SwipeLayout billItem;
+    private MySwipeLayout billItem;
+    static MySwipeLayout selectedItem=null;
     public BillItemManagement(final Context context, final IDBill bill, final Callback call){
         this.callback=call;
         LayoutInflater inflater = LayoutInflater.from(context);
-        billItem =  (SwipeLayout)inflater.inflate(R.layout.bill_item_plus, null);
+        billItem =  (MySwipeLayout)inflater.inflate(R.layout.bill_item_plus, null);
+        MySwipeLayout.Callback callback1=new MySwipeLayout.Callback() {
+            @Override
+            public void OnExpend() {
+                if(selectedItem!=null)
+                    selectedItem.SimulateScroll(MySwipeLayout.SHRINK);
+                selectedItem=billItem;
+            }
+
+            @Override
+            public void OnShrink() {
+                selectedItem=null;
+            }
+        };
+
+
+
+        billItem.setCallback(callback1);
         TextView Type=(TextView) billItem.findViewById(R.id.textView5);
         TextView mark=(TextView)billItem.findViewById(R.id.textView6);
         TextView number=(TextView)billItem.findViewById(R.id.textView7);
@@ -57,7 +74,7 @@ public class BillItemManagement {
         billItem.findViewById(R.id.star).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                billItem.SimulateScroll(SwipeLayout.SHRINK);
+                billItem.SimulateScroll(MySwipeLayout.SHRINK);
 
                callback.onEdit(bill);
             }
@@ -71,7 +88,7 @@ public class BillItemManagement {
                 final LinearLayout layout;
                 final View deletedView;
                 final int delPostion;
-                billItem.SimulateScroll(SwipeLayout.SHRINK);
+                billItem.SimulateScroll(MySwipeLayout.SHRINK);
                 if(((LinearLayout)(billItem.getParent())).getChildCount()>2) {
                     layout=((LinearLayout) (billItem.getParent()));
                     deletedView=billItem;
@@ -141,7 +158,7 @@ public class BillItemManagement {
 
 
     }
-    public SwipeLayout getView(){
+    public MySwipeLayout getView(){
         return billItem;
 
     }
@@ -150,7 +167,6 @@ public class BillItemManagement {
         void onDelete(double amount);
         void onEdit(IDBill bill);
         void onCancle(double amount);
-
     }
 
 
