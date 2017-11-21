@@ -36,6 +36,9 @@ import lz.db.CustomType;
 import lz.db.IDBill;
 import lz.regex.NumCheck;
 
+/**
+ * 账单显示界面
+ */
 public class BillListActivity extends AppCompatActivity {
     private LinearLayout lin;
 
@@ -50,7 +53,6 @@ public class BillListActivity extends AppCompatActivity {
         final LayoutInflater inflater = LayoutInflater.from(this);
         lin = (LinearLayout) findViewById(R.id.bill_list_layout);
         createViews();
-
 
     }
     private void createViews(){
@@ -228,6 +230,7 @@ public class BillListActivity extends AppCompatActivity {
                 R.layout.bill_column,null).findViewById(R.id.bill_column_layout);
         TextView t_day=(TextView) b_c_layout.findViewById(R.id.textView2);
         t_day.setText(month+"月"+day+"日");
+
         TextView t_amount=(TextView) b_c_layout.findViewById(R.id.textView4);
         t_amount.setText(""+amounts);
         return b_c_layout;
