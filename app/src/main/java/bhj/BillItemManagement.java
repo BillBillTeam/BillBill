@@ -1,6 +1,8 @@
 package bhj;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.SuperToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 
 import fivene.billbill.R;
 import lhq.ie.Expense;
@@ -26,7 +32,7 @@ public class BillItemManagement {
     private Bill bill;
     private Callback callback;
     private SwipeLayout billItem;
-    public BillItemManagement(final Context context, final IDBill bill, Callback call){
+    public BillItemManagement(final Context context, final IDBill bill, final Callback call){
         this.callback=call;
         LayoutInflater inflater = LayoutInflater.from(context);
         billItem = (SwipeLayout) inflater.inflate(R.layout.bill_item_plus, null);
@@ -59,21 +65,68 @@ public class BillItemManagement {
         billItem.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
-                Expense expense=new Expense(context);
-                expense.Delete(bill);
-                if(((LinearLayout)(billItem.getParent())).getChildCount()>2)
-                ((LinearLayout)(billItem.getParent())).removeView(billItem);
-                else{
-                    ((LinearLayout)billItem.getParent().getParent()).removeView((View)billItem.getParent());
-                    return;
+                final int deleteType;
+                final LinearLayout layout;
+                final View deletedView;
+                final int delPostion;
+                if(((LinearLayout)(billItem.getParent())).getChildCount()>2) {
+                    layout=((LinearLayout) (billItem.getParent()));
+                    deletedView=billItem;
+                    delPostion=layout.indexOfChild(deletedView);
+                    layout.removeView(billItem);
+
+                    deleteType=0;
                 }
 
+                else{
+                    layout=((LinearLayout)billItem.getParent().getParent());
+                    deletedView=(View)billItem.getParent();
+                    delPostion=layout.indexOfChild(deletedView);
+                    layout.removeView((View)billItem.getParent());
 
-                //recount amount
+                        deleteType=1;
 
-
+                }
+                if(deleteType==0)
                 callback.onDelete(bill.getAmount());
+
+
+                //superToast
+                final SuperActivityToast toast= SuperActivityToast.create(context, new Style(), Style.TYPE_BUTTON);
+                toast.setButtonText("撤销")
+                        //.setButtonIconResource(R.drawable.ic_undo)
+                        .setOnButtonClickListener("good_tag_name", null, new SuperActivityToast.OnButtonClickListener() {
+                            @Override
+                            public void onClick(View view, Parcelable token) {
+                                layout.addView(deletedView,delPostion);
+                                if(deleteType==0){//re add value to timeline
+                                    callback.onCancle(bill.getAmount());
+
+                                }
+                                toast.setOnDismissListener(null);
+                                toast.dismiss();
+                            }
+
+                        })
+                        .setProgressBarColor(Color.WHITE)
+                        .setText("您删除了一条记录！")
+                        .setDuration(Style.DURATION_LONG)
+                        .setFrame(Style.FRAME_LOLLIPOP)
+                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.GREY))
+                        .setAnimations(Style.ANIMATIONS_POP)
+                        .setOnDismissListener(new SuperToast.OnDismissListener() {
+                            @Override
+                            public void onDismiss(View view, Parcelable token) {
+                                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
+
+                                Expense expense=new Expense(context);
+                                expense.Delete(bill);
+                            }
+                        })
+                        .show();
+//
+//                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -95,6 +148,7 @@ public class BillItemManagement {
     public interface Callback{
         void onDelete(double amount);
         void onEdit(IDBill bill);
+        void onCancle(double amount);
 
     }
 

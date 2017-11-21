@@ -94,6 +94,14 @@ public class BillListActivity extends AppCompatActivity {
                         showItemEidtor(bill);
 
                     }
+
+                    @Override
+                    public void onCancle(double amount) {
+
+                        TextView view=(TextView)TimeLine.findViewById(R.id.textView4);
+                        view.setText(String.valueOf((float)(Double.valueOf(view.getText().toString())+amount)));
+
+                    }
                 };
 
                 BillItemManagement M=new BillItemManagement(this,idBills_oneDay.get(j),callback);
