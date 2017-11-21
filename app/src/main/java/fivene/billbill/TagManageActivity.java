@@ -45,6 +45,7 @@ public class TagManageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tag_manage);
         //Toolbar toolbar = (Toolbar)findViewById(R.id.)
 
+
         expenseType = new ExpenseType(this);
         dgvShow = ((DraggableGridView)findViewById(R.id.vgvShow));
         dgvHide = ((DraggableGridView)findViewById(R.id.vgvHide));

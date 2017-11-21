@@ -52,8 +52,6 @@ public class BillListActivity extends AppCompatActivity {
         createViews();
 
 
-
-
     }
     private void createViews(){
         //从树据库查询
@@ -206,7 +204,7 @@ public class BillListActivity extends AppCompatActivity {
                 Expense expense=new Expense(BillListActivity.this);
                 IDBill newBill=new IDBill(year,month,day,type,a,b,bill.getID());
                 expense.Update(newBill);
-               
+
                 pwdDialog.cancel();
                 lin.removeAllViews();
                 createViews();

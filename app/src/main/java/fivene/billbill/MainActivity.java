@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mTimeButton;
     private Button mbt_jump;
     private Button mbt_jump2;
+    private Button mbt_jump3;
 
 
     private EditText remark_text;
@@ -203,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         mButton2=(Button)findViewById(R.id.Button2);
         mbt_jump=(Button)findViewById(R.id.button_jump);
         mbt_jump2=(Button)findViewById(R.id.button_jump2);
+        mbt_jump3=(Button)findViewById(R.id.button_jump3);
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         amount_text=(TextView)findViewById(R.id.text_Amount) ;
         remark_text=(EditText)findViewById(R.id.editText2);
@@ -256,7 +258,16 @@ public class MainActivity extends AppCompatActivity {
 
 //        mScrollView.fullScroll(ScrollView.FOCUS_UP);
 //        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        mButton_ok.setOnClickListener(new View.OnClickListener() {
+//        mButton_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //just for test
+//                Intent intent = new Intent(MainActivity.this,StatisticsActivity.class);
+//                MainActivity.this.startActivity(intent);
+//
+//            }
+//        });
+        mbt_jump3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //just for test
@@ -585,5 +596,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(currentPage==1){
+            scrollToUP();
+            return;
+        }
+        super.onBackPressed();
     }
 }
