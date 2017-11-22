@@ -33,11 +33,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +147,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         XAxis xl = mChart.getXAxis();
         xl.setPosition(XAxisPosition.BOTTOM);
         // xl.setTypeface(mTfLight);
+        xl.setDrawLimitLinesBehindData(false);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
@@ -159,7 +162,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return ""+(int)(value/10+1);
+                return ""+(int)value/10;
             }
         });
 
@@ -173,8 +176,9 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
         YAxis yr = mChart.getAxisRight();
         //    yr.setTypeface(mTfLight);
-        yr.setDrawAxisLine(true);
+        yr.setDrawAxisLine(false);
         yr.setDrawGridLines(false);
+        yr.setDrawLabels(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 //        yr.setInverted(true);
 
@@ -203,12 +207,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             if(i<data.size())
             yVals1.add(new Entry(spaceForBar * i, data.get(i).floatValue()));
         }
-        ArrayList<Entry> yVals2 = new ArrayList<Entry>();
-        //add values at here
-        yVals2.add(new Entry( spaceForBar*0,3));
-        yVals2.add(new Entry( spaceForBar*1,3));
-        yVals2.add(new Entry( spaceForBar*4,3));
-        yVals2.add(new Entry( spaceForBar*5,3));
+
 
 
 
@@ -221,14 +220,30 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             //重新更新表信息
             set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals1);
+
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         } else {
             //添加表信息
             set1 = new LineDataSet(yVals1, dataSetName);
+
+            set1.setValueFormatter(new IValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    return String.valueOf(value);//return your text
+                }
+            });
+
             set1.setDrawIcons(false);
+            set1.setDrawValues(false);
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+
+
+
+
             dataSets.add(set1);
+
+
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface(mTfLight);

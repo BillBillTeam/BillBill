@@ -50,28 +50,37 @@ public class statistics extends CalendarOffset {
         return costList;
     }
 
-    public ArrayList<Double> showMonthPerMonthCost() {
-        ArrayList<Double> monthCost = new ArrayList<Double>();
+    /**
+     * 折线图7天统计数据
+     * @return
+     */
+    public ArrayList<Double> showWeekPerDayCost() {
+        ArrayList<Double> costList = new ArrayList<Double>();
         CalendarOffset cal = new CalendarOffset();
-        String str = cal.getLocalDate();
-        int n = 8;
-        String b = str.substring(str.length() - n, str.length());
-        int a = Integer.parseInt(b);
-        String aMonth = str.substring(6, 7);
-        String sYear = str.substring(0, 3);
-        int month = Integer.parseInt(aMonth);
-        int year = Integer.parseInt(sYear);
-        ArrayList<IDBill> listCopy = (ArrayList<IDBill>) mDBHelper.selectBillByTime(year, month, 1, year, month, a).clone();
-        for (int i = 0; i < 30; i++) {
-            double temp = 0;
-            temp = +listCopy.get(i).getAmount();
-            if (temp == 0) {
-                monthCost.add(temp);
-                break;
+        String str;
+        int n = 2;
+        for(int i=6;i>=0;i--) {
+            str=cal.getDay(-i);
+            String b = str.substring(str.length() - n, str.length());
+            String aMonth = str.substring(5, 7);
+            String sYear = str.substring(0, 4);
+            int a = Integer.parseInt(b);
+            int month = Integer.parseInt(aMonth);
+            int year = Integer.parseInt(sYear);
+            ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(year,month,a,year,month,a);
+            double sum=0;
+            for(int j=0;j<listCopy.size();j++){
+                sum+=listCopy.get(j).getAmount();
+
+
             }
+            costList.add(sum);
         }
-        return monthCost;
-    }
+        return costList;
+    };
+
+
+
 }
 
 

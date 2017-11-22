@@ -102,6 +102,35 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public ArrayList<Double> getData() {
                 statistics s=new statistics(StatisticsActivity.this);
+                return s.showWeekPerDayCost();
+
+            }
+
+            @Override
+            public ArrayList<String> getDataDesc() {
+                ArrayList<String> dataDesc=new ArrayList<>();
+                for(int i=1;i<8;i++){
+                    dataDesc.add(String.valueOf(i));
+                }
+                return dataDesc;
+            }
+
+            @Override
+            public String getDataSetName() {
+                return "最近七天消费";
+            }
+
+
+        };
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
+        //     chart.setValues();
+        chart.run();
+    }
+    private void loadTab2(){
+        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+            @Override
+            public ArrayList<Double> getData() {
+                statistics s=new statistics(StatisticsActivity.this);
                 return s.showMonthPerDayCost();
 
             }
@@ -122,14 +151,9 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
         };
-        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
-   //     chart.setValues();
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2,callback);
+        //     chart.setValues();
         chart.run();
-    }
-    private void loadTab2(){
-        //MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2);
-   //     chart.setValues();
-       // chart.run();
 
     }
     private void loadTab3(){
