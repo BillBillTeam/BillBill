@@ -11,9 +11,13 @@ import android.widget.TabHost;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 
+import java.util.ArrayList;
+
 import bhj.MyAsyncColoredLineChart;
 import bhj.MyAsyncHorizontalBarChart;
 import bhj.myAsyncTask;
+import yzj.t.statistics;
+
 public class StatisticsActivity extends AppCompatActivity {
     //three tab context
     LinearLayout layout1;
@@ -94,20 +98,44 @@ public class StatisticsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void loadTab1(){
-        MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar1,layout1);
-        chart.setValues();
+        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+            @Override
+            public ArrayList<Double> getData() {
+                statistics s=new statistics(StatisticsActivity.this);
+                return s.showMonthPerDayCost();
+
+            }
+
+            @Override
+            public ArrayList<String> getDataDesc() {
+                ArrayList<String> dataDesc=new ArrayList<>();
+                for(int i=1;i<32;i++){
+                    dataDesc.add(String.valueOf(i));
+                }
+                return dataDesc;
+            }
+
+            @Override
+            public String getDataSetName() {
+                return "本月消费";
+            }
+
+
+        };
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
+   //     chart.setValues();
         chart.run();
     }
     private void loadTab2(){
-        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2);
-        chart.setValues();
-        chart.run();
+        //MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2);
+   //     chart.setValues();
+       // chart.run();
 
     }
     private void loadTab3(){
-        MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar3,layout3);
-        chart.setValues();
-        chart.run();
+    //    MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar3,layout3);
+   //     chart.setValues();
+     //   chart.run();
 
     }
 }

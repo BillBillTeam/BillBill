@@ -21,7 +21,7 @@ public class CalendarOffset {
      * @throws ParseException
      */
     public Date setD(String date) throws ParseException{
-        Date d = mDateFormat.parse(date); // 指定日期
+        d = mDateFormat.parse(date); // 指定日期
         return d;
     }
 

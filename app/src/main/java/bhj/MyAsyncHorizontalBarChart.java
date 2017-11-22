@@ -48,24 +48,31 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
    //protected Typeface mTfLight;
     private ProgressBar progressBar;
     private LinearLayout layout;
+    private ArrayList<Double> data;
+    private ArrayList<String> dataDesc;
+    private Callback mycallback;
     //add barchart values at here
     //and init values at setValues()
     //and set it on createBarChart()
 
+    public interface Callback{
+        void setValue(ArrayList<Double> data,ArrayList<String> dataDesc);
+
+    }
 
 
-
-    public MyAsyncHorizontalBarChart(Context context,ProgressBar progressBar,LinearLayout linearLayout){
+    public MyAsyncHorizontalBarChart(Context context, ProgressBar progressBar, LinearLayout linearLayout, Callback callback){
         this.progressBar=progressBar;
         this.layout=linearLayout;
+        this.mycallback=callback;
         this.mChart=new HorizontalBarChart(context);
     }
-    public void setValues(){
+    public void setType(int type){
 
     }
 
     public void run(){
-        myAsyncTask.Callback callback=new myAsyncTask.Callback() {
+        final myAsyncTask.Callback callback=new myAsyncTask.Callback() {
 
             @Override
             public void CallbackOnPerExecute() {
@@ -78,7 +85,10 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
                 //colored line chart
                 //horizontal bar chart
-               createBarChart();
+                //查询数据库？？
+                mycallback.setValue(data,dataDesc);
+
+                createBarChart();
 
 
             }

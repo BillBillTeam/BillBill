@@ -1,6 +1,7 @@
 package yzj.t;
 import android.content.Context;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import  lz.db.DBHelper;
@@ -23,22 +24,28 @@ public class statistics extends CalendarOffset {
         ArrayList<Double> costList = new ArrayList<Double>();
         CalendarOffset cal = new CalendarOffset();
         String str = cal.getLocalDate();
-        int n = 8;
+        int n = 2;
+
         String b = str.substring(str.length() - n, str.length());
         int a = Integer.parseInt(b);
-        String aMonth = str.substring(6, 7);
-        String sYear = str.substring(0, 3);
+        String aMonth = str.substring(5, 7);
+        String sYear = str.substring(0, 4);
         int month = Integer.parseInt(aMonth);
         int year = Integer.parseInt(sYear);
-        for (int j = 0; j < a; j++) {
-            ArrayList<IDBill> listCopy = (ArrayList<IDBill>) mDBHelper.selectBillByTime(year, month, a - j, year, month, a - j).clone();
-            for (int i = 0; i < 100; i++) {
-                double temp = 0;
-                temp = +listCopy.get(i).getAmount();
-                if (temp == 0) {
-                    costList.add(temp);
+        ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(year, month, 1, year, month,a );
+        int cur=0;
+        for(int i=1;i<=a;i++){
+            double temp=0;
+            for (int j = cur; j < listCopy.size(); j++) {
+                if(listCopy.get(j).getDay()==i) {
+                    temp+=listCopy.get(j).getAmount();
+                    cur++;
                 }
+                else break;
+
             }
+            costList.add(temp);
+
         }
         return costList;
     }

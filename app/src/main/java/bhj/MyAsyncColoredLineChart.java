@@ -51,22 +51,31 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
     private ProgressBar progressBar;
     private LinearLayout layout;
+    private Callback mycallback;
     //add barchart values at here
     //and init values at setValues()
     //and set it on createBarChart()
+    private ArrayList<Double> data;
+    private ArrayList<String> dataDesc;
+    private String dataSetName;
+    public interface Callback{
+        ArrayList<Double> getData();
+        ArrayList<String> getDataDesc();
+        String getDataSetName();
+
+    }
     protected String[] mMonths = new String[] {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
     };
 
 
-    public MyAsyncColoredLineChart(Context context,ProgressBar progressBar,LinearLayout linearLayout){
+    public MyAsyncColoredLineChart(Context context,ProgressBar progressBar,LinearLayout linearLayout, Callback callback){
         this.progressBar=progressBar;
         this.layout=linearLayout;
+        this.mycallback=callback;
         this.mChart=new LineChart(context);
     }
-    public void setValues(){
 
-    }
 
     public void run(){
         myAsyncTask.Callback callback=new myAsyncTask.Callback() {
@@ -80,6 +89,9 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             @Override
             public void CallbackDoInBackground() {
 
+                data=mycallback.getData();
+                dataDesc=mycallback.getDataDesc();
+                dataSetName=mycallback.getDataSetName();
                 //colored line chart
                 //horizontal bar chart
                 createLineChart();
@@ -147,7 +159,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return "text";
+                return ""+(int)value/10;
             }
         });
 
@@ -187,11 +199,10 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         float spaceForBar = 10f;//
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         //add values at here
-        yVals1.add(new Entry( spaceForBar*0,5));
-        yVals1.add(new Entry( spaceForBar*1,5));
-        yVals1.add(new Entry( spaceForBar*2,5));
-        yVals1.add(new Entry( spaceForBar*5,5));
-
+        for(int i=0;i<dataDesc.size();i++) {
+            if(i<data.size())
+            yVals1.add(new Entry(spaceForBar * i, data.get(i).floatValue()));
+        }
         ArrayList<Entry> yVals2 = new ArrayList<Entry>();
         //add values at here
         yVals2.add(new Entry( spaceForBar*0,3));
@@ -214,19 +225,10 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             mChart.notifyDataSetChanged();
         } else {
             //添加表信息
-            set1 = new LineDataSet(yVals1, "DataSet 1");
+            set1 = new LineDataSet(yVals1, dataSetName);
             set1.setDrawIcons(false);
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-
-            LineDataSet set2 = new LineDataSet(yVals2, "DataSet 2");
-            set2.setColor(Color.rgb(140, 234, 0));
-
-            set2.setDrawIcons(false);
-
-
             dataSets.add(set1);
-            dataSets.add(set2);
-
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface(mTfLight);
