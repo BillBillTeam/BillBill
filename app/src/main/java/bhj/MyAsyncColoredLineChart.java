@@ -159,7 +159,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return ""+(int)value/10;
+                return ""+(int)(value/10+1);
             }
         });
 
