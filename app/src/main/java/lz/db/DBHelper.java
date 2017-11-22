@@ -91,11 +91,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     * 删除一个用户自定义类型
+     * 删除一个用户自定义类型，内部测试方法
      * @param customType 待删除的自定义类型
      * @return 删除成功返回受影响的行数(应该为1),否则返回0
      */
-    public long deleteCustomType(CustomType customType){
+    long deleteCustomType(CustomType customType){
         String where = String.format("%s='%s'",fd_TYPE,customType.getType());
         return getWritableDatabase().delete(TAB_CUSTOM_TYPE_NAME,where,null);
     }
@@ -136,6 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /** 根据指定的时间段，返回该时间段的数据，此时间段包含用于指定边界的两天
+     *  返回的结果将按照日期的升序进行排列
      * 此函数不检查给定数据的有效性，如果给定数据不符合逻辑或不符合日期表达习惯，则返回空的ArrayList
      * @param begYear 起始年
      * @param begMonth 起始月
@@ -148,7 +149,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<IDBill> selectBillByTime(int begYear,int begMonth,int begDay,int endYear,int endMonth,int endDay){
         String where = String.format("(%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s)",
                 fd_YEAR,begYear,endYear,fd_MONTH,begMonth,endMonth,fd_DAY,begDay,endDay);
-        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,where,null,null,null,null);
+        String orderBy = String.format("%s,%s,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
+        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,where,null,null,null,orderBy);
         ArrayList<IDBill> list = billCursor2List(cursor);
         cursor.close();
         return list;
@@ -174,6 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 获得用户的所有账单记录
+     * 记录按照日期的降序排列
      * @return 包含所有账单记录的数组
      */
     public ArrayList<IDBill> selectAllBill(){
