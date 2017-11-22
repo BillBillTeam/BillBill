@@ -37,6 +37,9 @@ import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import yzj.t.statistics;
+
 /**
  * Created by ubuntu on 17-11-1.
  * 横向的柱状图(后台加载)
@@ -48,16 +51,14 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
    //protected Typeface mTfLight;
     private ProgressBar progressBar;
     private LinearLayout layout;
-    private ArrayList<Double> data;
-    private ArrayList<String> dataDesc;
+    private statistics.BarChartValue barChartValue;
     private Callback mycallback;
     //add barchart values at here
     //and init values at setValues()
     //and set it on createBarChart()
 
     public interface Callback{
-        void setValue(ArrayList<Double> data,ArrayList<String> dataDesc);
-
+        statistics.BarChartValue getData();
     }
 
 
@@ -85,8 +86,10 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
                 //colored line chart
                 //horizontal bar chart
+                barChartValue=mycallback.getData();
+
                 //查询数据库？？
-                mycallback.setValue(data,dataDesc);
+
 
                 createBarChart();
 
@@ -152,7 +155,7 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
         xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return "text";
+                return barChartValue.types.get((int)(value/10)).name;
             }
         });
 
@@ -198,55 +201,60 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
 
         float barWidth = 9f;
         float spaceForBar = 10f;//
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        //add values at here
-        yVals1.add(new BarEntry( spaceForBar*0,5));
-        yVals1.add(new BarEntry( spaceForBar*1,5));
-        yVals1.add(new BarEntry( spaceForBar*2,5));
-        yVals1.add(new BarEntry( spaceForBar*5,5));
 
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
-        //add values at here
-        yVals2.add(new BarEntry( spaceForBar*0,3));
-        yVals2.add(new BarEntry( spaceForBar*1,3));
-        yVals2.add(new BarEntry( spaceForBar*4,3));
-        yVals2.add(new BarEntry( spaceForBar*5,3));
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
 
+        for(int i=0;i<barChartValue.types.size();i++){
+            ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-
-
-
-        BarDataSet set1;
-
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            //重新更新表信息
-            set1 = (BarDataSet)mChart.getData().getDataSetByIndex(0);
-            set1.setValues(yVals1);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-        } else {
-            //添加表信息
-            set1 = new BarDataSet(yVals1, "DataSet 1");
-            set1.setDrawIcons(false);
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-
-            BarDataSet set2 = new BarDataSet(yVals2, "DataSet 2");
-            set2.setColor(Color.rgb(140, 234, 0));
-
-            set2.setStackLabels(new String[]{"bian","zz","qq","mm"});
-            set2.setDrawIcons(false);
-
+            yVals1.add(new BarEntry( spaceForBar*i,barChartValue.types.get(i).value.floatValue()));
+            BarDataSet set1;
+            set1 = new BarDataSet(yVals1, barChartValue.types.get(i).name);
 
             dataSets.add(set1);
-            dataSets.add(set2);
+        }
+
+
+//        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+//        //add values at here
+//        yVals1.add(new BarEntry( spaceForBar*0,5));
+//        yVals1.add(new BarEntry( spaceForBar*1,5));
+//        yVals1.add(new BarEntry( spaceForBar*2,5));
+//        yVals1.add(new BarEntry( spaceForBar*5,5));
+//
+//        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
+//        //add values at here
+//        yVals2.add(new BarEntry( spaceForBar*0,3));
+//        yVals2.add(new BarEntry( spaceForBar*1,3));
+//        yVals2.add(new BarEntry( spaceForBar*4,3));
+//        yVals2.add(new BarEntry( spaceForBar*5,3));
+//
+//        BarDataSet set1;
+//
+//            //添加表信息
+//            set1 = new BarDataSet(yVals1, "DataSet 1");
+//            set1.setDrawIcons(false);
+//
+//
+//            BarDataSet set2 = new BarDataSet(yVals2, "DataSet 2");
+//            set2.setColor(Color.rgb(140, 234, 0));
+//
+//            set2.setStackLabels(new String[]{"bian","zz","qq","mm"});
+//            set2.setDrawIcons(false);
+//
+//
+//            dataSets.add(set1);
+//            dataSets.add(set2);
+
+
+
 
             BarData data = new BarData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface(mTfLight);
             data.setBarWidth(barWidth);
             mChart.setData(data);
-        }
+
     }
 
 

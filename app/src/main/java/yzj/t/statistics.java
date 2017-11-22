@@ -1,9 +1,19 @@
 package yzj.t;
 import android.content.Context;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import lhq.ie.Expense;
+import lhq.ie.ExpenseType;
+import lz.db.CustomType;
 import  lz.db.DBHelper;
 import lz.db.IDBill;
 
@@ -15,23 +25,25 @@ import lz.db.IDBill;
 
 public class statistics extends CalendarOffset {
     DBHelper mDBHelper;
+    Context context;
 
     public statistics(Context context) {
         this.mDBHelper = new DBHelper(context);
+        this.context=context;
     }
 
+    /**
+     * 折线图一月统计图
+     * @return
+     */
     public ArrayList<Double> showMonthPerDayCost() {
         ArrayList<Double> costList = new ArrayList<Double>();
         CalendarOffset cal = new CalendarOffset();
         String str = cal.getLocalDate();
-        int n = 2;
-
-        String b = str.substring(str.length() - n, str.length());
-        int a = Integer.parseInt(b);
-        String aMonth = str.substring(5, 7);
-        String sYear = str.substring(0, 4);
-        int month = Integer.parseInt(aMonth);
-        int year = Integer.parseInt(sYear);
+        TimeValue v= StringToTime(str);
+        int a = v.day;
+        int month = v.month;
+        int year = v.year;
         ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(year, month, 1, year, month,a );
         int cur=0;
         for(int i=1;i<=a;i++){
@@ -78,6 +90,89 @@ public class statistics extends CalendarOffset {
         }
         return costList;
     };
+
+    public BarChartValue showWeekPerDayCost_Bar(){
+        Map<String,Double> result=new HashMap<>();
+
+        CalendarOffset cal = new CalendarOffset();
+        String str2 = cal.getLocalDate();
+        String str1=cal.getDay(-6);
+        TimeValue v1=StringToTime(str1);
+        TimeValue v2=StringToTime(str2);
+
+        ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(v1.year, v1.month, v1.day, v2.year, v2.month,v2.day );
+        for(int i=0;i<listCopy.size();i++){
+           String type= listCopy.get(i).getType();
+            if(result.containsKey(type)){
+                Double sum= result.get(type);
+                sum+=listCopy.get(i).getAmount();
+                result.put(type,sum);
+            }
+            else{
+                result.put(type,listCopy.get(i).getAmount());
+            }
+        }
+        Iterator<String> iter = result.keySet().iterator();
+        BarChartValue values=new BarChartValue();
+        int i=0;
+        while (iter.hasNext()) {
+            NameWithNum d=new NameWithNum();
+            d.name=iter.next();
+            d.value = result.get(d.name);
+            values.sum+=d.value;
+            values.types.add(d);
+            i++;
+        }
+        values.sort();
+      return  values;
+
+    }
+    private TimeValue StringToTime(String str){
+        int n = 2;
+        String b = str.substring(str.length() - n, str.length());
+       int day = Integer.parseInt(b);
+        String aMonth = str.substring(5, 7);
+        String sYear = str.substring(0, 4);
+       int month = Integer.parseInt(aMonth);
+       int  year = Integer.parseInt(sYear);
+        TimeValue value=new TimeValue();
+        value.day=day;
+        value.month=month;
+        value.year=year;
+        return  value;
+    }
+    private class TimeValue{
+        public int year;
+        public int month;
+        public int day;
+    }
+    public class NameWithNum implements Comparable<NameWithNum>{
+        public String name;
+        public Double value;
+        NameWithNum(){
+            name="";
+            value=0.0;
+        }
+        @Override
+        public int compareTo(@NonNull NameWithNum nameWithNum) {
+            if(this.value>nameWithNum.value){
+                return 1;
+            }
+            return -1;
+        }
+    }
+
+    public class BarChartValue{
+        public ArrayList<NameWithNum> types;
+        public double sum;
+        public BarChartValue(){
+            types=new ArrayList<>();
+
+        }
+        public void sort(){
+            Collections.sort(types);
+        }
+    }
 
 
 

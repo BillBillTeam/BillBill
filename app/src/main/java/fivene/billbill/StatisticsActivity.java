@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TabHost;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.data.BarData;
 
 import java.util.ArrayList;
 
@@ -98,33 +99,49 @@ public class StatisticsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void loadTab1(){
-        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+//        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+//            @Override
+//            public ArrayList<Double> getData() {
+//                statistics s=new statistics(StatisticsActivity.this);
+//                return s.showWeekPerDayCost();
+//
+//            }
+//
+//            @Override
+//            public ArrayList<String> getDataDesc() {
+//                ArrayList<String> dataDesc=new ArrayList<>();
+//                for(int i=1;i<8;i++){
+//                    dataDesc.add(String.valueOf(i));
+//                }
+//                return dataDesc;
+//            }
+//
+//            @Override
+//            public String getDataSetName() {
+//                return "最近七天消费";
+//            }
+//
+//
+//        };
+//        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
+//        //     chart.setValues();
+//        chart.run();
+
+        MyAsyncHorizontalBarChart.Callback callback=new MyAsyncHorizontalBarChart.Callback() {
+
+
             @Override
-            public ArrayList<Double> getData() {
+            public statistics.BarChartValue getData() {
                 statistics s=new statistics(StatisticsActivity.this);
-                return s.showWeekPerDayCost();
 
+                return s.showWeekPerDayCost_Bar();
             }
-
-            @Override
-            public ArrayList<String> getDataDesc() {
-                ArrayList<String> dataDesc=new ArrayList<>();
-                for(int i=1;i<8;i++){
-                    dataDesc.add(String.valueOf(i));
-                }
-                return dataDesc;
-            }
-
-            @Override
-            public String getDataSetName() {
-                return "最近七天消费";
-            }
-
-
         };
-        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
+        MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar1,layout1,callback);
         //     chart.setValues();
         chart.run();
+
+
     }
     private void loadTab2(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {

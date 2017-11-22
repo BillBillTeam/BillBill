@@ -93,7 +93,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
                 data=mycallback.getData();
                 dataDesc=mycallback.getDataDesc();
-                dataSetName=mycallback.getDataSetName();
+               dataSetName=mycallback.getDataSetName();
                 //colored line chart
                 //horizontal bar chart
                 createLineChart();
