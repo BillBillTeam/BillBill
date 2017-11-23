@@ -124,4 +124,6 @@
     <string name="tag_manager_finish">完成</string>
     <string name="tag_manager_show">显示的标签</string>
     <string name="tag_manager_hide">不显示的标签</string>
+    <string name="money_head">RMB ¥:</string>
+    <string name="today">今天</string>
 </resources>
