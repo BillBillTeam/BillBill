@@ -174,6 +174,84 @@ public class statistics extends CalendarOffset {
       return  values;
 
     }
+
+    public ArrayList<Double> showGlobalPerMonthCost() {
+        ArrayList<Double> costList = new ArrayList<Double>();
+        CalendarOffset cal = new CalendarOffset();
+        String str = cal.getLocalDate();
+        TimeValue v= StringToTime(str);
+        int a = v.day;
+        int month = v.month;
+        int year = v.year;
+        ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(0, 0, 0, year, month,a );
+        int f_year=listCopy.get(0).getYear();
+        int f_month=listCopy.get(0).getMonth();
+
+        int g_month_count=(year-f_year)*12+month-f_month+1;
+        int cur=0;
+        for(int i=0;i<g_month_count;i++){
+            double count=0;
+            while (cur<listCopy.size()&&listCopy.get(cur).getYear()==f_year&&listCopy.get(cur).getMonth()==f_month){
+                count+=listCopy.get(cur).getAmount();
+                cur++;
+            }
+            costList.add(count);
+
+
+
+            f_month++;
+            if(f_month>12){
+                f_month=1;
+                f_year++;
+            }
+        }
+        return costList;
+    };
+    public BarChartValue showGlobalPerMonthCost_Bar(){
+        Map<String,NameWithNum> result=new HashMap<>();
+
+        CalendarOffset cal = new CalendarOffset();
+        String str = cal.getLocalDate();
+        TimeValue v= StringToTime(str);
+        int a = v.day;
+        int month = v.month;
+        int year = v.year;
+        ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(0, 0, 0, year, month,a );
+        for(int i=0;i<listCopy.size();i++){
+            String type= listCopy.get(i).getType();
+            if(result.containsKey(type)){
+                NameWithNum V= result.get(type);
+                V.value+=listCopy.get(i).getAmount();
+                V.num++;
+                result.put(type,V);
+            }
+            else{
+                NameWithNum V=new NameWithNum();
+                V.name=type;
+                V.value=listCopy.get(i).getAmount();
+                V.num=1;
+                result.put(type,V);
+            }
+
+        }
+        Iterator<String> iter = result.keySet().iterator();
+        BarChartValue values=new BarChartValue();
+        int i=0;
+        while (iter.hasNext()) {
+            NameWithNum d=result.get(iter.next());
+            values.types.add(d);
+            values.sum+=d.value;
+            i++;
+        }
+        values.sort();
+        return  values;
+
+    }
+
+
+
+
+
     private TimeValue StringToTime(String str){
         int n = 2;
         String b = str.substring(str.length() - n, str.length());

@@ -205,9 +205,49 @@ public class StatisticsActivity extends AppCompatActivity {
 
     }
     private void loadTab3(){
-    //    MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar3,layout3);
-   //     chart.setValues();
-     //   chart.run();
+        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+            @Override
+            public ArrayList<Double> getData() {
+                statistics s=new statistics(StatisticsActivity.this);
+                return s.showGlobalPerMonthCost();
+
+            }
+
+            @Override
+            public ArrayList<String> getDataDesc() {
+                ArrayList<String> dataDesc=new ArrayList<>();
+                for(int i=1;i<32;i++){
+                    dataDesc.add(String.valueOf(i));
+                }
+                return dataDesc;
+            }
+
+            @Override
+            public String getDataSetName() {
+                return "历月消费";
+            }
+
+
+        };
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar3,layout3_1,callback);
+        //     chart.setValues();
+        chart.run();
+
+
+
+        MyAsyncItemLineChart.Callback callback2=new MyAsyncItemLineChart.Callback() {
+
+
+            @Override
+            public statistics.BarChartValue getData() {
+                statistics s=new statistics(StatisticsActivity.this);
+
+                return s.showGlobalPerMonthCost_Bar();
+            }
+        };
+        MyAsyncItemLineChart chart2=new MyAsyncItemLineChart(this,progressBar3,layout3_2,callback2);
+        //     chart.se0tValues();
+        chart2.run();
 
     }
 }
