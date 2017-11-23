@@ -149,7 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<IDBill> selectBillByTime(int begYear,int begMonth,int begDay,int endYear,int endMonth,int endDay){
         String where = String.format("(%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s)",
                 fd_YEAR,begYear,endYear,fd_MONTH,begMonth,endMonth,fd_DAY,begDay,endDay);
-        String orderBy = String.format("%s,%s,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
+        String orderBy = String.format("%s ASC,%s ASC,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
         Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,where,null,null,null,orderBy);
         ArrayList<IDBill> list = billCursor2List(cursor);
         cursor.close();
@@ -180,7 +180,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return 包含所有账单记录的数组
      */
     public ArrayList<IDBill> selectAllBill(){
-        String orderBy = String.format("%s,%s,%s DESC",fd_YEAR,fd_MONTH,fd_DAY);
+        String orderBy = String.format("%s DESC,%s DESC,%s DESC",fd_YEAR,fd_MONTH,fd_DAY);
         Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,null,null,null,null,orderBy);
         ArrayList<IDBill> list = billCursor2List(cursor);
         cursor.close();
