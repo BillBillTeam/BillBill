@@ -110,9 +110,9 @@
 
     <string name="appInfo">
         感谢以下开源项目：\n
-        1. SublimePicker\n
-        2. FloatingActionButton\n
-        3. DividedDraggableView\n
+        1. vikramkakkar/SublimePicker\n
+        2. futuresimple/FloatingActionButton\n
+        3. andyken/DividedDraggableView\n
         4. PhilJay/MPAndroidChart\n
         5. fanrunqi/SwipeLayout\n
         6. JohnPersano/SuperToasts
