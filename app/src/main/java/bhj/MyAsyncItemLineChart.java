@@ -17,27 +17,33 @@ import lz.img.IconGetter;
 import yzj.t.statistics;
 
 /**
- * Created by ubuntu on 17-11-23.
+ * Created by mary kt on 17-11-23.
+ * 统计之横向柱状图
  */
 
 public class MyAsyncItemLineChart {
     private LinearLayout mItems;
-    //    protected Typeface mTfRegular;
-    //protected Typeface mTfLight;
     private ProgressBar progressBar;
     private Context context;
     private LinearLayout layout;
     private statistics.BarChartValue barChartValue;
     private Callback mycallback;
-    //add barchart values at here
-    //and init values at setValues()
-    //and set it on createBarChart()
 
     public interface Callback{
+        /**
+         * 通过回调函数获得数据
+         * @return BarChartValue 中存储着表需要的各种数据
+         */
         statistics.BarChartValue getData();
     }
 
-
+    /**
+     * 初始化
+     * @param context 上下文
+     * @param progressBar 界面上的进度条（图表加载完成后要隐藏它）
+     * @param linearLayout 包含图表的layout
+     * @param callback 回调函数
+     */
     public MyAsyncItemLineChart(Context context, ProgressBar progressBar, LinearLayout linearLayout, Callback callback){
         this.context=context;
         this.progressBar=progressBar;
@@ -47,10 +53,9 @@ public class MyAsyncItemLineChart {
         mItems.setOrientation(LinearLayout.VERTICAL);
     }
 
-    public void setType(int type){
-
-    }
-
+    /**
+     *  运行图表创建过程
+     */
     public void run(){
         final myAsyncTask.Callback callback=new myAsyncTask.Callback() {
 
@@ -62,17 +67,10 @@ public class MyAsyncItemLineChart {
 
             @Override
             public void CallbackDoInBackground() {
-
-                //colored line chart
-                //horizontal bar chart
+                //从树据库查询数据
                 barChartValue=mycallback.getData();
-
-                //查询数据库？？
-
-
+                //创建表
                 createBarChart();
-
-
             }
 
             @Override
@@ -90,7 +88,9 @@ public class MyAsyncItemLineChart {
     }
 
 
-
+    /**
+     * 创建表
+     */
     private void createBarChart() {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -124,13 +124,16 @@ public class MyAsyncItemLineChart {
 
 
     }
+
+    /**
+     * 获得整个表
+     * @return 表View
+     */
     public LinearLayout getView(){
 
         return mItems;
     }
 
-    private void setData(int count, float range) {
 
-    }
 
 }

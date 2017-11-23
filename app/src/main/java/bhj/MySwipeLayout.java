@@ -19,6 +19,8 @@ import java.util.List;
 
 /**
  * Created by fanrunqi on 2016/6/26.
+ * edit by marykt on 2017/11/16
+ * add an expand or close signal on Callback
  */
 public class MySwipeLayout extends LinearLayout {
 

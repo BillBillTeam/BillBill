@@ -44,7 +44,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Created by ubuntu on 17-11-1.
+ * Created by mary kt on 17-11-1.
  * 折线图（异步）
  */
 
@@ -54,23 +54,24 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
     private ProgressBar progressBar;
     private LinearLayout layout;
     private Callback mycallback;
-    //add barchart values at here
-    //and init values at setValues()
-    //and set it on createBarChart()
     private ArrayList<Double> data;
     private ArrayList<String> dataDesc;
     private String dataSetName;
+
     public interface Callback{
         ArrayList<Double> getData();
         ArrayList<String> getDataDesc();
         String getDataSetName();
 
     }
-    protected String[] mMonths = new String[] {
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
-    };
 
-
+    /**
+     * 初始化
+     * @param context 上下文
+     * @param progressBar 界面上的进度条（图表加载完成后要隐藏它）
+     * @param linearLayout 包含图表的layout
+     * @param callback 回调函数
+     */
     public MyAsyncColoredLineChart(Context context,ProgressBar progressBar,LinearLayout linearLayout, Callback callback){
         this.progressBar=progressBar;
         this.layout=linearLayout;
@@ -78,8 +79,11 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         this.mChart=new LineChart(context);
     }
 
-
+    /**
+     * 运行图表创建过程
+     */
     public void run(){
+        //创建回调函数
         myAsyncTask.Callback callback=new myAsyncTask.Callback() {
 
             @Override
@@ -87,27 +91,23 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
 
             }
-
             @Override
             public void CallbackDoInBackground() {
 
+                //从数据库获得数据
                 data=mycallback.getData();
                 dataDesc=mycallback.getDataDesc();
                dataSetName=mycallback.getDataSetName();
-                //colored line chart
-                //horizontal bar chart
+                //通过数据创建表
                 createLineChart();
-
 
             }
 
             @Override
             public void CallbackOnPostExecute() {
                 mChart.animateX(1000);
-                // get the legend (only possible after setting data)
                 Legend l = mChart.getLegend();
 
-                // modify the legend ...
                 l.setForm(Legend.LegendForm.LINE);
                 if(progressBar.isShown())
                     progressBar.setVisibility(View.GONE);
@@ -123,7 +123,9 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
     }
 
 
-
+    /**
+     * 创建表
+     */
     private void createLineChart() {
 
 
@@ -188,19 +190,25 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
         mChart.setMaxVisibleValueCount(60);
 
-        setData(12, 50);
+        setData();
 
 
 
     }
+
+    /**
+     * 获得表的View
+     * @return LineChart
+     */
     public LineChart getView(){
 
         return mChart;
     }
 
-    private void setData    (int count, float range) {
-
-        float barWidth = 9f;
+    /**
+     * 设置表数据
+     */
+    private void setData    () {
         float spaceForBar = 10f;//
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         //add values at here
@@ -208,12 +216,6 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             if(i<data.size())
             yVals1.add(new Entry(spaceForBar * i, data.get(i).floatValue()));
         }
-
-
-
-
-
-
         LineDataSet set1;
 
         if (mChart.getData() != null &&
@@ -227,24 +229,16 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         } else {
             //添加表信息
             set1 = new LineDataSet(yVals1, dataSetName);
-
             set1.setValueFormatter(new IValueFormatter() {
                 @Override
                 public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
                     return String.valueOf(value);//return your text
                 }
             });
-
             set1.setDrawIcons(false);
             set1.setDrawValues(false);
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-
-
-
-
             dataSets.add(set1);
-
-
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface(mTfLight);

@@ -28,6 +28,9 @@ import java.text.DateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * 一个从底部弹出的时间选择窗口
+ */
 public class TimePopWindow extends PopupWindow {
 
 
@@ -83,11 +86,8 @@ public class TimePopWindow extends PopupWindow {
                         hourOfDay, minute, recurrenceOption, recurrenceRule);
             }
 
-            // Should actually be called by activity inside `Callback.onCancelled()`
             dismiss();
         }
-// You can also override 'formatDate(Date)' & 'formatTime(Date)'
-        // to supply custom formatters.
     };
 
     public void setCallback(Callback callback) {
@@ -108,20 +108,6 @@ public class TimePopWindow extends PopupWindow {
         System.out.print("creating pop view...");
 
         popupLayout.addView( CreateView(LayoutInflater.from(mContext),popupLayout,arguments));
-//        btn_take_photo = (Button) view.findViewById(R.id.btn_take_photo);
-//        btn_pick_photo = (Button) view.findViewById(R.id.btn_pick_photo);
-      //  btn_cancel = (TextView) view.findViewById(R.id.btn_cancel);
-            // 取消按钮
-//       btn_cancel.setOnClickListener(new View.OnClickListener() {
-//
-//                public void onClick(View v) {
-//                    // 销毁弹出框
-//                    dismiss();
-//                }
-//        });
-            // 设置按钮监听
-//        btn_pick_photo.setOnClickListener(itemsOnClick);
-//        btn_take_photo.setOnClickListener(itemsOnClick);
 
             // 设置外部可点击
         this.setOutsideTouchable(true);
@@ -163,17 +149,15 @@ public class TimePopWindow extends PopupWindow {
 
     }
 
-    //设置view
+    /**
+     * 设置日期选择控件的属性
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return 控件
+     */
     public View CreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /*try {
-            //getActivity().getLayoutInflater()
-                    //.inflate(R.layout.sublime_recurrence_picker, new FrameLayout(getActivity()), true);
-            getActivity().getLayoutInflater()
-                    .inflate(R.layout.sublime_date_picker, new FrameLayout(getActivity()), true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }*/
+
 
         mSublimePicker = (SublimePicker)inflater.inflate(R.layout.sublime_picker, null);
 
@@ -195,8 +179,20 @@ public class TimePopWindow extends PopupWindow {
 
 
     public interface Callback {
+        /**
+         * 取消选择的回调函数
+         */
         void onCancelled();
 
+        /**
+         * 用于输出结果的回调函数
+         * 只取需要的数据
+         * @param selectedDate 选中的时间
+         * @param hourOfDay 小时
+         * @param minute 分
+         * @param recurrenceOption
+         * @param recurrenceRule
+         */
         void onDateTimeRecurrenceSet(SelectedDate selectedDate,
                                      int hourOfDay, int minute,
                                      SublimeRecurrencePicker.RecurrenceOption recurrenceOption,

@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import bhj.UIHelper;
-
+/**
+ * 关于界面
+ */
 public class AboutActivity extends AppCompatActivity {
 
     private TextView version;
@@ -24,7 +25,6 @@ public class AboutActivity extends AppCompatActivity {
         try { PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
             appVersion = info.versionName; //版本名
         } catch (PackageManager.NameNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         version=(TextView) findViewById(R.id.version_number);

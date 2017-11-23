@@ -17,7 +17,7 @@ import lhq.ie.ExpenseType;
 import lz.db.CustomType;
 
 /**
- * Created by marykt on 17-11-18.
+ * Created by mary kt on 17-11-18.
  * 管理标签ui的类
  */
 
@@ -28,8 +28,16 @@ public class ViewPagerManagement {
     private Callback mCallback;
     private ViewGroup group ;
     private ImageView mImageView;
-
     private ImageView[] mImageViews = null;
+
+    /**
+     * 初始化
+     * @param mTagGroupPager Viewpager
+     * @param globalWidth 屏幕宽度
+     * @param mCallback 回调函数
+     * @param group 包含底部小圆点的group
+     * @param mImageViews 小圆点图片
+     */
    public ViewPagerManagement(ViewPager mTagGroupPager, int globalWidth,Callback mCallback,ViewGroup group,ImageView[] mImageViews){
         this.mTagGroupPager=mTagGroupPager;
         this.globalWidth=globalWidth;
@@ -38,13 +46,22 @@ public class ViewPagerManagement {
         this.mImageViews=mImageViews;
 
     }
+
     public interface Callback{
+        /**
+         * 为ViewPager的当前页添加监听事件
+         * @param layout
+         */
         void callbackAddListenerToViewPager(GridLayout layout);
 
 
     }
 
-
+    /**
+     * 创建ViewPager
+     * 即主界面标签选择部分
+     * @param context
+     */
     public void createViewPager(Context context){
 
         mTagGroupPager.setVisibility(View.VISIBLE);
@@ -119,6 +136,9 @@ public class ViewPagerManagement {
 
     }
 
+    /**
+     * ViewPager对应的Adapter
+     */
     private final class TagGroupAdapter extends PagerAdapter {
         private List<View> views = null;
         public TagGroupAdapter(List<View> views) {
@@ -169,6 +189,10 @@ public class ViewPagerManagement {
 
     }
 
+    /**
+     * 重新加载
+     * @param context 上下文
+     */
     public void reloadIt(Context context){
         group.removeAllViews();
 

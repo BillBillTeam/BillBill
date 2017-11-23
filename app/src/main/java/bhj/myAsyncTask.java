@@ -3,7 +3,8 @@ package bhj;
 import android.os.AsyncTask;
 
 /**
- * Created by ubuntu on 17-10-31.
+ * Created by Mary Kt on 17-10-31.
+ * 对原生异步类进行包装 变成回调函数实现
  */
 
 public class myAsyncTask extends AsyncTask {
@@ -28,8 +29,19 @@ public class myAsyncTask extends AsyncTask {
     }
 
     public interface Callback {
+        /**
+         * 预先准备部分
+         */
         void CallbackOnPerExecute();
+
+        /**
+         * 在后台执行部分
+         */
         void CallbackDoInBackground();
+
+        /**
+         * 执行结束部分呢
+         */
         void CallbackOnPostExecute();
 
     }

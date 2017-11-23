@@ -25,6 +25,9 @@ import lz.img.IconGetter;
 
 /**
  * Created by mary kt on 17-11-19.
+ * 每个类对应着billListActivity中的一条数据
+ * 主要是完成UI方面的工作
+ *
  */
 
 public class BillItemManagement {
@@ -32,10 +35,19 @@ public class BillItemManagement {
     private Callback callback;
     private MySwipeLayout billItem;
     static MySwipeLayout selectedItem=null;
+
+    /**
+     * 初始化
+     * @param context
+     * @param bill 一条账单数据
+     * @param call 回调函数
+     */
     public BillItemManagement(final Context context, final IDBill bill, final Callback call){
         this.callback=call;
         LayoutInflater inflater = LayoutInflater.from(context);
         billItem =  (MySwipeLayout)inflater.inflate(R.layout.bill_item_plus, null);
+        //设置回调函数
+        //作用：每次只能选中一条账单记录
         MySwipeLayout.Callback callback1=new MySwipeLayout.Callback() {
             @Override
             public void OnExpend() {
@@ -57,20 +69,15 @@ public class BillItemManagement {
         TextView mark=(TextView)billItem.findViewById(R.id.textView6);
         TextView number=(TextView)billItem.findViewById(R.id.textView7);
         ImageView img=(ImageView)billItem.findViewById(R.id.imageView);
+        //数据库初始化
         ExpenseType expenseType=new ExpenseType(context);
-
+        //设置ui上显示的数据
         img.setImageBitmap(IconGetter.getIcon(context,expenseType.searchRes_ID(bill.getType())));
-
         Type.setText(bill.getType());
         mark.setText(bill.getRemark());
         number.setText(String.valueOf((float)bill.getAmount()));
-        //TODO:add img recid
 
-        //img.setImageBitmap(IconGetter.getIcon(context,bill.ge));
-
-   //     billItem.setShowMode(SwipeLayout.ShowMode.LayDown);
-   //     billItem.addDrag(SwipeLayout.DragEdge.Right, billItem.findViewWithTag("Bottom2"));
-//        sample2.setShowMode(SwipeLayout.ShowMode.PullOut);
+        //编辑账单数据
         billItem.findViewById(R.id.star).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,37 +86,30 @@ public class BillItemManagement {
                callback.onEdit(bill);
             }
         });
-
+        //删除账单数据
         billItem.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final int deleteType;
                 final LinearLayout layout;
                 final View deletedView;
                 final int delPostion;
                 billItem.SimulateScroll(MySwipeLayout.SHRINK);
+                //如果当日账单数据有两条及以上
                 if(((LinearLayout)(billItem.getParent())).getChildCount()>2) {
                     layout=((LinearLayout) (billItem.getParent()));
                     deletedView=billItem;
                     delPostion=layout.indexOfChild(deletedView);
                     layout.removeView(billItem);
-
                     deleteType=0;
                 }
-
                 else{
                     layout=((LinearLayout)billItem.getParent().getParent());
                     deletedView=(View)billItem.getParent();
                     delPostion=layout.indexOfChild(deletedView);
                     layout.removeView((View)billItem.getParent());
-
-                        deleteType=1;
-
+                    deleteType=1;
                 }
-
-
-
                 //superToast
                 final SuperActivityToast toast= SuperActivityToast.create(context, new Style(), Style.TYPE_BUTTON);
                 toast.setButtonText("撤销")
@@ -120,7 +120,6 @@ public class BillItemManagement {
                                 layout.addView(deletedView,delPostion);
                                 if(deleteType==0){//re add value to timeline
                                     callback.onCancle(bill.getAmount());
-
                                 }
                                 toast.setOnDismissListener(null);
                                 toast.dismiss();
@@ -140,35 +139,49 @@ public class BillItemManagement {
                                 expense.Delete(bill);
                             }
                         });
-
                 if(deleteType==0)
                     callback.onDelete(bill.getAmount(),toast);
                         toast.show();
-
-
-//                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
-
             }
         });
 
 
-//        billItem.getSurfaceView().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, "Click on surface", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
 
     }
+
+    /**
+     * 获得生成好的ui控件
+     * @return MySwipeLayout
+     */
     public MySwipeLayout getView(){
         return billItem;
 
     }
 
+    /**
+     * 回调函数
+     * 1.删除
+     * 2.编辑
+     * 3.取消删除
+     */
     public interface Callback{
+        /**
+         * 删除账单数据和控件
+         * @param amount 账单消费额
+         * @param toast 弹出删除提示的提示框
+         */
         void onDelete(double amount,SuperActivityToast toast);
+
+        /**
+         * 编辑账单数据
+         * @param bill 账单数据
+         */
         void onEdit(IDBill bill);
+
+        /**
+         * 取消删除（发生在删除提示框提示时取消删除）
+         * @param amount 账单消费额
+         */
         void onCancle(double amount);
     }
 
