@@ -43,6 +43,7 @@ import yzj.t.statistics;
 /**
  * Created by ubuntu on 17-11-1.
  * 横向的柱状图(后台加载)
+ * no use see MyAsyncItemLineChart
  */
 
 public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener {
@@ -119,6 +120,7 @@ public class MyAsyncHorizontalBarChart implements  OnChartValueSelectedListener 
         mChart.setOnChartValueSelectedListener(this);
         // mChart.setHighlightEnabled(false);
 
+        mChart.setMinimumHeight(900);
         mChart.setDrawBarShadow(false);
 
         mChart.setDrawValueAboveBar(true);

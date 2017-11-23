@@ -9,14 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.data.BarData;
-
 import java.util.ArrayList;
 
 import bhj.MyAsyncColoredLineChart;
-import bhj.MyAsyncHorizontalBarChart;
-import bhj.myAsyncTask;
+import bhj.MyAsyncItemLineChart;
 import yzj.t.statistics;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -24,6 +20,13 @@ public class StatisticsActivity extends AppCompatActivity {
     LinearLayout layout1;
     LinearLayout layout2;
     LinearLayout layout3;
+
+    LinearLayout layout1_1;
+    LinearLayout layout2_1;
+    LinearLayout layout3_1;
+    LinearLayout layout1_2;
+    LinearLayout layout2_2;
+    LinearLayout layout3_2;
 
     ProgressBar progressBar1;
     ProgressBar progressBar2;
@@ -42,6 +45,16 @@ public class StatisticsActivity extends AppCompatActivity {
         layout1=(LinearLayout)findViewById(R.id.tab1_content);
         layout2=(LinearLayout)findViewById(R.id.tab2_content);
         layout3=(LinearLayout)findViewById(R.id.tab3_content);
+
+        layout1_1=(LinearLayout)findViewById(R.id.LinearLayout1_1);
+        layout2_1=(LinearLayout)findViewById(R.id.LinearLayout2_1);
+        layout3_1=(LinearLayout)findViewById(R.id.LinearLayout3_1);
+        layout1_2=(LinearLayout)findViewById(R.id.LinearLayout1_2);
+        layout2_2=(LinearLayout)findViewById(R.id.LinearLayout2_2);
+        layout3_2=(LinearLayout)findViewById(R.id.LinearLayout3_2);
+
+
+
         progressBar1=(ProgressBar)findViewById(R.id.progressBar1);
         progressBar2=(ProgressBar)findViewById(R.id.progressBar2);
         progressBar3=(ProgressBar)findViewById(R.id.progressBar3);
@@ -51,7 +64,7 @@ public class StatisticsActivity extends AppCompatActivity {
         //Tab 1
         TabHost.TabSpec spec = host.newTabSpec("tabOne");
         spec.setContent(R.id.tab1);
-        spec.setIndicator("周统计");
+        spec.setIndicator("七天统计");
         host.addTab(spec);
 
         //Tab 2
@@ -63,7 +76,7 @@ public class StatisticsActivity extends AppCompatActivity {
         //Tab 3
         spec = host.newTabSpec("tabThree");
         spec.setContent(R.id.tab3);
-        spec.setIndicator("年统计");
+        spec.setIndicator("总统计");
         host.addTab(spec);
 
         host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -79,8 +92,9 @@ public class StatisticsActivity extends AppCompatActivity {
                         loadTab2();
                         break;
                     case "tabThree":
-                        if(progressBar3.getVisibility()!=View.GONE)
-                        loadTab3();
+                        if(progressBar3.getVisibility()!=View.GONE) {
+                            loadTab3();
+                        }
                         break;
 
 
@@ -99,35 +113,35 @@ public class StatisticsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void loadTab1(){
-//        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
-//            @Override
-//            public ArrayList<Double> getData() {
-//                statistics s=new statistics(StatisticsActivity.this);
-//                return s.showWeekPerDayCost();
-//
-//            }
-//
-//            @Override
-//            public ArrayList<String> getDataDesc() {
-//                ArrayList<String> dataDesc=new ArrayList<>();
-//                for(int i=1;i<8;i++){
-//                    dataDesc.add(String.valueOf(i));
-//                }
-//                return dataDesc;
-//            }
-//
-//            @Override
-//            public String getDataSetName() {
-//                return "最近七天消费";
-//            }
-//
-//
-//        };
-//        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1,callback);
-//        //     chart.setValues();
-//        chart.run();
+        MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
+            @Override
+            public ArrayList<Double> getData() {
+                statistics s=new statistics(StatisticsActivity.this);
+                return s.showWeekPerDayCost();
 
-        MyAsyncHorizontalBarChart.Callback callback=new MyAsyncHorizontalBarChart.Callback() {
+            }
+
+            @Override
+            public ArrayList<String> getDataDesc() {
+                ArrayList<String> dataDesc=new ArrayList<>();
+                for(int i=1;i<8;i++){
+                    dataDesc.add(String.valueOf(i));
+                }
+                return dataDesc;
+            }
+
+            @Override
+            public String getDataSetName() {
+                return "最近七天消费";
+            }
+
+
+        };
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1_1,callback);
+        //     chart.setValues();
+        chart.run();
+
+        MyAsyncItemLineChart.Callback callback2=new MyAsyncItemLineChart.Callback() {
 
 
             @Override
@@ -137,9 +151,9 @@ public class StatisticsActivity extends AppCompatActivity {
                 return s.showWeekPerDayCost_Bar();
             }
         };
-        MyAsyncHorizontalBarChart chart=new MyAsyncHorizontalBarChart(this,progressBar1,layout1,callback);
-        //     chart.setValues();
-        chart.run();
+        MyAsyncItemLineChart chart2=new MyAsyncItemLineChart(this,progressBar1,layout1_2,callback2);
+        //     chart.se0tValues();
+        chart2.run();
 
 
     }
@@ -168,9 +182,26 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
         };
-        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2,callback);
+        MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar2,layout2_1,callback);
         //     chart.setValues();
         chart.run();
+
+
+
+        MyAsyncItemLineChart.Callback callback2=new MyAsyncItemLineChart.Callback() {
+
+
+            @Override
+            public statistics.BarChartValue getData() {
+                statistics s=new statistics(StatisticsActivity.this);
+
+                return s.showMonthPerDayCost_Bar();
+            }
+        };
+        MyAsyncItemLineChart chart2=new MyAsyncItemLineChart(this,progressBar1,layout2_2,callback2);
+        //     chart.se0tValues();
+        chart2.run();
+
 
     }
     private void loadTab3(){

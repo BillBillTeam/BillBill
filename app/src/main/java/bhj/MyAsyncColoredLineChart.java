@@ -109,7 +109,8 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
 
                 // modify the legend ...
                 l.setForm(Legend.LegendForm.LINE);
-                progressBar.setVisibility(View.GONE);
+                if(progressBar.isShown())
+                    progressBar.setVisibility(View.GONE);
                 mChart.setMinimumHeight(400);
                 layout.addView(mChart);
             }

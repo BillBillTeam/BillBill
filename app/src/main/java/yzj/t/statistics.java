@@ -62,6 +62,49 @@ public class statistics extends CalendarOffset {
         return costList;
     }
 
+    public BarChartValue showMonthPerDayCost_Bar(){
+        Map<String,NameWithNum> result=new HashMap<>();
+
+        CalendarOffset cal = new CalendarOffset();
+        String str = cal.getLocalDate();
+        TimeValue v= StringToTime(str);
+        int a = v.day;
+        int month = v.month;
+        int year = v.year;
+        ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(year, month, 1, year, month,a );
+        for(int i=0;i<listCopy.size();i++){
+            String type= listCopy.get(i).getType();
+            if(result.containsKey(type)){
+                NameWithNum V= result.get(type);
+                V.value+=listCopy.get(i).getAmount();
+                V.num++;
+                result.put(type,V);
+            }
+            else{
+                NameWithNum V=new NameWithNum();
+                V.name=type;
+                V.value=listCopy.get(i).getAmount();
+                V.num=1;
+                result.put(type,V);
+            }
+
+        }
+        Iterator<String> iter = result.keySet().iterator();
+        BarChartValue values=new BarChartValue();
+        int i=0;
+        while (iter.hasNext()) {
+            NameWithNum d=result.get(iter.next());
+            values.types.add(d);
+            values.sum+=d.value;
+            i++;
+        }
+        values.sort();
+        return  values;
+
+    }
+
+
+
     /**
      * 折线图7天统计数据
      * @return
@@ -92,7 +135,7 @@ public class statistics extends CalendarOffset {
     };
 
     public BarChartValue showWeekPerDayCost_Bar(){
-        Map<String,Double> result=new HashMap<>();
+        Map<String,NameWithNum> result=new HashMap<>();
 
         CalendarOffset cal = new CalendarOffset();
         String str2 = cal.getLocalDate();
@@ -104,23 +147,27 @@ public class statistics extends CalendarOffset {
         for(int i=0;i<listCopy.size();i++){
            String type= listCopy.get(i).getType();
             if(result.containsKey(type)){
-                Double sum= result.get(type);
-                sum+=listCopy.get(i).getAmount();
-                result.put(type,sum);
+                NameWithNum V= result.get(type);
+                V.value+=listCopy.get(i).getAmount();
+                V.num++;
+                result.put(type,V);
             }
             else{
-                result.put(type,listCopy.get(i).getAmount());
+                NameWithNum V=new NameWithNum();
+                V.name=type;
+                V.value=listCopy.get(i).getAmount();
+                V.num=1;
+                result.put(type,V);
             }
+
         }
         Iterator<String> iter = result.keySet().iterator();
         BarChartValue values=new BarChartValue();
         int i=0;
         while (iter.hasNext()) {
-            NameWithNum d=new NameWithNum();
-            d.name=iter.next();
-            d.value = result.get(d.name);
-            values.sum+=d.value;
+            NameWithNum d=result.get(iter.next());
             values.types.add(d);
+            values.sum+=d.value;
             i++;
         }
         values.sort();
@@ -148,17 +195,19 @@ public class statistics extends CalendarOffset {
     }
     public class NameWithNum implements Comparable<NameWithNum>{
         public String name;
-        public Double value;
+        public Double value;//总钱数
+        public int num;//笔数
         NameWithNum(){
             name="";
             value=0.0;
+            num=0;
         }
         @Override
         public int compareTo(@NonNull NameWithNum nameWithNum) {
             if(this.value>nameWithNum.value){
-                return 1;
+                return -1;
             }
-            return -1;
+            return 1;
         }
     }
 

@@ -36,7 +36,8 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:scrollbars="none">
 
                         <LinearLayout
                             android:id="@+id/tab1_content"
@@ -49,6 +50,20 @@
                                 style="?android:attr/progressBarStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout1_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"></LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout1_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>
@@ -61,7 +76,8 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:scrollbars="none">
 
                         <LinearLayout
                             android:id="@+id/tab2_content"
@@ -74,6 +90,18 @@
                                 style="?android:attr/progressBarStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout2_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"></LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout2_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"></LinearLayout>
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>
@@ -86,7 +114,8 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:scrollbars="none">
 
                         <LinearLayout
                             android:id="@+id/tab3_content"
@@ -99,6 +128,20 @@
                                 style="?android:attr/progressBarStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout3_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"></LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/LinearLayout3_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>

@@ -107,8 +107,7 @@ public class BillItemManagement {
                         deleteType=1;
 
                 }
-                if(deleteType==0)
-                callback.onDelete(bill.getAmount());
+
 
 
                 //superToast
@@ -140,9 +139,13 @@ public class BillItemManagement {
                                 Expense expense=new Expense(context);
                                 expense.Delete(bill);
                             }
-                        })
-                        .show();
-//
+                        });
+
+                if(deleteType==0)
+                    callback.onDelete(bill.getAmount(),toast);
+                        toast.show();
+
+
 //                Toast.makeText(context, "您删除了一条记录", Toast.LENGTH_SHORT).show();
 
             }
@@ -164,7 +167,7 @@ public class BillItemManagement {
     }
 
     public interface Callback{
-        void onDelete(double amount);
+        void onDelete(double amount,SuperActivityToast toast);
         void onEdit(IDBill bill);
         void onCancle(double amount);
     }

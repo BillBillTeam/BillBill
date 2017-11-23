@@ -23,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -41,7 +43,7 @@ import lz.regex.NumCheck;
  */
 public class BillListActivity extends AppCompatActivity {
     private LinearLayout lin;
-
+    private SuperActivityToast currentToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +85,14 @@ public class BillListActivity extends AppCompatActivity {
             for(int j=0;j<idBills_oneDay.size();j++){
                 //设置回调函数
                 BillItemManagement.Callback callback=new BillItemManagement.Callback() {
+
+
                     @Override
-                    public void onDelete(double amount) {
-//                        TextView view=(TextView) ((LinearLayout)((LinearLayout)billItem.getParent()).getChildAt(0)).getChildAt(3);
-//                        view.setText(String.valueOf((float)(Double.valueOf(view.getText().toString())-bill.getAmount())));
+                    public void onDelete(double amount, SuperActivityToast toast) {
+                        if (currentToast!=null&&currentToast.isShowing()){
+                            toast.dismiss();
+                        }
+                        currentToast=toast;
                         TextView view=(TextView)TimeLine.findViewById(R.id.textView4);
                         view.setText(String.valueOf((float)(Double.valueOf(view.getText().toString())-amount)));
                     }
@@ -224,7 +230,15 @@ public class BillListActivity extends AppCompatActivity {
 
 
     }
-    private View createTimeLine(int year,int month,int day,double amounts){
+
+    @Override
+    protected void onDestroy() {
+        if(currentToast!=null &&currentToast.isShowing())
+            currentToast.dismiss();
+        super.onDestroy();
+    }
+
+    private View createTimeLine(int year, int month, int day, double amounts){
         final LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout b_c_layout = (LinearLayout) inflater.inflate(
                 R.layout.bill_column,null).findViewById(R.id.bill_column_layout);
