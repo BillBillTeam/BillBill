@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 remark_text.setFocusable(false);
+                amount_text.setFocusable(false);
                 adjustSpaceHeight();
                 makePageScrollable();
 
@@ -659,6 +660,8 @@ public class MainActivity extends AppCompatActivity {
      * 滑动到底部
      */
     private void scrollToDOWN(){
+        amount_text.setFocusable(true);
+        amount_text.setFocusableInTouchMode(true);
         mScrollView.post(new Runnable() {
             @Override
             public void run() {
