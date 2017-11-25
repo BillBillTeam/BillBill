@@ -370,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
         currentSelectedTag = null;
         amountTextStringBuilder = new StringBuilder();
         amount_text.setText("");
+        amount_text.setSelection(0);
         remark_text.setText("");
     }
 
@@ -598,6 +599,7 @@ public class MainActivity extends AppCompatActivity {
                     if(NumCheck.matchDouble(amountTextStringBuilder+".")){
                         amountTextStringBuilder.append(".");
                         amount_text.setText(amountTextStringBuilder);
+                        amount_text.setSelection(amountTextStringBuilder.length());
                     }
                 }
             }
@@ -608,6 +610,7 @@ public class MainActivity extends AppCompatActivity {
                 if(amountTextStringBuilder.length()>0){
                     amountTextStringBuilder.deleteCharAt(amountTextStringBuilder.length()-1);
                     amount_text.setText(amountTextStringBuilder);
+                    amount_text.setSelection(amountTextStringBuilder.length());
                 }
             }
         });
@@ -622,6 +625,7 @@ public class MainActivity extends AppCompatActivity {
             if(amountTextStringBuilder.length()<20){
                 amountTextStringBuilder.append(v.getTag());
                 amount_text.setText(amountTextStringBuilder);
+                amount_text.setSelection(amountTextStringBuilder.length());
             }
         }
     };

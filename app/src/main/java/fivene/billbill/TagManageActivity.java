@@ -132,6 +132,9 @@ public class TagManageActivity extends AppCompatActivity {
                 if(ischanged){
                     quitDialog.show();
                 }
+                else{
+                    finish();
+                }
                 break;
             default:
                 Log.w(TAG, "onOptionsItemSelected: 未设置的选项");
