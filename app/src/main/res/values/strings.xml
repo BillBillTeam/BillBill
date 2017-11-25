@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BillBill</string>
+    <string name="app_name">简单记</string>
     <string-array name="systemType">
         <item>吃喝</item>
         <item>交通</item>
