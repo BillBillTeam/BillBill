@@ -115,31 +115,31 @@ public class StatisticsActivity extends AppCompatActivity {
     private void loadTab1(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public ArrayList<Double> getData() {
+            public statistics.LineChartValue getData() {
                 statistics s=new statistics(StatisticsActivity.this);
                 return s.showWeekPerDayCost();
 
             }
-
-            @Override
-            public ArrayList<String> getDataDesc() {
-                ArrayList<String> dataDesc=new ArrayList<>();
-                for(int i=1;i<8;i++){
-                    dataDesc.add(String.valueOf(i));
-                }
-                return dataDesc;
-            }
-
-            @Override
-            public String getDataSetName() {
-                return "最近七天消费";
-            }
+//
+//            @Override
+//            public ArrayList<String> getDataDesc() {
+//                ArrayList<String> dataDesc=new ArrayList<>();
+//                for(int i=1;i<8;i++){
+//                    dataDesc.add(String.valueOf(i));
+//                }
+//                return dataDesc;
+//            }
+//
+//            @Override
+//            public String getDataSetName() {
+//                return "最近七天消费";
+//            }
 
 
         };
         MyAsyncColoredLineChart chart=new MyAsyncColoredLineChart(this,progressBar1,layout1_1,callback);
-        //     chart.setValues();
         chart.run();
+
 
         MyAsyncItemLineChart.Callback callback2=new MyAsyncItemLineChart.Callback() {
 
@@ -160,25 +160,13 @@ public class StatisticsActivity extends AppCompatActivity {
     private void loadTab2(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public ArrayList<Double> getData() {
+            public statistics.LineChartValue getData() {
                 statistics s=new statistics(StatisticsActivity.this);
                 return s.showMonthPerDayCost();
 
             }
 
-            @Override
-            public ArrayList<String> getDataDesc() {
-                ArrayList<String> dataDesc=new ArrayList<>();
-                for(int i=1;i<32;i++){
-                    dataDesc.add(String.valueOf(i));
-                }
-                return dataDesc;
-            }
 
-            @Override
-            public String getDataSetName() {
-                return "本月消费";
-            }
 
 
         };
@@ -207,24 +195,10 @@ public class StatisticsActivity extends AppCompatActivity {
     private void loadTab3(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public ArrayList<Double> getData() {
+            public statistics.LineChartValue getData() {
                 statistics s=new statistics(StatisticsActivity.this);
                 return s.showGlobalPerMonthCost();
 
-            }
-
-            @Override
-            public ArrayList<String> getDataDesc() {
-                ArrayList<String> dataDesc=new ArrayList<>();
-                for(int i=1;i<32;i++){
-                    dataDesc.add(String.valueOf(i));
-                }
-                return dataDesc;
-            }
-
-            @Override
-            public String getDataSetName() {
-                return "历月消费";
             }
 
 

@@ -43,6 +43,9 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import yzj.t.statistics;
+
 /**
  * Created by mary kt on 17-11-1.
  * 折线图（异步）
@@ -54,14 +57,15 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
     private ProgressBar progressBar;
     private LinearLayout layout;
     private Callback mycallback;
+    statistics.LineChartValue lineChartValue;
     private ArrayList<Double> data;
     private ArrayList<String> dataDesc;
     private String dataSetName;
 
     public interface Callback{
-        ArrayList<Double> getData();
-        ArrayList<String> getDataDesc();
-        String getDataSetName();
+        statistics.LineChartValue getData();
+//        ArrayList<String> getDataDesc();
+//        String getDataSetName();
 
     }
 
@@ -95,9 +99,10 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
             public void CallbackDoInBackground() {
 
                 //从数据库获得数据
-                data=mycallback.getData();
-                dataDesc=mycallback.getDataDesc();
-               dataSetName=mycallback.getDataSetName();
+                lineChartValue=mycallback.getData();
+                data=lineChartValue.values;
+                dataDesc=lineChartValue.x_lineName;
+                dataSetName=lineChartValue.dataSetName;
                 //通过数据创建表
                 createLineChart();
 
@@ -154,6 +159,7 @@ public class MyAsyncColoredLineChart implements  OnChartValueSelectedListener {
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
+
         //set left text value
 //    ex:
 //     xAxis.setValueFormatter(new IAxisValueFormatter() {

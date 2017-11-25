@@ -2,11 +2,15 @@ package yzj.t;
 import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.widget.LinearLayout;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,8 +40,8 @@ public class statistics extends CalendarOffset {
      * 折线图一月统计图
      * @return
      */
-    public ArrayList<Double> showMonthPerDayCost() {
-        ArrayList<Double> costList = new ArrayList<Double>();
+    public LineChartValue showMonthPerDayCost() {
+        LineChartValue lineChartValue=new LineChartValue();
         CalendarOffset cal = new CalendarOffset();
         String str = cal.getLocalDate();
         TimeValue v= StringToTime(str);
@@ -56,10 +60,11 @@ public class statistics extends CalendarOffset {
                 else break;
 
             }
-            costList.add(temp);
-
+            lineChartValue.values.add(temp);
+            lineChartValue.x_lineName.add(month+"/"+i);
         }
-        return costList;
+        lineChartValue.dataSetName="本月消费情况";
+        return lineChartValue;
     }
 
     public BarChartValue showMonthPerDayCost_Bar(){
@@ -104,14 +109,23 @@ public class statistics extends CalendarOffset {
     }
 
 
+    private String getdayOfWeek(int year,int month,int day){
+        String[] val={"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
+        Calendar calendar=new GregorianCalendar(year,month-1,day);
+        int dayOfWeek=calendar.get(Calendar.DAY_OF_WEEK);
+        return val[dayOfWeek-1];
+
+    }
+
 
     /**
      * 折线图7天统计数据
      * @return
      */
-    public ArrayList<Double> showWeekPerDayCost() {
-        ArrayList<Double> costList = new ArrayList<Double>();
+    public LineChartValue  showWeekPerDayCost() {
+
         CalendarOffset cal = new CalendarOffset();
+        LineChartValue values=new LineChartValue();
         String str;
         int n = 2;
         for(int i=6;i>=0;i--) {
@@ -129,9 +143,12 @@ public class statistics extends CalendarOffset {
 
 
             }
-            costList.add(sum);
+            values.x_lineName.add(getdayOfWeek(year,month,a));
+            values.values.add(sum);
         }
-        return costList;
+
+        values.dataSetName="最近七天消费";
+        return values;
     };
 
     public BarChartValue showWeekPerDayCost_Bar(){
@@ -175,8 +192,9 @@ public class statistics extends CalendarOffset {
 
     }
 
-    public ArrayList<Double> showGlobalPerMonthCost() {
-        ArrayList<Double> costList = new ArrayList<Double>();
+    public LineChartValue showGlobalPerMonthCost() {
+
+        LineChartValue lineChartValue=new LineChartValue();
         CalendarOffset cal = new CalendarOffset();
         String str = cal.getLocalDate();
         TimeValue v= StringToTime(str);
@@ -195,8 +213,8 @@ public class statistics extends CalendarOffset {
                 count+=listCopy.get(cur).getAmount();
                 cur++;
             }
-            costList.add(count);
-
+            lineChartValue.values.add(count);
+            lineChartValue.x_lineName.add(year+"/"+f_month);
 
 
             f_month++;
@@ -205,7 +223,11 @@ public class statistics extends CalendarOffset {
                 f_year++;
             }
         }
-        return costList;
+        lineChartValue.x_lineName.add(lineChartValue.x_lineName.get(lineChartValue.x_lineName.size()-1)+"  -");
+        lineChartValue.x_lineName.remove(lineChartValue.x_lineName.size()-2);
+        lineChartValue.dataSetName="历月消费情况";
+
+        return lineChartValue;
     };
     public BarChartValue showGlobalPerMonthCost_Bar(){
         Map<String,NameWithNum> result=new HashMap<>();
@@ -300,7 +322,17 @@ public class statistics extends CalendarOffset {
             Collections.sort(types);
         }
     }
-
+    public class LineChartValue{
+        public ArrayList<Double> values;//值
+        public String dataSetName;
+        public ArrayList<String> x_lineName;//x轴各个项名字
+        float f;//x轴名字倾斜角度
+        public LineChartValue(){
+            values=new ArrayList<>();
+            x_lineName=new ArrayList<>();
+            f=0;
+        }
+    }
 
 
 }
