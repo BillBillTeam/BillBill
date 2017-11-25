@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Space;
@@ -33,6 +34,8 @@ import android.widget.TextView;
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
+
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private EditText remark_text;
-    private TextView amount_text;
+    private EditText amount_text;
     private StringBuilder amountTextStringBuilder = new StringBuilder();
 
     private Button mButton2;
@@ -116,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        disableAmountTextShowSoftInput();
     }
 
     @Override
@@ -201,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         //数字键盘
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         //显示钱数的
-        amount_text=(TextView)findViewById(R.id.text_Amount) ;
+        amount_text=(EditText)findViewById(R.id.text_Amount) ;
         //显示用户输入的文本的
         remark_text=(EditText)findViewById(R.id.editText2);
 
@@ -337,6 +342,18 @@ public class MainActivity extends AppCompatActivity {
                 showTimePopFormBottom(view);
             }
         });
+
+        // 获得焦点时，强制隐藏当前的系统键盘
+        amount_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(amount_text.getWindowToken(), 0);
+                }
+            }
+        });
+
        addListenerToNumberKeyboard();
     }
 
@@ -615,5 +632,28 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     *  限制系统键盘弹出
+     */
+    private void disableAmountTextShowSoftInput() {
+        Class<EditText> cls = EditText.class;
+        Method method;
+        try {
+            method = cls.getMethod("setShowSoftInputOnFocus", boolean.class);
+            method.setAccessible(true);
+            method.invoke(amount_text, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            method = cls.getMethod("setSoftInputShownOnFocus", boolean.class);
+            method.setAccessible(true);
+            method.invoke(amount_text, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -85,7 +85,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <EditText
                     android:id="@+id/text_Amount"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
