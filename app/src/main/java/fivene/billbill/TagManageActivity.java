@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -166,6 +165,7 @@ public class TagManageActivity extends AppCompatActivity {
                     checkAndPrint(isSuccess);
 
                     isDeleteStatus = false;
+                    ischanged = true;
                 }
                 else{
                     if(hideCount < 15){
@@ -174,9 +174,12 @@ public class TagManageActivity extends AppCompatActivity {
                         expenseType.showToHide(position);
                         dgvHide.addView(view);
                         hideCount++;
+                        ischanged = true;
+                    }
+                    else {
+                        Toast.makeText(TagManageActivity.this,"不显示的标签区域已经填满了",Toast.LENGTH_SHORT).show();
                     }
                 }
-                ischanged = true;
             }
         });
 
@@ -189,6 +192,7 @@ public class TagManageActivity extends AppCompatActivity {
                     checkAndPrint(isSuccess);
 
                     isDeleteStatus = false;
+                    ischanged = true;
                 }
                 else{
                     if(showCount < 14){
@@ -197,9 +201,12 @@ public class TagManageActivity extends AppCompatActivity {
                         expenseType.hideToShow(-position-1);
                         dgvShow.addView(view);
                         showCount++;
+                        ischanged = true;
+                    }
+                    else {
+                        Toast.makeText(TagManageActivity.this,"显示的标签区域已经填满了",Toast.LENGTH_SHORT).show();
                     }
                 }
-                ischanged = true;
             }
         });
 
