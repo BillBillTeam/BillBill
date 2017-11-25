@@ -90,13 +90,8 @@
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:textAlignment="textEnd"
+                    android:hint="输入金额"
                     android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.15" />
 
 
             </LinearLayout>

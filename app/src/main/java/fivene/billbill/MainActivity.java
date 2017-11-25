@@ -52,8 +52,6 @@ import lz.regex.NumCheck;
 
 public class MainActivity extends AppCompatActivity {
 
-   // private ImageView mDefaultImage = null;
-
     private int currentPage=0;
 
     private int currentSelectedTag_pageN;
@@ -93,10 +91,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(this.getString(R.string.mainTitle));
-        }
+
         //获取屏幕信息（不可信）
         DisplayMetrics dm = getResources().getDisplayMetrics();
         globalWidth = dm.widthPixels;
@@ -519,13 +514,17 @@ public class MainActivity extends AppCompatActivity {
                             scrollToDOWN();
                         }
                         TextView textView=(TextView) layout1.getChildAt(1);
-                        System.out.print(textView.getText());
+                        Log.i("标签选择", "onClick: "+textView.getText());
                     }
+                    amount_text.requestFocus();
                 }
             });
         }
     }
 
+    /**
+     * 清除标签选择区域的选中状态
+     */
     private void removeCurrentSelect() {
         LinearLayout layout2 =(LinearLayout) currentSelectedTag;
         int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
