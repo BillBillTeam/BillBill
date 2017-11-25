@@ -334,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftInput(view);
                 showTimePopFormBottom(view);
             }
         });
@@ -343,13 +344,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(amount_text.getWindowToken(), 0);
+                    hideSoftInput(v);
                 }
             }
         });
 
        addListenerToNumberKeyboard();
+    }
+
+    private void hideSoftInput(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void insertNewRecord() {
@@ -521,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
             if(selectedDate.getFirstDate().getTime()!=Calendar.getInstance().getTime()){//no use need to update
 
                 mSelectedDate = selectedDate.getFirstDate();
-                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()));
+                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()).substring(5));
 
                 Log.i("billbill",selectedDate.toString());
 
