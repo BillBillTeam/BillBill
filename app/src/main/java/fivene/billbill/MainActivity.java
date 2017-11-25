@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
@@ -107,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
         initViewPager();
         //添加Listener
         initev();
-        //不可点击记账按钮
-        mButton2.setClickable(false);
         //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
             @Override
@@ -280,27 +279,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
                 //获得用户输入的信息
-                double amount= Double.valueOf(amountTextStringBuilder.toString());
-                String remark=remark_text.getText().toString();
-                String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
-                Bill bill=new Bill(mSelectedDate,type,amount,remark);
-                Log.i("billbill","new bill :"+bill.toString());
-                Expense ex=new Expense(mContext);
-                ex.Insert(bill);
-                new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
-                        .setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？")//设置显示的内容
-                        .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
-                            }
-                        }).setNegativeButton("返回账单",new DialogInterface.OnClickListener() {//添加返回按钮
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {//响应事件
-                    }
+                if(checkInput()){
+                    insertNewRecord();
 
-                }).show();//在按键响应事件中显示此对话框
+                    new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
+                            .setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？")//设置显示的内容
+                            .setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
+                                }
+                            }).setNegativeButton("返回账单",new DialogInterface.OnClickListener() {//添加返回按钮
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {//响应事件
+                        }
+
+                    }).show();//在按键响应事件中显示此对话框
+                }
             }
         });
 
@@ -355,6 +350,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
        addListenerToNumberKeyboard();
+    }
+
+    private void insertNewRecord() {
+        double amount= Double.valueOf(amountTextStringBuilder.toString());
+        String remark=remark_text.getText().toString();
+        String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
+        Bill bill=new Bill(mSelectedDate,type,amount,remark);
+        Log.i("billbill","new bill :"+bill.toString());
+        Expense ex=new Expense(mContext);
+        ex.Insert(bill);
     }
 
 
@@ -480,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
                         TextView textView=(TextView) layout1.getChildAt(1);
                         System.out.print(textView.getText());
 
-                        checkInput();
+                        //checkInput();
                     }
                 }
             });
@@ -550,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
                         amount_text.setText(amountTextStringBuilder);
                     }
                 }
-                checkInput();
+                //checkInput();
             }
         });
         mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {
@@ -578,12 +583,26 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 检查用户输入
      */
-    private void checkInput(){
-        if(currentSelectedTag!=null&&amount_text.getText().toString().length()>0){
-            mButton2.setClickable(true);
+//    private void checkInput(){
+//        if(currentSelectedTag!=null&&amount_text.getText().toString().length()>0){
+//            mButton2.setClickable(true);
+//        }
+//        else{
+//            mButton2.setClickable(false);
+//        }
+//    }
+
+    private boolean checkInput(){
+        if(currentSelectedTag==null){
+            Toast.makeText(this,"请先选择账单类型",Toast.LENGTH_SHORT).show();
+            return false;
         }
-        else{
-            mButton2.setClickable(false);
+        else if(amount_text.getText().toString().length() == 0){
+            Toast.makeText(this,"请输入金额",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
+            return true;
         }
     }
 
