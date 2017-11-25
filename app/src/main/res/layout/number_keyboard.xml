@@ -49,7 +49,7 @@
                     android:id="@+id/btn_c"
                     style="@style/btn_input_amount_style"
                     android:clickable="true"
-                    android:text="C" />
+                    android:text="←" />
             </LinearLayout>
 
             <LinearLayout style="@style/layout_input_amount_style"
@@ -108,10 +108,11 @@
                     android:clickable="true" />
 
                 <Button
-                    android:id="@+id/btn_sub"
+                    android:id="@+id/btn_next"
                     style="@style/btn_input_amount_style"
-                    android:text="-"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:textSize="20sp"
+                    android:text="下一个" />
             </LinearLayout>
 
             <LinearLayout style="@style/layout_input_amount_style"
@@ -132,11 +133,11 @@
                     android:clickable="true" />
 
                 <Button
-                    android:id="@+id/btn_tab"
+                    android:id="@+id/btn_sub"
                     style="@style/btn_input_amount_style"
                     android:layout_marginRight="1dp"
-                    android:text="tab"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:text="-" />
 
                 <Button
                     android:id="@+id/btn_ok"
