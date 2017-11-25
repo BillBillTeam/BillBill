@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText amount_text;
     private StringBuilder amountTextStringBuilder = new StringBuilder();
 
-    private Button mButton2;
-
     private ScrollView mScrollView;
     private View currentSelectedTag;
     private LinearLayout mNumberKeyboard;
@@ -201,8 +199,6 @@ public class MainActivity extends AppCompatActivity {
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
         //弹出时间选择的按钮
         mTimeButton=(Button)findViewById(R.id.time_button);
-        //用户输入完账单的确定按钮
-        mButton2=(Button)findViewById(R.id.Button2);
         //主页面上半部分的三个按钮
         mbt_jump=(Button)findViewById(R.id.button_jump);
         mbt_jump2=(Button)findViewById(R.id.button_jump2);
@@ -280,8 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mButton2.setOnClickListener(listenerWhenFinish);
-
 
         mbt_jump.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,17 +354,27 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //确定按钮的响应事件
+                clearStatus();
             }
         });
-        builder.setNegativeButton("返回账单",new DialogInterface.OnClickListener() {//添加返回按钮
+        builder.setNegativeButton("转到账单",new DialogInterface.OnClickListener() {//添加返回按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //响应事件
+                clearStatus();
+                Intent intent = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
 
         finishDialog = builder.create();
+    }
+
+    private void clearStatus(){
+        removeCurrentSelect();
+        currentSelectedTag = null;
+        amountTextStringBuilder = new StringBuilder();
+        amount_text.setText("");
+        remark_text.setText("");
     }
 
     View.OnClickListener listenerWhenFinish = new View.OnClickListener() {
@@ -492,16 +496,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if(currentSelectedTag!=null){
                             //remove selected change
-                            LinearLayout layout2 =(LinearLayout) currentSelectedTag;
-                            int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
-                            int currentPage=currentSelectedTag_pageN;
-                            int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
-
-                            int picRecID=TagGroupProvider.getPicRecID(finIndex);
-
-                            ((ImageView)layout2.getChildAt(0)).setImageBitmap(IconGetter.getIcon(MainActivity.this,picRecID));
-
-
+                            removeCurrentSelect();
                         }
                         currentSelectedTag=view;
                         //add selected change
@@ -525,12 +520,21 @@ public class MainActivity extends AppCompatActivity {
                         }
                         TextView textView=(TextView) layout1.getChildAt(1);
                         System.out.print(textView.getText());
-
-                        //checkInput();
                     }
                 }
             });
         }
+    }
+
+    private void removeCurrentSelect() {
+        LinearLayout layout2 =(LinearLayout) currentSelectedTag;
+        int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
+        int currentPage=currentSelectedTag_pageN;
+        int finIndex=currentPage* TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+
+        int picRecID=TagGroupProvider.getPicRecID(finIndex);
+
+        ((ImageView)layout2.getChildAt(0)).setImageBitmap(IconGetter.getIcon(MainActivity.this,picRecID));
     }
 
     /**
@@ -596,7 +600,6 @@ public class MainActivity extends AppCompatActivity {
                         amount_text.setText(amountTextStringBuilder);
                     }
                 }
-                //checkInput();
             }
         });
         mNumberKeyboard.findViewById(R.id.btn_c).setOnClickListener(new View.OnClickListener() {

@@ -119,14 +119,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:hint="点击输入备注"
                     android:inputType="textPersonName"
-                    tools:text="bei" />
+                    />
 
-                <Button
-                    android:id="@+id/Button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:clickable="false" />
             </LinearLayout>
 
             <Space
