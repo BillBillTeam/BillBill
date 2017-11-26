@@ -202,6 +202,9 @@ public class statistics extends CalendarOffset {
         int month = v.month;
         int year = v.year;
         ArrayList<IDBill> listCopy = mDBHelper.selectBillByTime(0, 0, 0, year, month,a );
+        if(listCopy.size()==0){
+            return lineChartValue;
+        }
         int f_year=listCopy.get(0).getYear();
         int f_month=listCopy.get(0).getMonth();
 
