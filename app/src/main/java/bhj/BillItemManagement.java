@@ -110,6 +110,8 @@ public class BillItemManagement {
                     layout.removeView((View)billItem.getParent());
                     deleteType=1;
                 }
+                Expense expense=new Expense(context);
+                expense.Delete(bill);
                 //superToast
                 final SuperActivityToast toast= SuperActivityToast.create(context, new Style(), Style.TYPE_BUTTON);
                 toast.setButtonText("撤销")
@@ -121,6 +123,8 @@ public class BillItemManagement {
                                 if(deleteType==0){//re add value to timeline
                                     callback.onCancle(bill.getAmount());
                                 }
+                                Expense expense=new Expense(context);
+                                expense.Insert(bill);
                                 toast.setOnDismissListener(null);
                                 toast.dismiss();
                             }
@@ -135,8 +139,7 @@ public class BillItemManagement {
                         .setOnDismissListener(new SuperToast.OnDismissListener() {
                             @Override
                             public void onDismiss(View view, Parcelable token) {
-                                Expense expense=new Expense(context);
-                                expense.Delete(bill);
+
                             }
                         });
                 if(deleteType==0)

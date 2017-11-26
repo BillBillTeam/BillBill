@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.Space;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,17 +35,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
-import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
-import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
-
 import java.lang.reflect.Method;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import bhj.TagGroupProvider;
-import bhj.TimePopWindow;
+import bhj.TimePickerFragment;
 import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
 import lz.db.Bill;
@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 amount_text.setFocusable(false);
                 adjustSpaceHeight();
                 makePageScrollable();
+                scrollToUP();
 
             }
         });
@@ -437,46 +438,62 @@ public class MainActivity extends AppCompatActivity {
      * @param view view
      */
     public void showTimePopFormBottom(View view) {
-        Pair<Boolean, SublimeOptions> optionsPair = getOptions();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
-        TimePopWindow PopWin = new TimePopWindow(this, bundle);
-        PopWin.setCallback(mFragmentCallback);
-        PopWin.setHeight((int) (globalHeight/2*1.20));
-
-        //设置Popupwindow显示位置（从底部弹出）
-        PopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        //当弹出Popupwindow时，背景变半透明
-        params.alpha=0.7f;
-        getWindow().setAttributes(params);
-        //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
-        PopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        TimePickerFragment.Callback callback=new TimePickerFragment.Callback() {
             @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams params = getWindow().getAttributes();
-                params.alpha=1f;
-                getWindow().setAttributes(params);
+            public void setTime(DatePicker datePicker,int i0, int i1, int i2) {
+                mSelectedDate=new GregorianCalendar(i0,i1,i2);
+                String pat2 = "MM月dd日" ;
+                SimpleDateFormat sdf1 = new SimpleDateFormat(pat2) ; // 实例化模板对象
+
+                mTimeButton.setText(sdf1.format(mSelectedDate.getTime()));
+
+                Log.i("billbill",mSelectedDate.toString());
             }
-        });
+        } ;
+        TimePickerFragment newFragment = new TimePickerFragment();
+        newFragment.setCallBack(callback);
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+
+//        Pair<Boolean, SublimeOptions> optionsPair = getOptions();
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
+//        TimePopWindow PopWin = new TimePopWindow(this, bundle);
+//        PopWin.setCallback(mFragmentCallback);
+//        PopWin.setHeight((int) (globalHeight/2*1.20));
+//
+//        //设置Popupwindow显示位置（从底部弹出）
+//        PopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+//        WindowManager.LayoutParams params = getWindow().getAttributes();
+//        //当弹出Popupwindow时，背景变半透明
+//        params.alpha=0.7f;
+//        getWindow().setAttributes(params);
+//        //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
+//        PopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                WindowManager.LayoutParams params = getWindow().getAttributes();
+//                params.alpha=1f;
+//                getWindow().setAttributes(params);
+//            }
+//        });
     }
 
-    /**
-     * 设置日历的显示参数
-     * @return return
-     */
-    Pair<Boolean, SublimeOptions> getOptions() {
-        SublimeOptions options = new SublimeOptions();
-        int displayOptions = 0;
-        displayOptions |= SublimeOptions.ACTIVATE_DATE_PICKER;
-        options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
-        options.setDisplayOptions(displayOptions);
-        // Enable/disable the date range selection feature
-        options.setCanPickDateRange(false);
-
-        // If 'displayOptions' is zero, the chosen options are not valid
-        return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
-    }
+//    /**
+//     * 设置日历的显示参数
+//     * @return return
+//     */
+//    Pair<Boolean, SublimeOptions> getOptions() {
+//        SublimeOptions options = new SublimeOptions();
+//        int displayOptions = 0;
+//        displayOptions |= SublimeOptions.ACTIVATE_DATE_PICKER;
+//        options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
+//        options.setDisplayOptions(displayOptions);
+//        // Enable/disable the date range selection feature
+//        options.setCanPickDateRange(false);
+//
+//        // If 'displayOptions' is zero, the chosen options are not valid
+//        return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
+//    }
 
     /**
      * 给标签组添加监听事件
@@ -549,35 +566,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     *时间选择的回调函数
-     */
-    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
-        @Override
-        public void onCancelled() {
-            // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
-                                            int hourOfDay, int minute,
-                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
-                                            String recurrenceRule) {
-
-            if(selectedDate.getFirstDate().getTime()!=Calendar.getInstance().getTime()){//no use need to update
-
-                mSelectedDate = selectedDate.getFirstDate();
-                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()).substring(5));
-
-                Log.i("billbill",selectedDate.toString());
-
-            }
-            else{
-                mTimeButton.setText("今天");
-            }
-
-        }
-    };
+//    /**
+//     *时间选择的回调函数
+//     */
+//    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
+//        @Override
+//        public void onCancelled() {
+//            // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
+//        }
+//
+//        @Override
+//        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+//                                            int hourOfDay, int minute,
+//                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+//                                            String recurrenceRule) {
+//
+//            if(selectedDate.getFirstDate().getTime()!=Calendar.getInstance().getTime()){//no use need to update
+//
+//                mSelectedDate = selectedDate.getFirstDate();
+//                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()).substring(5));
+//
+//                Log.i("billbill",selectedDate.toString());
+//
+//            }
+//            else{
+//                mTimeButton.setText("今天");
+//            }
+//
+//        }
+//    };
 
     /**
      * 小键盘的事件响应

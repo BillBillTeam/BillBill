@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:orientation="vertical"
-    app:layout_columnWeight="1"
-    app:layout_rowWeight="1"
+    android:layout_columnWeight="1"
+    android:layout_rowWeight="1"
     >
 
     <ImageView

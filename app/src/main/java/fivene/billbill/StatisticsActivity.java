@@ -39,7 +39,7 @@ public class StatisticsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
-
+        setTitle("数据统计");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext=this;
         layout1=(LinearLayout)findViewById(R.id.tab1_content);

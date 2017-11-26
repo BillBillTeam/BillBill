@@ -1,1 +1,1 @@
-include ':app', ':sublimepickerlibrary', ':draggablegridview', ':draggablegridview', ':library'
+include ':app', ':draggablegridview', ':draggablegridview', ':library'

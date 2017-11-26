@@ -27,6 +27,7 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import bhj.BillItemManagement;
@@ -48,6 +49,7 @@ public class BillListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("消费记录");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bill_list);
@@ -237,12 +239,21 @@ public class BillListActivity extends AppCompatActivity {
             currentToast.dismiss();
         super.onDestroy();
     }
+    private String getdayOfWeek(int year,int month,int day){
+        String[] val={"周日","周一","周二","周三","周四","周五","周六"};
+        Calendar calendar=new GregorianCalendar(year,month-1,day);
+        int dayOfWeek=calendar.get(Calendar.DAY_OF_WEEK);
+        return val[dayOfWeek-1];
+
+    }
 
     private View createTimeLine(int year, int month, int day, double amounts){
         final LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout b_c_layout = (LinearLayout) inflater.inflate(
                 R.layout.bill_column,null).findViewById(R.id.bill_column_layout);
         TextView t_day=(TextView) b_c_layout.findViewById(R.id.textView2);
+        TextView dayOfWeek=(TextView)b_c_layout.findViewById(R.id.textView3);
+        dayOfWeek.setText(getdayOfWeek(year,month,day));
         t_day.setText(month+"月"+day+"日");
 
         TextView t_amount=(TextView) b_c_layout.findViewById(R.id.textView4);
