@@ -41,6 +41,7 @@ import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
 import lz.db.Bill;
 import lz.img.IconGetter;
+import lz.math.Calculator;
 import lz.regex.NumCheck;
 
 /**
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         initListener();
         // 初始化完成提示框
         initFinishDialog();
+        // 初始化快速入口按钮
+        initFastButton();
         //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
             @Override
@@ -208,9 +211,32 @@ public class MainActivity extends AppCompatActivity {
         mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
         //标签组的外面一层
         mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
+    }
 
+    private void  initFastButton(){
+        findViewById(R.id.btn_bill_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentBill = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intentBill);
+            }
+        });
 
+        findViewById(R.id.btn_bill_stat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentStat = new Intent(MainActivity.this,StatisticsActivity.class);
+                MainActivity.this.startActivity(intentStat);
+            }
+        });
 
+        findViewById(R.id.btn_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentTag = new Intent(MainActivity.this,TagManageActivity.class);
+                MainActivity.this.startActivity(intentTag);
+            }
+        });
     }
 
     /**
@@ -362,8 +388,10 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             //获得用户输入的信息
             if(checkInput()){
-                insertNewRecord();
-                finishDialog.show();
+                boolean isSuccess = insertNewRecord();
+                if(isSuccess){
+                    finishDialog.show();
+                }
             }
         }
     };
@@ -380,14 +408,22 @@ public class MainActivity extends AppCompatActivity {
     /**
      *  通过界面上的数据，向数据库插入一条记录
      */
-    private void insertNewRecord() {
-        double amount= Double.valueOf(amountTextStringBuilder.toString());
-        String remark=remark_text.getText().toString();
-        String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
-        Bill bill=new Bill(mSelectedDate,type,amount,remark);
-        Log.i("billbill","new bill :"+bill.toString());
-        Expense ex=new Expense(mContext);
-        ex.Insert(bill);
+    private boolean insertNewRecord() {
+        String exp = amountTextStringBuilder.toString();
+        double amount= Calculator.conversion(exp);
+        if(amount > 0){
+            String remark=remark_text.getText().toString();
+            String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
+            Bill bill=new Bill(mSelectedDate,type,amount,remark);
+            Log.i("billbill","new bill :"+bill.toString());
+            Expense ex=new Expense(mContext);
+            ex.Insert(bill);
+            return true;
+        }
+        else {
+            Toast.makeText(this,"输入的表达式不正确，请重新输入",Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
 
@@ -547,6 +583,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mNumberKeyboard.findViewById(R.id.btn_ok).setOnClickListener(listenerWhenFinish);
+
+        mNumberKeyboard.findViewById(R.id.btn_add).setTag("+");
+        mNumberKeyboard.findViewById(R.id.btn_add).setOnClickListener(NumberClickListener);
+        mNumberKeyboard.findViewById(R.id.btn_sub).setTag("-");
+        mNumberKeyboard.findViewById(R.id.btn_sub).setOnClickListener(NumberClickListener);
 
     }
 

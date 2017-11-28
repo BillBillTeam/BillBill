@@ -15,9 +15,27 @@
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
             android:scaleType="fitCenter"
             android:translationY="-20dp"
             app:srcCompat="@drawable/main_picture" />
+
+        <Button
+            android:id="@+id/btn_bill_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bill_info" />
+
+        <Button
+            android:id="@+id/btn_bill_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bill_stat" />
+
+        <Button
+            android:id="@+id/btn_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_tag_manage" />
     </LinearLayout>
 </LinearLayout>
