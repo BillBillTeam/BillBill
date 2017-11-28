@@ -298,6 +298,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        remark_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(v, InputMethod.SHOW_FORCED);
+            }
+        });
+
         remark_text.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -594,12 +602,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mNumberKeyboard.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remark_text.setFocusable(true);
+                remark_text.setFocusableInTouchMode(true);
+                remark_text.requestFocus();
+            }
+        });
+
         mNumberKeyboard.findViewById(R.id.btn_ok).setOnClickListener(listenerWhenFinish);
 
         mNumberKeyboard.findViewById(R.id.btn_add).setTag("+");
         mNumberKeyboard.findViewById(R.id.btn_add).setOnClickListener(NumberClickListener);
         mNumberKeyboard.findViewById(R.id.btn_sub).setTag("-");
         mNumberKeyboard.findViewById(R.id.btn_sub).setOnClickListener(NumberClickListener);
+
 
     }
 
