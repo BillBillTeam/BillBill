@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         initListener();
         // 初始化完成提示框
         initFinishDialog();
+        // 初始化快速入口按钮
+        initFastButton();
         //添加空白&&添加主页面的上下滑动&&强制回到上半部分
         mScrollView.post(new Runnable() {
             @Override
@@ -208,9 +210,32 @@ public class MainActivity extends AppCompatActivity {
         mFirstPart=(LinearLayout)findViewById(R.id.main_first_part);
         //标签组的外面一层
         mTagGroupContainer=(FrameLayout)findViewById(R.id.tag_group_container);
+    }
 
+    private void  initFastButton(){
+        findViewById(R.id.btn_bill_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentBill = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intentBill);
+            }
+        });
 
+        findViewById(R.id.btn_bill_stat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentStat = new Intent(MainActivity.this,StatisticsActivity.class);
+                MainActivity.this.startActivity(intentStat);
+            }
+        });
 
+        findViewById(R.id.btn_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentTag = new Intent(MainActivity.this,TagManageActivity.class);
+                MainActivity.this.startActivity(intentTag);
+            }
+        });
     }
 
     /**
