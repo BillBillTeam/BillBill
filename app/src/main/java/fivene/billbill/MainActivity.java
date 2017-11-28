@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         //初始化标签选择部分
         initViewPager();
         //添加Listener
-        initev();
+        initListener();
         // 初始化完成提示框
         initFinishDialog();
         //添加空白&&添加主页面的上下滑动&&强制回到上半部分
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 为主界面添加listener
      */
-    private void initev(){
+    private void initListener(){
 
         mbt_jump3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,6 +341,9 @@ public class MainActivity extends AppCompatActivity {
        addListenerToNumberKeyboard();
     }
 
+    /**
+     *  初始化结束询问对话框
+     */
     private void initFinishDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("温馨提示");
@@ -369,6 +372,10 @@ public class MainActivity extends AppCompatActivity {
         finishDialog = builder.create();
     }
 
+    /**
+     *  清除记账相关控件的内容，使其恢复初始状态
+     *  以便以填写下一项记录
+     */
     private void clearStatus(){
         removeCurrentSelect();
         currentSelectedTag = null;
@@ -378,6 +385,10 @@ public class MainActivity extends AppCompatActivity {
         remark_text.setText("");
     }
 
+    /**
+     *  点击事件监听类
+     *  检查输入并将填写的账单存入数据库
+     */
     View.OnClickListener listenerWhenFinish = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -398,6 +409,9 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /**
+     *  通过界面上的数据，向数据库插入一条记录
+     */
     private void insertNewRecord() {
         double amount= Double.valueOf(amountTextStringBuilder.toString());
         String remark=remark_text.getText().toString();
@@ -456,47 +470,7 @@ public class MainActivity extends AppCompatActivity {
         TimePickerFragment newFragment = new TimePickerFragment();
         newFragment.setCallBack(callback);
         newFragment.show(getSupportFragmentManager(), "timePicker");
-
-//        Pair<Boolean, SublimeOptions> optionsPair = getOptions();
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
-//        TimePopWindow PopWin = new TimePopWindow(this, bundle);
-//        PopWin.setCallback(mFragmentCallback);
-//        PopWin.setHeight((int) (globalHeight/2*1.20));
-//
-//        //设置Popupwindow显示位置（从底部弹出）
-//        PopWin.showAtLocation(findViewById(R.id.main_view), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-//        WindowManager.LayoutParams params = getWindow().getAttributes();
-//        //当弹出Popupwindow时，背景变半透明
-//        params.alpha=0.7f;
-//        getWindow().setAttributes(params);
-//        //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
-//        PopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//            @Override
-//            public void onDismiss() {
-//                WindowManager.LayoutParams params = getWindow().getAttributes();
-//                params.alpha=1f;
-//                getWindow().setAttributes(params);
-//            }
-//        });
     }
-
-//    /**
-//     * 设置日历的显示参数
-//     * @return return
-//     */
-//    Pair<Boolean, SublimeOptions> getOptions() {
-//        SublimeOptions options = new SublimeOptions();
-//        int displayOptions = 0;
-//        displayOptions |= SublimeOptions.ACTIVATE_DATE_PICKER;
-//        options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
-//        options.setDisplayOptions(displayOptions);
-//        // Enable/disable the date range selection feature
-//        options.setCanPickDateRange(false);
-//
-//        // If 'displayOptions' is zero, the chosen options are not valid
-//        return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
-//    }
 
     /**
      * 给标签组添加监听事件
@@ -564,9 +538,6 @@ public class MainActivity extends AppCompatActivity {
     private void jumpToTagManageActivity(){
         Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
         MainActivity.this.startActivityForResult(intent,0);
-
-
-
     }
 
 

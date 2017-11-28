@@ -69,6 +69,10 @@ public class IconGetter {
         customIcon = BitmapFactory.decodeResource(context.getResources(),resID);
     }
 
+    /**
+     * 初始化选中图标
+     * @param context 上下文
+     */
     private static void initClickedIcons(Context context){
         String clickedIconName = "clicked_icon";
         ApplicationInfo appInfo = context.getApplicationInfo();

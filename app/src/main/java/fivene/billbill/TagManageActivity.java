@@ -45,7 +45,7 @@ public class TagManageActivity extends AppCompatActivity {
     int showCount;   // 显示标签数量计数
     int hideCount;   // 隐藏标签数量计数
     boolean isDeleteStatus = false;  // 标识是否处于删除状态
-    boolean ischanged = false;       // 标识界面是否被修改
+    boolean isChanged = false;       // 标识界面是否被修改
 
     /** Called when the activity is first created. */
     @Override
@@ -131,7 +131,7 @@ public class TagManageActivity extends AppCompatActivity {
                 finish();
                 break;
             case android.R.id.home :
-                if(ischanged){
+                if(isChanged){
                     quitDialog.show();
                 }
                 else{
@@ -148,14 +148,14 @@ public class TagManageActivity extends AppCompatActivity {
         dgvShow.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
                 expenseType.moveShowType(oldIndex,newIndex);
-                ischanged = true;
+                isChanged = true;
             }
         });
         dgvHide.setOnRearrangeListener(new DraggableGridView.OnRearrangeListener() {
             @Override
             public void onRearrange(int oldIndex, int newIndex) {
                 expenseType.moveHideType(-oldIndex-1,-newIndex-1);
-                ischanged = true;
+                isChanged = true;
             }
         });
 
@@ -168,7 +168,7 @@ public class TagManageActivity extends AppCompatActivity {
                     checkAndPrint(isSuccess);
 
                     isDeleteStatus = false;
-                    ischanged = true;
+                    isChanged = true;
                 }
                 else{
                     if(hideCount < 15){
@@ -177,7 +177,7 @@ public class TagManageActivity extends AppCompatActivity {
                         expenseType.showToHide(position);
                         dgvHide.addView(view);
                         hideCount++;
-                        ischanged = true;
+                        isChanged = true;
                     }
                     else {
                         Toast.makeText(TagManageActivity.this,"不显示的标签区域已经填满了",Toast.LENGTH_SHORT).show();
@@ -195,7 +195,7 @@ public class TagManageActivity extends AppCompatActivity {
                     checkAndPrint(isSuccess);
 
                     isDeleteStatus = false;
-                    ischanged = true;
+                    isChanged = true;
                 }
                 else{
                     if(showCount < 14){
@@ -204,7 +204,7 @@ public class TagManageActivity extends AppCompatActivity {
                         expenseType.hideToShow(-position-1);
                         dgvShow.addView(view);
                         showCount++;
-                        ischanged = true;
+                        isChanged = true;
                     }
                     else {
                         Toast.makeText(TagManageActivity.this,"显示的标签区域已经填满了",Toast.LENGTH_SHORT).show();
@@ -215,6 +215,9 @@ public class TagManageActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 为FloatingActionButton设置事件监听
+     */
     private void setFAction(){
         fActionNew.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,7 +251,7 @@ public class TagManageActivity extends AppCompatActivity {
                         expenseType.InsertType(name);
                         dgvShow.addView(getCustomTypeImageView(name));
                         Toast.makeText(TagManageActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
-                        ischanged = true;
+                        isChanged = true;
                     }
                 } catch (Exception e) {
                     Toast.makeText(TagManageActivity.this,"数据库异常，请稍后再试",Toast.LENGTH_SHORT).show();
@@ -262,7 +265,7 @@ public class TagManageActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(ischanged){
+            if(isChanged){
                 quitDialog.show();
             }
         }
