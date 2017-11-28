@@ -13,6 +13,8 @@ import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 
+import java.text.DecimalFormat;
+
 import fivene.billbill.R;
 import lhq.ie.Expense;
 import lhq.ie.ExpenseType;
@@ -70,7 +72,9 @@ public class BillItemManagement {
         img.setImageBitmap(IconGetter.getIcon(context,expenseType.searchRes_ID(bill.getType())));
         Type.setText(bill.getType());
         mark.setText(bill.getRemark());
-        number.setText(String.valueOf((float)bill.getAmount()));
+        DecimalFormat df   =     new   DecimalFormat( "################0.00");
+        String   temp     =   df.format(bill.getAmount());
+        number.setText(temp);
 
         //编辑账单数据
         billItem.findViewById(R.id.star).setOnClickListener(new View.OnClickListener() {
