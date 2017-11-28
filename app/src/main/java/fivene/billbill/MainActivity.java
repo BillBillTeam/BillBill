@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setElevation(0);
 
         //获取屏幕信息（不可信）
         DisplayMetrics dm = getResources().getDisplayMetrics();
