@@ -64,10 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
 
     private Button mTimeButton;
-    private Button mbt_jump;
-    private Button mbt_jump2;
-    private Button mbt_jump3;
-
 
     private EditText remark_text;
     private EditText amount_text;
@@ -159,13 +155,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.item_setting:
-                Intent intentSetting = new Intent(MainActivity.this,SettingsActivity.class);
-                MainActivity.this.startActivity(intentSetting);
+            case R.id.item_bill:
+                Intent intentBill = new Intent(MainActivity.this,BillListActivity.class);
+                MainActivity.this.startActivity(intentBill);
+                return true;
+            case R.id.item_stat:
+                Intent intentStat = new Intent(MainActivity.this,StatisticsActivity.class);
+                MainActivity.this.startActivity(intentStat);
                 return true;
             case R.id.item_about:
-                Intent intentSearch = new Intent(MainActivity.this,AboutActivity.class);
-                MainActivity.this.startActivity(intentSearch);
+                Intent intentAbout = new Intent(MainActivity.this,AboutActivity.class);
+                MainActivity.this.startActivity(intentAbout);
                 return true;
             default:
                 return true;
@@ -193,10 +193,6 @@ public class MainActivity extends AppCompatActivity {
         mScrollView =(ScrollView)findViewById(R.id.mainScrollView);
         //弹出时间选择的按钮
         mTimeButton=(Button)findViewById(R.id.time_button);
-        //主页面上半部分的三个按钮
-        mbt_jump=(Button)findViewById(R.id.button_jump);
-        mbt_jump2=(Button)findViewById(R.id.button_jump2);
-        mbt_jump3=(Button)findViewById(R.id.button_jump3);
         //数字键盘
         mNumberKeyboard=(LinearLayout)findViewById(R.id.table_num);
         //显示钱数的
@@ -260,34 +256,6 @@ public class MainActivity extends AppCompatActivity {
      * 为主界面添加listener
      */
     private void initListener(){
-
-        mbt_jump3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //just for test
-                Intent intent = new Intent(MainActivity.this,StatisticsActivity.class);
-                MainActivity.this.startActivity(intent);
-
-            }
-        });
-
-        mbt_jump.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,BillListActivity.class);
-                MainActivity.this.startActivity(intent);
-            }
-        });
-
-        mbt_jump2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,TagManageActivity.class);
-                MainActivity.this.startActivityForResult(intent,0);
-
-
-            }
-        });
         //控制
         remark_text.setOnClickListener(new View.OnClickListener() {
             @Override
