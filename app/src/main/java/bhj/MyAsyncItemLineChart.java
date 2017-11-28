@@ -9,12 +9,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
-
 import fivene.billbill.R;
 import lhq.ie.ExpenseType;
 import lz.img.IconGetter;
-import yzj.t.statistics;
+import yzj.t.Statistics;
 
 /**
  * Created by mary kt on 17-11-23.
@@ -26,23 +24,26 @@ public class MyAsyncItemLineChart {
     private ProgressBar progressBar;
     private Context context;
     private LinearLayout layout;
-    private statistics.BarChartValue barChartValue;
+    private Statistics.BarChartValue barChartValue;
     private Callback mycallback;
 
+    /**
+     * 通过这个回调函数来设置表格需要的数据
+     */
     public interface Callback{
         /**
          * 通过回调函数获得数据
          * @return BarChartValue 中存储着表需要的各种数据
          */
-        statistics.BarChartValue getData();
+        Statistics.BarChartValue getData();
     }
 
     /**
-     * 初始化
+     * 创建横向柱状图
      * @param context 上下文
      * @param progressBar 界面上的进度条（图表加载完成后要隐藏它）
      * @param linearLayout 包含图表的layout
-     * @param callback 回调函数
+     * @param callback 通过这个回调函数来设置表格需要的数据
      */
     public MyAsyncItemLineChart(Context context, ProgressBar progressBar, LinearLayout linearLayout, Callback callback){
         this.context=context;
@@ -112,7 +113,7 @@ public class MyAsyncItemLineChart {
             type.setText(barChartValue.types.get(i).name);
             count.setText(String.valueOf(barChartValue.types.get(i).value));
             per.setText(((int)((barChartValue.types.get(i).value/barChartValue.sum)*1000))/10+"%");
-            num.setText(barChartValue.types.get(i).num+"笔");
+            num.setText(String.valueOf( barChartValue.types.get(i).num)+"笔");
             progressBar1.setProgress((int)(barChartValue.types.get(i).value/barChartValue.sum*1000));
 
 

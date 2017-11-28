@@ -29,6 +29,9 @@ import lz.db.CustomType;
 import lz.img.IconGetter;
 import top.lizec.draggablegridview.DraggableGridView;
 
+/**
+ * 标签管理界面
+ */
 public class TagManageActivity extends AppCompatActivity {
     private static final String TAG = "TagManageActivity";
     DraggableGridView dgvShow;

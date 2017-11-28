@@ -7,7 +7,7 @@ import android.os.AsyncTask;
  * 对原生异步类进行包装 变成回调函数实现
  */
 
-public class myAsyncTask extends AsyncTask {
+ class myAsyncTask extends AsyncTask {
     private Callback mCallback;
     public void setCallback(Callback callback) {
         mCallback = callback;
@@ -28,6 +28,9 @@ public class myAsyncTask extends AsyncTask {
 
     }
 
+    /**
+     * 实现这个回调函数来实现异步调用
+     */
     public interface Callback {
         /**
          * 预先准备部分

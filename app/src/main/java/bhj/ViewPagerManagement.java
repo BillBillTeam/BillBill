@@ -31,7 +31,7 @@ public class ViewPagerManagement {
     private ImageView[] mImageViews = null;
 
     /**
-     * 初始化
+     * 提供主界面上的标签ui
      * @param mTagGroupPager Viewpager
      * @param globalWidth 屏幕宽度
      * @param mCallback 回调函数
@@ -47,6 +47,9 @@ public class ViewPagerManagement {
 
     }
 
+    /**
+     * 为ViewPager的当前页添加监听事件
+     */
     public interface Callback{
         /**
          * 为ViewPager的当前页添加监听事件

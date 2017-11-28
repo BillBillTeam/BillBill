@@ -4,31 +4,38 @@ package bhj;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.telecom.Call;
-import android.text.format.DateFormat;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.Window;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
 /**
  * Created by mary kt on 17-11-26.
+ * 时间选择器
  */
 public class TimePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
     private Callback callback;
-    public interface Callback{
 
+    /**
+     * 用户选择时间以后的调用
+     */
+    public interface Callback{
+        /**
+         * 用户按下确定后的回调函数
+         * @param datePicker 控件
+         * @param i0 年
+         * @param i1 月
+         * @param i2 日
+         */
         void setTime(DatePicker datePicker,int i0,int i1,int i2);
     }
+
+    /**
+     * 设置回调函数(用户选择完时间调用)
+     * @param callBack
+     */
     public void  setCallBack(Callback callBack){
         this.callback=callBack;
     }

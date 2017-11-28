@@ -27,18 +27,17 @@ import lz.db.IDBill;
  * Created by ~ on 2017/11/15.
  */
 
-public class statistics extends CalendarOffset {
+public class Statistics extends CalendarOffset {
     DBHelper mDBHelper;
     Context context;
 
-    public statistics(Context context) {
+    public Statistics(Context context) {
         this.mDBHelper = new DBHelper(context);
         this.context=context;
     }
-
     /**
-     * 折线图一月统计图
-     * @return
+     * 获得折线图当月统计图数据
+     * @return 存储数据的对象
      */
     public LineChartValue showMonthPerDayCost() {
         LineChartValue lineChartValue=new LineChartValue();
@@ -66,7 +65,10 @@ public class statistics extends CalendarOffset {
         lineChartValue.dataSetName="本月消费情况";
         return lineChartValue;
     }
-
+    /**
+     * 获得横向柱状图当月统计图数据
+     * @return 存储数据的对象
+     */
     public BarChartValue showMonthPerDayCost_Bar(){
         Map<String,NameWithNum> result=new HashMap<>();
 
@@ -108,7 +110,13 @@ public class statistics extends CalendarOffset {
 
     }
 
-
+    /**
+     * 获得当前日期是星期几
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @return String 星期几
+     */
     private String getdayOfWeek(int year,int month,int day){
         String[] val={"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
         Calendar calendar=new GregorianCalendar(year,month-1,day);
@@ -119,8 +127,8 @@ public class statistics extends CalendarOffset {
 
 
     /**
-     * 折线图7天统计数据
-     * @return
+     * 获得折线图七天统计图数据
+     * @return 存储数据的对象
      */
     public LineChartValue  showWeekPerDayCost() {
 
@@ -150,7 +158,10 @@ public class statistics extends CalendarOffset {
         values.dataSetName="最近七天消费";
         return values;
     };
-
+    /**
+     * 获得横向柱状图七天统计图数据
+     * @return 存储数据的对象
+     */
     public BarChartValue showWeekPerDayCost_Bar(){
         Map<String,NameWithNum> result=new HashMap<>();
 
@@ -191,7 +202,10 @@ public class statistics extends CalendarOffset {
       return  values;
 
     }
-
+    /**
+     * 获得折线图总统计图数据
+     * @return 存储数据的对象
+     */
     public LineChartValue showGlobalPerMonthCost() {
 
         LineChartValue lineChartValue=new LineChartValue();
@@ -232,6 +246,10 @@ public class statistics extends CalendarOffset {
 
         return lineChartValue;
     };
+    /**
+     * 获得横向柱状图总统计图数据
+     * @return 存储数据的对象
+     */
     public BarChartValue showGlobalPerMonthCost_Bar(){
         Map<String,NameWithNum> result=new HashMap<>();
 

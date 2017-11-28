@@ -4,42 +4,35 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.text.InputType;
-import android.view.KeyEvent;
-import android.view.inputmethod.InputMethod;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
-import android.widget.Space;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Method;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import bhj.TagGroupProvider;
@@ -49,6 +42,10 @@ import lhq.ie.Expense;
 import lz.db.Bill;
 import lz.img.IconGetter;
 import lz.regex.NumCheck;
+
+/**
+ * 主界面
+ */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -449,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
             public void setTime(DatePicker datePicker,int i0, int i1, int i2) {
                 mSelectedDate=new GregorianCalendar(i0,i1,i2);
                 String pat2 = "MM月dd日" ;
-                SimpleDateFormat sdf1 = new SimpleDateFormat(pat2) ; // 实例化模板对象
+                SimpleDateFormat sdf1 = new SimpleDateFormat(pat2, Locale.CHINA) ; // 实例化模板对象
 
                 mTimeButton.setText(sdf1.format(mSelectedDate.getTime()));
 
@@ -572,35 +569,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    /**
-//     *时间选择的回调函数
-//     */
-//    TimePopWindow.Callback mFragmentCallback = new TimePopWindow.Callback() {
-//        @Override
-//        public void onCancelled() {
-//            // rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
-//        }
-//
-//        @Override
-//        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
-//                                            int hourOfDay, int minute,
-//                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
-//                                            String recurrenceRule) {
-//
-//            if(selectedDate.getFirstDate().getTime()!=Calendar.getInstance().getTime()){//no use need to update
-//
-//                mSelectedDate = selectedDate.getFirstDate();
-//                mTimeButton.setText(DateFormat.getDateInstance().format(mSelectedDate.getTime()).substring(5));
-//
-//                Log.i("billbill",selectedDate.toString());
-//
-//            }
-//            else{
-//                mTimeButton.setText("今天");
-//            }
-//
-//        }
-//    };
+
 
     /**
      * 小键盘的事件响应

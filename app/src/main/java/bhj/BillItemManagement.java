@@ -3,23 +3,19 @@ package bhj;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Parcelable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
-import com.github.johnpersano.supertoasts.library.SuperToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 
 import fivene.billbill.R;
 import lhq.ie.Expense;
 import lhq.ie.ExpenseType;
-import lz.db.Bill;
 import lz.db.IDBill;
 import lz.img.IconGetter;
 
@@ -31,14 +27,13 @@ import lz.img.IconGetter;
  */
 
 public class BillItemManagement {
-    private Bill bill;
     private Callback callback;
     private MySwipeLayout billItem;
-    static MySwipeLayout selectedItem=null;
+    private static MySwipeLayout selectedItem=null;
 
     /**
      * 初始化
-     * @param context
+     * @param context 上下文
      * @param bill 一条账单数据
      * @param call 回调函数
      */
@@ -125,7 +120,6 @@ public class BillItemManagement {
                                 }
                                 Expense expense=new Expense(context);
                                 expense.Insert(bill);
-                                toast.setOnDismissListener(null);
                                 toast.dismiss();
                             }
 
@@ -135,13 +129,7 @@ public class BillItemManagement {
                         .setDuration(Style.DURATION_LONG)
                         .setFrame(Style.FRAME_LOLLIPOP)
                         .setColor(PaletteUtils.getSolidColor(PaletteUtils.GREY))
-                        .setAnimations(Style.ANIMATIONS_POP)
-                        .setOnDismissListener(new SuperToast.OnDismissListener() {
-                            @Override
-                            public void onDismiss(View view, Parcelable token) {
-
-                            }
-                        });
+                        .setAnimations(Style.ANIMATIONS_POP);
                 if(deleteType==0)
                     callback.onDelete(bill.getAmount(),toast);
                         toast.show();
@@ -163,9 +151,9 @@ public class BillItemManagement {
 
     /**
      * 回调函数
-     * 1.删除
-     * 2.编辑
-     * 3.取消删除
+     * 1.删除事件
+     * 2.编辑事件
+     * 3.取消删除事件
      */
     public interface Callback{
         /**

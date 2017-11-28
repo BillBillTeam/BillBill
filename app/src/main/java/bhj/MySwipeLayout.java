@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by fanrunqi on 2016/6/26.
  * edit by marykt on 2017/11/16
+ * 用于账单列表的一条数据展示的ui
  * add an expand or close signal on Callback
  */
 public class MySwipeLayout extends LinearLayout {
@@ -47,6 +48,10 @@ public class MySwipeLayout extends LinearLayout {
     public void setCallback(Callback callback){
         this.callback=callback;
     }
+
+    /**
+     * 用户选中或取消选中的事件
+     */
     public interface Callback{
        void OnExpend();
         void OnShrink();
@@ -107,11 +112,7 @@ public class MySwipeLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(isHorizontalMove){
-
-            return true;
-        }
-        return super.onInterceptTouchEvent(ev);
+        return isHorizontalMove|| super.onInterceptTouchEvent(ev);
     }
 
     @Override

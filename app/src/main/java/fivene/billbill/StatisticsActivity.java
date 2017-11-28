@@ -9,12 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 
-import java.util.ArrayList;
-
 import bhj.MyAsyncColoredLineChart;
 import bhj.MyAsyncItemLineChart;
-import yzj.t.statistics;
+import yzj.t.Statistics;
 
+/**
+ * 统计界面
+ */
 public class StatisticsActivity extends AppCompatActivity {
     //three tab context
     LinearLayout layout1;
@@ -40,7 +41,8 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         setTitle("数据统计");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext=this;
         layout1=(LinearLayout)findViewById(R.id.tab1_content);
         layout2=(LinearLayout)findViewById(R.id.tab2_content);
@@ -112,11 +114,15 @@ public class StatisticsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 加载七天统计数据
+     */
     private void loadTab1(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public statistics.LineChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.LineChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
                 return s.showWeekPerDayCost();
 
             }
@@ -145,8 +151,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
             @Override
-            public statistics.BarChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.BarChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
 
                 return s.showWeekPerDayCost_Bar();
             }
@@ -157,11 +163,15 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * 加载月统计数据
+     */
     private void loadTab2(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public statistics.LineChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.LineChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
                 return s.showMonthPerDayCost();
 
             }
@@ -180,8 +190,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
             @Override
-            public statistics.BarChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.BarChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
 
                 return s.showMonthPerDayCost_Bar();
             }
@@ -192,11 +202,15 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * 加载总统计数据
+     */
     private void loadTab3(){
         MyAsyncColoredLineChart.Callback callback=new MyAsyncColoredLineChart.Callback() {
             @Override
-            public statistics.LineChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.LineChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
                 return s.showGlobalPerMonthCost();
 
             }
@@ -213,8 +227,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
             @Override
-            public statistics.BarChartValue getData() {
-                statistics s=new statistics(StatisticsActivity.this);
+            public Statistics.BarChartValue getData() {
+                Statistics s=new Statistics(StatisticsActivity.this);
 
                 return s.showGlobalPerMonthCost_Bar();
             }

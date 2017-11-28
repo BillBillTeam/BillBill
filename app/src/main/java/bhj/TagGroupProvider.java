@@ -2,16 +2,15 @@ package bhj;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import fivene.billbill.R;
 import lz.db.CustomType;
@@ -32,7 +31,7 @@ public class TagGroupProvider {
     private int width;
     private Context context;
     /**
-     * chisinau
+     * 为ViewPagermanagement类提供数据
      * @param context 上下文
      * @param tagList 标签数据
      */
@@ -49,7 +48,7 @@ public class TagGroupProvider {
 
     /**
      * 获取存储图片信息的数组大小
-     * @return
+     * @return size
      */
     public static int getPicRecSize(){
         return PicPostion.size();
@@ -112,7 +111,7 @@ public class TagGroupProvider {
 
     /**
      * 创建新的tag_with_name 实例并初始化相关数据
-     * @param inflater
+     * @param inflater 布局注入器
      * @param text 标签名
      * @param bitmap 标签的图片
      * @return 整个视图

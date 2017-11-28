@@ -1,27 +1,20 @@
 package fivene.billbill;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.annotation.ColorInt;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
@@ -31,13 +24,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import bhj.BillItemManagement;
-import bhj.myAsyncTask;
 import lhq.ie.Expense;
 import lhq.ie.ExpenseType;
-import lz.db.Bill;
 import lz.db.CustomType;
 import lz.db.IDBill;
-import lz.regex.NumCheck;
 
 /**
  * 账单显示界面
@@ -50,8 +40,8 @@ public class BillListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("消费记录");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bill_list);
 
         final LayoutInflater inflater = LayoutInflater.from(this);
@@ -59,6 +49,10 @@ public class BillListActivity extends AppCompatActivity {
         createViews();
 
     }
+
+    /**
+     * 初始化消费记录
+     */
     private void createViews(){
         //从树据库查询
         Expense expense=new Expense(this);
@@ -140,6 +134,11 @@ public class BillListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 显示编辑账单界面
+     * @param bill 被编辑的数据
+     */
     private void showItemEidtor(final IDBill bill){
         final View dialgoView = View.inflate(this, R.layout.bill_eidtor, null); //初始化输入对话框的布局
 
@@ -153,7 +152,7 @@ public class BillListActivity extends AppCompatActivity {
         final Spinner sp=(Spinner) dialgoView.findViewById(R.id.spinner);
         final DatePicker datePicker=(DatePicker)dialgoView.findViewById(R.id.datePicker2);
 
-        amount.setText(""+bill.getAmount());
+        amount.setText(String.valueOf( bill.getAmount()));
         amount.setInputType(EditorInfo.TYPE_CLASS_PHONE);
 
         mark.setText(bill.getRemark());
@@ -162,7 +161,7 @@ public class BillListActivity extends AppCompatActivity {
         ExpenseType expenseType =new ExpenseType(this);
         ArrayList<CustomType> typeArrayList=expenseType.getAllShowExpenseType();
         for(int i=0;i<typeArrayList.size();i++){
-            if(typeArrayList.get(i).getType()!=bill.getType()){
+            if(!typeArrayList.get(i).getType().equals(  bill.getType())){
 
                 list.add(typeArrayList.get(i).getType());
             }
@@ -170,7 +169,7 @@ public class BillListActivity extends AppCompatActivity {
         }
         typeArrayList=expenseType.getAllHideExpenseType();
         for(int i=0;i<typeArrayList.size();i++){
-            if(typeArrayList.get(i).getType()!=bill.getType()){
+            if(!typeArrayList.get(i).getType().equals( bill.getType())){
 
                 list.add(typeArrayList.get(i).getType());
             }
@@ -239,6 +238,14 @@ public class BillListActivity extends AppCompatActivity {
             currentToast.dismiss();
         super.onDestroy();
     }
+
+    /**
+     * 通过日期获得星期几
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @return String 日期
+     */
     private String getdayOfWeek(int year,int month,int day){
         String[] val={"周日","周一","周二","周三","周四","周五","周六"};
         Calendar calendar=new GregorianCalendar(year,month-1,day);
@@ -247,6 +254,14 @@ public class BillListActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 创建时间条
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @param amounts 总支出
+     * @return 创建好的VIEW
+     */
     private View createTimeLine(int year, int month, int day, double amounts){
         final LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout b_c_layout = (LinearLayout) inflater.inflate(
@@ -257,7 +272,7 @@ public class BillListActivity extends AppCompatActivity {
         t_day.setText(month+"月"+day+"日");
 
         TextView t_amount=(TextView) b_c_layout.findViewById(R.id.textView4);
-        t_amount.setText(""+amounts);
+        t_amount.setText(String.valueOf( amounts));
         return b_c_layout;
     }
 }
