@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intentTag);
             }
         });
+        //findViewById(R.id.btn_next)
     }
 
     /**
@@ -300,8 +301,9 @@ public class MainActivity extends AppCompatActivity {
         remark_text.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+                if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                     //获得用户输入的信息
+                    Log.i("KeEvent",event.toString());
                     if(checkInput()){
                         insertNewRecord();
                         finishDialog.show();
@@ -410,7 +412,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean insertNewRecord() {
         String exp = amountTextStringBuilder.toString();
-        double amount= Calculator.conversion(exp);
+        double amount;
+        try{
+            amount = Double.parseDouble(exp);
+        }catch (Exception e){
+            amount= Calculator.conversion(exp);
+        }
+
         if(amount > 1000000){
             Toast.makeText(this,"单笔最大金额不超过100万，请重新输入",Toast.LENGTH_SHORT).show();
             return false;
