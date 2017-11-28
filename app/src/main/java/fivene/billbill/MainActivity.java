@@ -411,6 +411,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean insertNewRecord() {
         String exp = amountTextStringBuilder.toString();
         double amount= Calculator.conversion(exp);
+        if(amount > 1000000){
+            Toast.makeText(this,"单笔最大金额不超过100万，请重新输入",Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if(amount > 0){
             String remark=remark_text.getText().toString();
             String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
