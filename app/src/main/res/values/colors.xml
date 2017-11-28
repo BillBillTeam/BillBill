@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00A1E9</color>
     <color name="colorAccent">#A09C9C</color>
     <color name="iconBackground">#A09C9C</color>
+    <color name="spilt_tag">#A29F9C</color>
     <color name="red">#FF3B00</color>
     <color name="red_press">#990000</color>
 </resources>

@@ -17,7 +17,8 @@
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tag_manager_show" />
+            android:text="@string/tag_manager_show"
+            android:background="@color/spilt_tag"/>
 
         <top.lizec.draggablegridview.DraggableGridView
             android:id="@+id/vgvShow"
@@ -33,7 +34,8 @@
             android:id="@+id/textView12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tag_manager_hide" />
+            android:text="@string/tag_manager_hide"
+            android:background="@color/spilt_tag" />
 
         <top.lizec.draggablegridview.DraggableGridView
             android:id="@+id/vgvHide"
