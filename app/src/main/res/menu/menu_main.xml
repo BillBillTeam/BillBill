@@ -2,9 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_setting"
-        android:title="设置" />
+        android:id="@+id/item_bill"
+        android:title="@string/bill_info" />
+    <item
+        android:id="@+id/item_stat"
+        android:title="@string/bill_stat" />
     <item
         android:id="@+id/item_about"
-        android:title="关于" />
+        android:title="@string/about_this_app" />
 </menu>
