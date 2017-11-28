@@ -41,6 +41,7 @@ import bhj.ViewPagerManagement;
 import lhq.ie.Expense;
 import lz.db.Bill;
 import lz.img.IconGetter;
+import lz.math.Calculator;
 import lz.regex.NumCheck;
 
 /**
@@ -387,8 +388,10 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             //获得用户输入的信息
             if(checkInput()){
-                insertNewRecord();
-                finishDialog.show();
+                boolean isSuccess = insertNewRecord();
+                if(isSuccess){
+                    finishDialog.show();
+                }
             }
         }
     };
@@ -405,14 +408,22 @@ public class MainActivity extends AppCompatActivity {
     /**
      *  通过界面上的数据，向数据库插入一条记录
      */
-    private void insertNewRecord() {
-        double amount= Double.valueOf(amountTextStringBuilder.toString());
-        String remark=remark_text.getText().toString();
-        String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
-        Bill bill=new Bill(mSelectedDate,type,amount,remark);
-        Log.i("billbill","new bill :"+bill.toString());
-        Expense ex=new Expense(mContext);
-        ex.Insert(bill);
+    private boolean insertNewRecord() {
+        String exp = amountTextStringBuilder.toString();
+        double amount= Calculator.conversion(exp);
+        if(amount > 0){
+            String remark=remark_text.getText().toString();
+            String type=((TextView)currentSelectedTag.findViewById(R.id.tag_name)).getText().toString();
+            Bill bill=new Bill(mSelectedDate,type,amount,remark);
+            Log.i("billbill","new bill :"+bill.toString());
+            Expense ex=new Expense(mContext);
+            ex.Insert(bill);
+            return true;
+        }
+        else {
+            Toast.makeText(this,"输入的表达式不正确，请重新输入",Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
 
@@ -572,6 +583,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mNumberKeyboard.findViewById(R.id.btn_ok).setOnClickListener(listenerWhenFinish);
+
+        mNumberKeyboard.findViewById(R.id.btn_add).setTag("+");
+        mNumberKeyboard.findViewById(R.id.btn_add).setOnClickListener(NumberClickListener);
+        mNumberKeyboard.findViewById(R.id.btn_sub).setTag("-");
+        mNumberKeyboard.findViewById(R.id.btn_sub).setOnClickListener(NumberClickListener);
 
     }
 
