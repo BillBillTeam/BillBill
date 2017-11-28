@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -90,7 +91,9 @@ public class BillListActivity extends AppCompatActivity {
                         }
                         currentToast=toast;
                         TextView view=(TextView)TimeLine.findViewById(R.id.textView4);
-                        view.setText(String.valueOf((float)(Double.valueOf(view.getText().toString())-amount)));
+                        DecimalFormat df   =     new   DecimalFormat("#########0.00");
+                        String   temp     =   df.format((Double.valueOf(view.getText().toString())-amount));
+                        view.setText(temp);
                     }
 
                     @Override
@@ -103,7 +106,9 @@ public class BillListActivity extends AppCompatActivity {
                     public void onCancle(double amount) {
 
                         TextView view=(TextView)TimeLine.findViewById(R.id.textView4);
-                        view.setText(String.valueOf((float)(Double.valueOf(view.getText().toString())+amount)));
+                        DecimalFormat df   =     new   DecimalFormat("################0.00");
+                        String   temp     =   df.format((Double.valueOf(view.getText().toString())+amount));
+                        view.setText(temp);
 
                     }
                 };
@@ -151,8 +156,11 @@ public class BillListActivity extends AppCompatActivity {
         final EditText mark = (EditText)dialgoView.findViewById(R.id.editText_mark);
         final Spinner sp=(Spinner) dialgoView.findViewById(R.id.spinner);
         final DatePicker datePicker=(DatePicker)dialgoView.findViewById(R.id.datePicker2);
-
-        amount.setText(String.valueOf( bill.getAmount()));
+        final Calendar c = Calendar.getInstance();
+        datePicker.setMaxDate(c.getTime().getTime());
+        DecimalFormat df   =     new   DecimalFormat( "################0.00");
+        String   temp     =   df.format(bill.getAmount());
+        amount.setText(temp);
         amount.setInputType(EditorInfo.TYPE_CLASS_PHONE);
 
         mark.setText(bill.getRemark());
@@ -272,7 +280,9 @@ public class BillListActivity extends AppCompatActivity {
         t_day.setText(month+"月"+day+"日");
 
         TextView t_amount=(TextView) b_c_layout.findViewById(R.id.textView4);
-        t_amount.setText(String.valueOf( amounts));
+        DecimalFormat df   =     new   DecimalFormat("################0.00");
+        String   temp     =   df.format(amounts);
+        t_amount.setText(temp);
         return b_c_layout;
     }
 }

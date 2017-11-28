@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="250dp"
             android:scaleType="fitCenter"
-            android:translationY="-20dp"
+            android:translationY="-13dp"
             app:srcCompat="@drawable/main_picture" />
 
         <Button

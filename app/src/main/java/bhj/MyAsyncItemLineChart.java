@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import java.text.DecimalFormat;
+
 import fivene.billbill.R;
 import lhq.ie.ExpenseType;
 import lz.img.IconGetter;
@@ -111,7 +113,9 @@ public class MyAsyncItemLineChart {
             img.setImageBitmap(IconGetter.getClickedIcon(context,expenseType.searchRes_ID(barChartValue.types.get(i).name)));
 
             type.setText(barChartValue.types.get(i).name);
-            count.setText(String.valueOf(barChartValue.types.get(i).value));
+            DecimalFormat df   =     new   DecimalFormat("################0.00");
+            String   temp     =   df.format(barChartValue.types.get(i).value);
+            count.setText(temp);
             per.setText(((int)((barChartValue.types.get(i).value/barChartValue.sum)*1000))/10+"%");
             num.setText(String.valueOf( barChartValue.types.get(i).num)+"笔");
             progressBar1.setProgress((int)(barChartValue.types.get(i).value/barChartValue.sum*1000));
