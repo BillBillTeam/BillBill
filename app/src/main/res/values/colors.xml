@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#00A1E9</color>
     <color name="colorPrimaryDark">#00A1E9</color>
-    <color name="colorAccent">#A09C9C</color>
+    <color name="colorAccent">#848485</color>
     <color name="iconBackground">#A09C9C</color>
     <color name="spilt_tag">#e1e0e0</color>
     <color name="red">#FF3B00</color>
