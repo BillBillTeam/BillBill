@@ -234,8 +234,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_tag).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentTag = new Intent(MainActivity.this,TagManageActivity.class);
-                MainActivity.this.startActivity(intentTag);
+                jumpToTagManageActivity();
             }
         });
         //findViewById(R.id.btn_next)
