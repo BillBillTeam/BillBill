@@ -3,6 +3,7 @@
     android:id="@+id/bill_column_layout"
     android:layout_width="match_parent"
     android:layout_height="20dp"
+    android:background="@color/spilt_tag"
     android:orientation="horizontal">
 
     //高度20dp，三个TextView比例：1:4:1

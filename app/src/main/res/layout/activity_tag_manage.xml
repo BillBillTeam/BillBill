@@ -63,12 +63,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp">
 
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
+        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fActionNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/iconBackground"
             fab:fab_colorPressed="@color/colorPrimary"
+            app:fab_icon="@drawable/star"
             fab:fab_title="添加"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="31dp"

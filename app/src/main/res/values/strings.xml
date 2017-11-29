@@ -125,7 +125,7 @@
     <string name="tag_manager_hide">不显示的标签</string>
     <string name="money_head">RMB ¥:</string>
     <string name="today">今天</string>
-    <string name="bill_info">账单详情</string>
+    <string name="bill_info">消费记录</string>
     <string name="bill_stat">消费统计</string>
     <string name="about_this_app">关于应用</string>
 </resources>

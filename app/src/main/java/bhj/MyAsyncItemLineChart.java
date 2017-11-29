@@ -116,7 +116,7 @@ public class MyAsyncItemLineChart {
             DecimalFormat df   =     new   DecimalFormat("################0.00");
             String   temp     =   df.format(barChartValue.types.get(i).value);
             count.setText(temp);
-            per.setText(((int)((barChartValue.types.get(i).value/barChartValue.sum)*1000))/10+"%");
+            per.setText(df.format((barChartValue.types.get(i).value/barChartValue.sum)*100)+"%");
             num.setText(String.valueOf( barChartValue.types.get(i).num)+"笔");
             progressBar1.setProgress((int)(barChartValue.types.get(i).value/barChartValue.sum*1000));
 
