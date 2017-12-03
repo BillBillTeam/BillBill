@@ -2,6 +2,7 @@ package lz.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -147,10 +148,14 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return 在给定范围内的全部数据
      */
     public ArrayList<IDBill> selectBillByTime(int begYear,int begMonth,int begDay,int endYear,int endMonth,int endDay){
-        String where = String.format("(%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s) AND (%s BETWEEN %s AND %s)",
-                fd_YEAR,begYear,endYear,fd_MONTH,begMonth,endMonth,fd_DAY,begDay,endDay);
-        String orderBy = String.format("%s ASC,%s ASC,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
-        Cursor cursor = getReadableDatabase().query(TAB_BILL_NAME,null,where,null,null,null,orderBy);
+        String exp = String.format("%s*10000+%s*100+%s",fd_YEAR,fd_MONTH,fd_DAY);
+        String select = String.format("SELECT *, %s  FROM %s ", exp,TAB_BILL_NAME);
+        String where = String.format("WHERE %s BETWEEN %s and %s ", exp ,
+                Integer.toString(begYear*10000+begMonth*100+begDay),
+                Integer.toString(endYear*10000+endMonth*100+endDay));
+        String orderBy = String.format("ORDER BY %s ASC,%s ASC,%s ASC",fd_YEAR,fd_MONTH,fd_DAY);
+        String sql = select+where+orderBy;
+        Cursor cursor = getReadableDatabase().rawQuery(sql,null);
         ArrayList<IDBill> list = billCursor2List(cursor);
         cursor.close();
         return list;
