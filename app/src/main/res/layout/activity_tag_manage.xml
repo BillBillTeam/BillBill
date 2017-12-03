@@ -45,6 +45,13 @@
             app:itemHeight="60dp"
             app:itemWidth="60dp"/>
 
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tag_manager_hit"
+            android:textColor="@color/hitColor"/>
+
     </LinearLayout>
 
 

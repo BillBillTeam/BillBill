@@ -102,10 +102,10 @@
     <string name="author_message">
         人员：\n
         组长：LiZeC\n
+        程序：marykt\n
         产品：lrStyle\n
         测试：huiqingli\n
-        交互：miseryby\n
-        程序：marykt\n
+        测试：miseryby\n
     </string>
 
     <string name="appInfo">
@@ -128,4 +128,5 @@
     <string name="bill_stat">图表统计</string>
     <string name="bill_tag">标签管理</string>
     <string name="about_this_app">关于应用</string>
+    <string name="tag_manager_hit">点击交换,长按排序</string>
 </resources>
