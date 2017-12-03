@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -149,7 +150,12 @@ public class BillListActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
       //  builder.setIcon(R.drawable.ic_launcher);
-        builder.setTitle("请输入您想要的记录");
+          builder.setTitle("请修改相应内容");
+//        TextView title = new TextView(this);
+//        title.setText("请修改相应内容");
+//        title.setTextSize(20);
+//        title.setGravity(Gravity.CENTER);
+//        builder.setCustomTitle(title);
         //    设置我们自己定义的布局文件作为弹出框的Content
         builder.setView(dialgoView);
         final EditText amount = (EditText)dialgoView.findViewById(R.id.editText_amount);
