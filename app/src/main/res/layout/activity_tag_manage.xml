@@ -50,6 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tag_manager_hit"
+            android:textSize="17sp"
+            android:gravity="center"
             android:textColor="@color/hitColor"/>
 
     </LinearLayout>

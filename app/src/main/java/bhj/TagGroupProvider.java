@@ -90,7 +90,7 @@ public class TagGroupProvider {
 
             }
             if(i==n-1&&tagList.size()%(COLUMNCOUNT*ROWCOUNT)!=0){
-                layout.addView(newTagWithName(inflater,"自定义",IconGetter.getIcon(context,14)));
+                layout.addView(newTagWithName(inflater,"设置",IconGetter.getIcon(context,14)));
                 TagGroupList.add(layout);
                 break;
             }
@@ -99,7 +99,7 @@ public class TagGroupProvider {
                 GridLayout layout1=(GridLayout)view1.getRootView();
                 layout1.setColumnCount(COLUMNCOUNT);
                 layout1.setRowCount(ROWCOUNT);
-                layout1.addView(newTagWithName(inflater,"自定义",IconGetter.getIcon(context,14)));
+                layout1.addView(newTagWithName(inflater,"设置",IconGetter.getIcon(context,14)));
                 TagGroupList.add(layout);
                 TagGroupList.add(layout1);
                 break;
