@@ -352,13 +352,13 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("温馨提示");
         builder.setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？");
-        builder.setPositiveButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
+        builder.setNegativeButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 clearStatus();
             }
         });
-        builder.setNegativeButton("转到账单",new DialogInterface.OnClickListener() {//添加返回按钮
+        builder.setPositiveButton("转到账单",new DialogInterface.OnClickListener() {//添加返回按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 clearStatus();

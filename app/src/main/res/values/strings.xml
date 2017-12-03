@@ -119,13 +119,13 @@
 
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_tag_manage">标签管理</string>
     <string name="tag_manager_finish">完成</string>
     <string name="tag_manager_show">显示的标签</string>
     <string name="tag_manager_hide">不显示的标签</string>
     <string name="money_head">RMB ¥:</string>
     <string name="today">今天</string>
-    <string name="bill_info">消费记录</string>
-    <string name="bill_stat">消费统计</string>
+    <string name="bill_info">账单明细</string>
+    <string name="bill_stat">图表统计</string>
+    <string name="bill_tag">标签管理</string>
     <string name="about_this_app">关于应用</string>
 </resources>

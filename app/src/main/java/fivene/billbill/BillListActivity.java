@@ -40,7 +40,7 @@ public class BillListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("消费记录");
+        setTitle(R.string.bill_info);
         if(getSupportActionBar()!=null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bill_list);

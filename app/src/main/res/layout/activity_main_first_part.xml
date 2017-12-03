@@ -36,6 +36,6 @@
             android:id="@+id/btn_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_activity_tag_manage" />
+            android:text="@string/bill_tag" />
     </LinearLayout>
 </LinearLayout>

@@ -57,7 +57,7 @@ public class TagManageActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        setTitle(R.string.bill_tag);
 
         expenseType = new ExpenseType(this);
         dgvShow = ((DraggableGridView)findViewById(R.id.vgvShow));

@@ -26,7 +26,7 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".TagManageActivity"
-            android:label="@string/title_activity_tag_manage" />
+            android:label="@string/bill_tag" />
         <activity android:name=".AboutActivity"/>
     </application>
 
