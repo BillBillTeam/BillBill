@@ -516,10 +516,10 @@ public class MainActivity extends AppCompatActivity {
                         currentSelectedTag=view;
                         //add selected change
                         int index=((GridLayout)(currentSelectedTag.getParent())).indexOfChild(currentSelectedTag);
-                        int currentPage=mTagGroupPager.getCurrentItem();
-                        currentSelectedTag_pageN=currentPage;
+                        currentSelectedTag_pageN=mTagGroupPager.getCurrentItem();
 
-                        int finIndex=currentPage*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
+
+                        int finIndex=currentSelectedTag_pageN*TagGroupProvider.COLUMNCOUNT*TagGroupProvider.ROWCOUNT+index;
                         if(finIndex>=TagGroupProvider.getPicRecSize()){//自定义标签//jump
 
                             jumpToTagManageActivity();

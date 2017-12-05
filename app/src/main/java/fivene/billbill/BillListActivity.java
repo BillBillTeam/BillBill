@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
@@ -223,8 +224,14 @@ public class BillListActivity extends AppCompatActivity {
                 }
                 catch (Exception e){
                     amount.setTextColor(Color.RED);
+                    Toast.makeText(BillListActivity.this,"输入的金额格式有误",Toast.LENGTH_SHORT).show();
                     return ;
 
+                }
+                if(a>1000000){
+                    amount.setTextColor(Color.RED);
+                    Toast.makeText(BillListActivity.this,"输入的金额应小于100万",Toast.LENGTH_SHORT).show();
+                    return ;
                 }
 
                 String b = mark.getText().toString();
