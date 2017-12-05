@@ -38,6 +38,7 @@ import lz.db.IDBill;
 public class BillListActivity extends AppCompatActivity {
     private LinearLayout lin;
     private SuperActivityToast currentToast;
+    BillItemManagement M;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,12 @@ public class BillListActivity extends AppCompatActivity {
         lin = (LinearLayout) findViewById(R.id.bill_list_layout);
         createViews();
 
+    }
+
+    @Override
+    protected void onStop() {
+        M.CloseAllSuperToasts();
+        super.onStop();
     }
 
     /**
@@ -88,10 +95,6 @@ public class BillListActivity extends AppCompatActivity {
 
                     @Override
                     public void onDelete(double amount, SuperActivityToast toast) {
-                        if (currentToast!=null&&currentToast.isShowing()){
-                            toast.dismiss();
-                        }
-                        currentToast=toast;
                         TextView view=(TextView)TimeLine.findViewById(R.id.textView4);
                         DecimalFormat df   =     new   DecimalFormat("#########0.00");
                         String   temp     =   df.format((Double.valueOf(view.getText().toString())-amount));
@@ -115,7 +118,7 @@ public class BillListActivity extends AppCompatActivity {
                     }
                 };
 
-                BillItemManagement M=new BillItemManagement(this,idBills_oneDay.get(j),callback);
+                M=new BillItemManagement(this,idBills_oneDay.get(j),callback);
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT

@@ -34,6 +34,9 @@ public class BillItemManagement {
     private Callback callback;
     private MySwipeLayout billItem;
     private static MySwipeLayout selectedItem=null;
+    private SuperToast superToast;
+    private static IDBill delBill;
+    private Context context;
 
     /**
      * 初始化
@@ -42,6 +45,7 @@ public class BillItemManagement {
      * @param call 回调函数
      */
     public BillItemManagement(final Context context, final IDBill bill, final Callback call){
+        this.context=context;
         this.callback=call;
         LayoutInflater inflater = LayoutInflater.from(context);
         billItem =  (MySwipeLayout)inflater.inflate(R.layout.bill_item_plus, null);
@@ -111,8 +115,8 @@ public class BillItemManagement {
                     layout.removeView((View)billItem.getParent());
                     deleteType=1;
                 }
-                Expense expense=new Expense(context);
-                expense.Delete(bill);
+                CloseAllSuperToasts();
+                BillItemManagement.delBill= bill;
                 //superToast
                 final SuperActivityToast toast= SuperActivityToast.create(context, new Style(), Style.TYPE_BUTTON);
                 toast.setButtonText("撤销")
@@ -124,8 +128,7 @@ public class BillItemManagement {
                                 if(deleteType==0){//re add value to timeline
                                     callback.onCancle(bill.getAmount());
                                 }
-                                Expense expense=new Expense(context);
-                                expense.Insert(bill);
+                                BillItemManagement.delBill=null;
                                 toast.dismiss();
                             }
 
@@ -138,7 +141,19 @@ public class BillItemManagement {
                         .setAnimations(Style.ANIMATIONS_POP);
                 if(deleteType==0)
                     callback.onDelete(bill.getAmount(),toast);
-                toast.cancelAllSuperToasts();
+
+                superToast=toast;
+                toast.setOnDismissListener(new SuperToast.OnDismissListener() {
+                    @Override
+                    public void onDismiss(View view, Parcelable token) {
+                        if(BillItemManagement.delBill!=null){
+                            Expense expense=new Expense(context);
+                            expense.Delete(BillItemManagement.delBill);
+                            BillItemManagement.delBill=null;
+
+                        }
+                    }
+                });
                 toast.show();
 
 
@@ -147,6 +162,15 @@ public class BillItemManagement {
         });
 
 
+
+    }
+    public void CloseAllSuperToasts(){
+        if (BillItemManagement.delBill!=null){
+                Expense expense=new Expense(context);
+                expense.Delete(BillItemManagement.delBill);
+            BillItemManagement.delBill=null;
+        }
+        SuperToast.cancelAllSuperToasts();
 
     }
 
@@ -185,7 +209,6 @@ public class BillItemManagement {
          */
         void onCancle(double amount);
     }
-
 
 
 
