@@ -254,7 +254,7 @@ public class TagManageActivity extends AppCompatActivity {
                         isChanged = true;
                     }
                 } catch (Exception e) {
-                    Toast.makeText(TagManageActivity.this,"数据库异常，请稍后再试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TagManageActivity.this,"不能添加同名的标签",Toast.LENGTH_SHORT).show();
                 }
             }
         });
