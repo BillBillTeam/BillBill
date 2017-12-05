@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFinishDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("温馨提示");
-        builder.setMessage("这笔账我已经记录下来啦，您是不是要再记一笔呢？");
+        builder.setMessage("这笔账我已经记录下来啦！");
         builder.setNegativeButton("再来一笔",new DialogInterface.OnClickListener() {//添加确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {

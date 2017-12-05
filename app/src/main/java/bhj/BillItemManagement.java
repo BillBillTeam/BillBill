@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.SuperToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 
 import java.text.DecimalFormat;
@@ -136,7 +138,11 @@ public class BillItemManagement {
                         .setAnimations(Style.ANIMATIONS_POP);
                 if(deleteType==0)
                     callback.onDelete(bill.getAmount(),toast);
-                        toast.show();
+                toast.cancelAllSuperToasts();
+                toast.show();
+
+
+                //toast.setProgress();
             }
         });
 
